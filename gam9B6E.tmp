@@ -1,0 +1,76 @@
+[gd_scene load_steps=15 format=4 uid="uid://cv2kgylt7uhk4"]
+
+[ext_resource type="PackedScene" uid="uid://n46n5hkwy7i" path="res://player.tscn" id="1_plyk1"]
+[ext_resource type="Texture2D" uid="uid://skwer2ngjunk" path="res://Aurelia/pixel_art/blocks/dirt_block.png" id="2_6wxjt"]
+[ext_resource type="Script" path="res://scripts/BlockEntity.gd" id="2_igne5"]
+[ext_resource type="Texture2D" uid="uid://fwfysdx12jle" path="res://Aurelia/pixel_art/blocks/dirt_block_2.png" id="2_ph2l1"]
+[ext_resource type="Texture2D" uid="uid://dip1w8ql50qc7" path="res://Aurelia/pixel_art/blocks/bedrock.png" id="4_7bq21"]
+[ext_resource type="Script" path="res://scripts/tile_map_layer.gd" id="4_423te"]
+[ext_resource type="Texture2D" uid="uid://dm4lwd8oju2xu" path="res://Aurelia/pixel_art/blocks/animations/breaking_sheet.png" id="6_3wswg"]
+[ext_resource type="Script" path="res://scripts/BlockAnimation.gd" id="8_ffrlr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ggnev"]
+resource_name = "dirt_block_2"
+texture = ExtResource("2_ph2l1")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:0/0/custom_data_0 = 3
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnejx"]
+resource_name = "dirt_block"
+texture = ExtResource("2_6wxjt")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:0/0/custom_data_0 = 3
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5mbqy"]
+texture = ExtResource("4_7bq21")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:0/0/custom_data_0 = -1
+
+[sub_resource type="TileSet" id="TileSet_n25bb"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+custom_data_layer_0/name = "hp"
+custom_data_layer_0/type = 2
+sources/1 = SubResource("TileSetAtlasSource_nnejx")
+sources/0 = SubResource("TileSetAtlasSource_ggnev")
+sources/2 = SubResource("TileSetAtlasSource_5mbqy")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m4khl"]
+texture = ExtResource("6_3wswg")
+texture_region_size = Vector2i(32, 32)
+4:0/0 = 0
+5:0/0 = 0
+3:0/0 = 0
+2:0/0 = 0
+1:0/0 = 0
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_cpqtn"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_m4khl")
+
+[node name="game" type="Node2D"]
+script = ExtResource("2_igne5")
+
+[node name="player" parent="." instance=ExtResource("1_plyk1")]
+position = Vector2(0, -14)
+
+[node name="Camera2D" type="Camera2D" parent="player"]
+zoom = Vector2(3, 3)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD//wAAAQAAAAAAAAD+/wAAAQAAAAAAAAD9/wAAAQAAAAAAAAD8/wAAAQAAAAAAAAD7/wAAAQAAAAAAAAD6/wAAAQAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAQAAAAAAAAACAAAAAQAAAAAAAAADAAAAAQAAAAAAAAAEAAAAAQAAAAAAAAAFAAAAAQAAAAAAAAAGAAAAAQAAAAAAAAAHAAAAAQAAAAAAAAAIAAAAAQAAAAAAAAAJAAAAAQAAAAAAAAAKAAAAAQAAAAAAAAALAAAAAQAAAAAAAAD5/wAAAQAAAAAAAAD4/wAAAQAAAAAAAAD3/wAAAQAAAAAAAAD2/wAAAQAAAAAAAAD1/wAAAQAAAAAAAAD1/wEAAAAAAAAAAAD2/wEAAAAAAAAAAAD3/wEAAAAAAAAAAAD4/wEAAAAAAAAAAAD5/wEAAAAAAAAAAAD6/wEAAAAAAAAAAAD7/wEAAAAAAAAAAAD8/wEAAAAAAAAAAAD9/wEAAAAAAAAAAAD+/wEAAAAAAAAAAAD//wEAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAEAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAEAAAAAAAAAAAAIAAEAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAALAAEAAAAAAAAAAAALAAIAAAAAAAAAAAAKAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAIAAIAAAAAAAAAAAAHAAIAAAAAAAAAAAAGAAIAAAAAAAAAAAAFAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAADAAIAAAAAAAAAAAACAAIAAAAAAAAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAD9/wIAAAAAAAAAAAD8/wIAAAAAAAAAAAD7/wIAAAAAAAAAAAD6/wIAAAAAAAAAAAD5/wIAAAAAAAAAAAD4/wIAAAAAAAAAAAD3/wIAAAAAAAAAAAD2/wIAAAAAAAAAAAD1/wIAAAAAAAAAAAD+////AgAAAAAAAAD9////AgAAAAAAAAD9//7/AgAAAAAAAAAFAAkAAgAAAAAAAAAGAAkAAgAAAAAAAAAHAAkAAgAAAAAAAAAIAAkAAgAAAAAAAAAJAAkAAgAAAAAAAAAKAAkAAgAAAAAAAAALAAkAAgAAAAAAAAAMAAkAAgAAAAAAAAANAAkAAgAAAAAAAAAOAAkAAgAAAAAAAAAPAAkAAgAAAAAAAAAQAAkAAgAAAAAAAAARAAkAAgAAAAAAAAASAAkAAgAAAAAAAAATAAkAAgAAAAAAAAAUAAkAAgAAAAAAAAAVAAkAAgAAAAAAAAAWAAkAAgAAAAAAAAAXAAkAAgAAAAAAAAAYAAkAAgAAAAAAAAAZAAkAAgAAAAAAAAAaAAkAAgAAAAAAAAAbAAkAAgAAAAAAAAAcAAkAAgAAAAAAAAAdAAkAAgAAAAAAAAAeAAkAAgAAAAAAAAAfAAkAAgAAAAAAAAAgAAkAAgAAAAAAAAAhAAkAAgAAAAAAAAAiAAkAAgAAAAAAAAAjAAkAAgAAAAAAAAAkAAkAAgAAAAAAAAAlAAkAAgAAAAAAAAAmAAkAAgAAAAAAAAAnAAkAAgAAAAAAAAAoAAkAAgAAAAAAAAApAAkAAgAAAAAAAAAqAAkAAgAAAAAAAAArAAkAAgAAAAAAAAAsAAkAAgAAAAAAAAAtAAkAAgAAAAAAAAAuAAkAAgAAAAAAAAAvAAkAAgAAAAAAAAAwAAkAAgAAAAAAAAAxAAkAAgAAAAAAAAAyAAkAAgAAAAAAAAAzAAkAAgAAAAAAAAA0AAkAAgAAAAAAAAA1AAkAAgAAAAAAAAA2AAkAAgAAAAAAAAA3AAkAAgAAAAAAAAA4AAkAAgAAAAAAAAA5AAkAAgAAAAAAAAA6AAkAAgAAAAAAAAA7AAkAAgAAAAAAAAA8AAkAAgAAAAAAAAA9AAkAAgAAAAAAAAA+AAkAAgAAAAAAAAA/AAkAAgAAAAAAAABAAAkAAgAAAAAAAABBAAkAAgAAAAAAAABCAAkAAgAAAAAAAABDAAkAAgAAAAAAAABEAAkAAgAAAAAAAABFAAkAAgAAAAAAAAA=")
+tile_set = SubResource("TileSet_n25bb")
+script = ExtResource("4_423te")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="."]
+z_index = 10
+z_as_relative = false
+tile_set = SubResource("TileSet_cpqtn")
+script = ExtResource("8_ffrlr")

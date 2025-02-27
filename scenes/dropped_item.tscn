@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://ba6g4u1rfl4vy"]
+
+[sub_resource type="GDScript" id="GDScript_c81js"]
+script/source = "extends Area2D  # Use Area2D for collision detection
+
+@export var bounce_force: float = 200.0  # Bounce when hitting the ground
+
+var velocity: Vector2 = Vector2.ZERO
+var is_on_floor: bool = false
+
+func _ready():
+	print(\"✅ DroppedItem script _ready() is running!\")
+
+	# Ensure Sprite2D has the correct texture (if not set in drop_block)
+	if $Sprite2D and not $Sprite2D.texture:
+		$Sprite2D.texture = preload(\"res://Aurelia/pixel_art/blocks/dirt_block.png\")
+		print(\"🎨 Assigned dirt block texture to sprite\")
+
+func _physics_process(delta: float) -> void:
+	if not is_on_floor:
+		velocity.y += 500 * delta  # Apply gravity
+		position += velocity * delta  # Update position
+
+	# Check for collisions with the ground
+	if position.y >= 500:  # Replace with actual ground level
+		position.y = 500
+		is_on_floor = true
+		velocity.y = -bounce_force  # Bounce when hitting the ground
+
+# Called when the player enters the pickup area
+func _on_body_entered(body: Node2D) -> void:
+	await get_tree().create_timer(0.5).timeout  # Wait 0.5 seconds before pickup
+	if body.is_in_group(\"player\"):
+		queue_free()  # Remove the dropped item from the scene
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_neg6k"]
+load_path = "res://.godot/imported/dirt_block.png-6d71ee45f1bb9faad96d7f6f39469478.ctex"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1ompb"]
+
+[node name="dropped_item" type="Area2D"]
+script = SubResource("GDScript_c81js")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+texture = SubResource("CompressedTexture2D_neg6k")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1ompb")

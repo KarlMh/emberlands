@@ -1,0 +1,177 @@
+[gd_scene load_steps=12 format=3 uid="uid://clmjiogjv36gg"]
+
+[ext_resource type="Script" path="res://scripts/canvas_layer.gd" id="1_lobxb"]
+[ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_xe1e8"]
+[ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="2_e8fq5"]
+[ext_resource type="PackedScene" uid="uid://fv1emrsjq35m" path="res://scenes/inventory_window.tscn" id="3_edm41"]
+[ext_resource type="Script" path="res://scenes/display_gems.gd" id="4_5xbdi"]
+[ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="4_w6ll5"]
+[ext_resource type="Script" path="res://scripts/hand_slot.gd" id="5_bcsbj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qhkqk"]
+bg_color = Color(0.454902, 0.72549, 1, 0.768627)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ppw1b"]
+bg_color = Color(0.454902, 0.72549, 1, 0.768627)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jatgd"]
+bg_color = Color(0.454902, 0.72549, 1, 0.768627)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_cb7q1"]
+font_color = Color(0.140447, 0.140447, 0.140447, 1)
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_lobxb")
+
+[node name="inventory_bar" parent="." instance=ExtResource("1_xe1e8")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -40.0
+offset_right = 110.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_qhkqk")
+script = null
+
+[node name="slot_bar" parent="inventory_bar" index="0" node_paths=PackedStringArray("bar_container")]
+script = ExtResource("2_e8fq5")
+bar_container = NodePath(".")
+
+[node name="inventory_window" parent="." instance=ExtResource("3_edm41")]
+offset_left = -250.0
+offset_top = -125.0
+offset_right = 250.0
+offset_bottom = 125.0
+scale = Vector2(1, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_ppw1b")
+
+[node name="ScrollContainer" parent="inventory_window" index="0"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -243.0
+offset_top = -115.0
+offset_right = 0.0
+offset_bottom = 115.0
+grow_horizontal = 0
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="equipment_inventory" type="Panel" parent="inventory_window"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 240.0
+
+[node name="FlowContainer" type="FlowContainer" parent="inventory_window/equipment_inventory"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.0
+offset_top = -79.0
+offset_right = -63.0
+offset_bottom = 61.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical = true
+
+[node name="head_slot" parent="inventory_window/equipment_inventory/FlowContainer" instance=ExtResource("4_w6ll5")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("5_bcsbj")
+
+[node name="chest_slot" parent="inventory_window/equipment_inventory/FlowContainer" instance=ExtResource("4_w6ll5")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("5_bcsbj")
+
+[node name="pants_slot" parent="inventory_window/equipment_inventory/FlowContainer" instance=ExtResource("4_w6ll5")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("5_bcsbj")
+
+[node name="boot_slot" parent="inventory_window/equipment_inventory/FlowContainer" instance=ExtResource("4_w6ll5")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("5_bcsbj")
+
+[node name="FlowContainer2" type="FlowContainer" parent="inventory_window/equipment_inventory"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.5
+offset_top = -43.0
+offset_right = -28.5
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical = true
+
+[node name="hand_slot" parent="inventory_window/equipment_inventory/FlowContainer2" instance=ExtResource("4_w6ll5")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="display_gems" type="Panel" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_right = 60.0
+offset_bottom = 15.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jatgd")
+script = ExtResource("4_5xbdi")
+
+[node name="Label" type="Label" parent="display_gems"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -11.5
+offset_right = 25.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_cb7q1")
+
+[editable path="inventory_bar"]
+[editable path="inventory_window"]
+[editable path="inventory_window/equipment_inventory/FlowContainer/head_slot"]
+[editable path="inventory_window/equipment_inventory/FlowContainer/chest_slot"]
+[editable path="inventory_window/equipment_inventory/FlowContainer/pants_slot"]
+[editable path="inventory_window/equipment_inventory/FlowContainer/boot_slot"]
+[editable path="inventory_window/equipment_inventory/FlowContainer2/hand_slot"]

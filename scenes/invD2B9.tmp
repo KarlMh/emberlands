@@ -1,0 +1,889 @@
+[gd_scene load_steps=7 format=3 uid="uid://bovwxam6nii6l"]
+
+[ext_resource type="Texture2D" uid="uid://skwer2ngjunk" path="res://Aurelia/pixel_art/blocks/dirt_block.png" id="1_688im"]
+[ext_resource type="Script" path="res://scripts/inventory.gd" id="1_tdngp"]
+[ext_resource type="Script" path="res://scripts/inventory_slot.gd" id="2_4itop"]
+[ext_resource type="Script" path="res://scripts/drag_inv.gd" id="2_5luaw"]
+[ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="2_uwdxv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vd027"]
+font_size = 200
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 20
+
+[node name="inventory_ui" type="Control"]
+z_index = 100
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -156.0
+offset_top = 220.0
+offset_right = -156.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(2, 2)
+script = ExtResource("1_tdngp")
+
+[node name="dragger" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_5luaw")
+
+[node name="drag_handle" type="Button" parent="dragger"]
+layout_mode = 0
+offset_left = 59.5
+offset_top = -158.5
+offset_right = 89.5
+offset_bottom = -148.5
+
+[node name="inventory_bar" type="Panel" parent="dragger/drag_handle"]
+layout_mode = 0
+offset_left = -95.5
+offset_top = 9.0
+offset_right = 124.5
+offset_bottom = 49.0
+
+[node name="slot_bar" type="GridContainer" parent="dragger/drag_handle/inventory_bar"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 4.0
+offset_right = 210.0
+offset_bottom = 39.0
+theme_override_constants/h_separation = 10
+columns = 5
+
+[node name="inventory_slot" parent="dragger/drag_handle/inventory_bar/slot_bar" instance=ExtResource("2_uwdxv")]
+layout_mode = 2
+
+[node name="inventory_slot2" parent="dragger/drag_handle/inventory_bar/slot_bar" instance=ExtResource("2_uwdxv")]
+layout_mode = 2
+
+[node name="inventory_slot3" parent="dragger/drag_handle/inventory_bar/slot_bar" instance=ExtResource("2_uwdxv")]
+layout_mode = 2
+
+[node name="inventory_slot4" parent="dragger/drag_handle/inventory_bar/slot_bar" instance=ExtResource("2_uwdxv")]
+layout_mode = 2
+
+[node name="inventory_slot5" parent="dragger/drag_handle/inventory_bar/slot_bar" instance=ExtResource("2_uwdxv")]
+layout_mode = 2
+
+[node name="inventory_window" type="Panel" parent="dragger/drag_handle"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -284.5
+offset_top = 43.5
+offset_right = 291.5
+offset_bottom = 263.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="slot_container" type="GridContainer" parent="dragger/drag_handle/inventory_window"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 8
+columns = 12
+
+[node name="inventory_slot" parent="dragger/drag_handle/inventory_window/slot_container" instance=ExtResource("2_uwdxv")]
+layout_mode = 2
+
+[node name="inventory_slot2" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot2/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot3" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot3"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot3/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot4" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot4"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot4/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot5" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot5"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot5/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot6" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot6"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot6/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot7" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot7"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot7/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot8" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot8"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot8/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot9" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot9"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot9/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot10" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot10"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot10/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot11" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot11"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot11/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot12" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot12"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot12/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot13" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot13"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot13/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot14" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot14"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot14/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot15" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot15"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot15/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot16" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot16"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot16/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot17" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot17"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot17/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot18" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot18"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot18/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot19" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot19"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot19/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot20" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot20"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot20/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot21" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot21"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot21/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot22" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot22"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot22/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot23" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot23"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot23/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="inventory_slot24" type="Button" parent="dragger/drag_handle/inventory_window/slot_container"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("2_4itop")
+
+[node name="icon" type="TextureRect" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot24"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("1_688im")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="dragger/drag_handle/inventory_window/slot_container/inventory_slot24/icon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 324.0
+offset_bottom = 258.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.05, 0.05)
+text = "256"
+label_settings = SubResource("LabelSettings_vd027")
+horizontal_alignment = 2
+vertical_alignment = 2

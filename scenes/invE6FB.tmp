@@ -1,0 +1,291 @@
+[gd_scene load_steps=7 format=3 uid="uid://ul4ff2b876bs"]
+
+[ext_resource type="Script" path="res://scripts/inventory.gd" id="1_ib066"]
+[ext_resource type="Texture2D" uid="uid://bgrnoq0tkwyxs" path="res://pixel_art/ui/inventory.png" id="1_kvxuh"]
+[ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="1_wrlxy"]
+[ext_resource type="Script" path="res://scripts/inventory_manager.gd" id="2_sb42w"]
+[ext_resource type="Script" path="res://scripts/hand_slot.gd" id="2_wn18w"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ckp8"]
+texture = ExtResource("1_kvxuh")
+expand_margin_left = 15.0
+expand_margin_top = 15.0
+expand_margin_right = 15.0
+expand_margin_bottom = 15.0
+
+[node name="inventory_window" type="Panel"]
+anchors_preset = -1
+anchor_left = 0.457
+anchor_top = 0.461
+anchor_right = 0.457
+anchor_bottom = 0.461
+offset_left = -250.464
+offset_top = -124.728
+offset_right = 249.536
+offset_bottom = 125.272
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(250, 125)
+theme_override_styles/panel = SubResource("StyleBoxTexture_2ckp8")
+script = ExtResource("1_ib066")
+
+[node name="scroll_container" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -120.0
+offset_bottom = 120.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(140, 130)
+
+[node name="margin_conatiner" type="MarginContainer" parent="scroll_container"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="slot_container" type="GridContainer" parent="scroll_container/margin_conatiner"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 6
+script = ExtResource("2_sb42w")
+
+[node name="inventory_slot" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot2" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot3" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot4" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot5" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot6" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot7" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot8" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot9" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot10" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot11" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot12" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot13" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot14" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot15" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot16" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot17" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot18" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot19" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot20" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot21" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot22" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot23" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot24" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot25" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot26" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot27" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot28" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot29" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot30" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot31" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot32" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot33" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot34" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot35" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot36" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot37" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot38" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot39" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot40" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot41" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot42" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot43" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot44" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot45" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot46" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot47" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot48" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot49" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot50" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot51" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot52" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot53" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot54" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot55" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot56" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot57" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot58" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot59" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="inventory_slot60" parent="scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+
+[node name="equipment_inventory2" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="wearables_container_1" type="VBoxContainer" parent="equipment_inventory2"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 50.0
+offset_bottom = 168.0
+theme_override_constants/separation = 10
+
+[node name="head_slot" parent="equipment_inventory2/wearables_container_1" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("2_wn18w")
+
+[node name="chest_slot" parent="equipment_inventory2/wearables_container_1" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("2_wn18w")
+
+[node name="pants_slot" parent="equipment_inventory2/wearables_container_1" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("2_wn18w")
+
+[node name="boot_slot" parent="equipment_inventory2/wearables_container_1" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+script = ExtResource("2_wn18w")
+
+[node name="wearables_container_2" type="VBoxContainer" parent="equipment_inventory2"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 52.0
+offset_right = 92.0
+offset_bottom = 92.0
+
+[node name="hand_slot" parent="equipment_inventory2/wearables_container_2" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[editable path="equipment_inventory2/wearables_container_1/head_slot"]
+[editable path="equipment_inventory2/wearables_container_1/chest_slot"]
+[editable path="equipment_inventory2/wearables_container_1/pants_slot"]
+[editable path="equipment_inventory2/wearables_container_1/boot_slot"]
+[editable path="equipment_inventory2/wearables_container_2/hand_slot"]

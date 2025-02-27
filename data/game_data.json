@@ -1,0 +1,29 @@
+{
+	"blocks": {
+		"EMPTY": { "id": -1, "hp": 0, "gems": 0, "icon": "res://pixel_art/blocks/EMPTY.png" },
+		"BLOCK_BEDROCK": { "id": 1, "hp": -1, "gems": 0, "icon": "res://pixel_art/blocks/BLOCK_BEDROCK.png" },
+		"BLOCK_DIRT": { "id": 2, "hp": 4, "gems": 3, "icon": "res://pixel_art/blocks/BLOCK_DIRT.png" },
+		"BLOCK_DEEP_DIRT": { "id": 3, "hp": 4, "gems": 3, "icon": "res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" },
+		"BLOCK_STONE": { "id": 4, "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_STONE.png" },
+		"BLOCK_MAGMA": { "id": 5, "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_MAGMA.png" },
+		
+		"interactive_blocks": {
+			"CRAFTING_TABLE": { "id": 401, "hp": 6, "gems": 6, "recipe":{"BACKGROUND_WOOD": 1}, 
+			"interaction_type": "crafting","icon": "res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" },
+		},
+	},
+	"backgrounds": {
+		"BACKGROUND_CAVE": { "id": 101, "hp": 4, "gems": 3, "icon": "res://pixel_art/backgrounds/BACKGROUND_CAVE.png" },
+		"BACKGROUND_WOOD": { "id": 102, "hp": 5, "gems": 8, "icon": "res://pixel_art/backgrounds/BACKGROUND_WOOD.png" },
+		"BACKGROUND_LEAF": { "id": 103, "hp": 4, "gems": 15, "drop_chance": 0.5, "alt_drop": "SEED_TREE","icon": "res://pixel_art/backgrounds/BACKGROUND_LEAF.png" }
+	},
+	
+	"seeds": {
+		"SEED_TREE": { "id": 201, "drop_chance": 0.2, "icon": "res://pixel_art/seeds/SEED_TREE.png" }
+	},
+	
+	"items": {
+		"WOODEN_PICKAXE": { "id": 301, "damage": 1, "recipe":{"BACKGROUND_WOOD": 1, "BLOCK_STONE": 3}, "icon": "res://pixel_art/items/WOODEN_PICKAXE.png" },
+		"GOLDEN_PICKAXE": { "id": 302, "damage": 100, "icon": "res://pixel_art/items/GOLDEN_PICKAXE.png" },
+	},
+}

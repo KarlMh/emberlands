@@ -1,0 +1,109 @@
+[gd_scene load_steps=10 format=3 uid="uid://clmjiogjv36gg"]
+
+[ext_resource type="Script" path="res://scripts/canvas_layer.gd" id="1_lobxb"]
+[ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_xe1e8"]
+[ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="2_e8fq5"]
+[ext_resource type="PackedScene" uid="uid://ul4ff2b876bs" path="res://scenes/inventory_window.tscn" id="3_edm41"]
+[ext_resource type="Script" path="res://scenes/display_gems.gd" id="4_5xbdi"]
+[ext_resource type="Texture2D" uid="uid://ba1dptwycerkh" path="res://pixel_art/stuff/gems.png" id="8_p665x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qhkqk"]
+bg_color = Color(0.227451, 0.717647, 1, 0.12549)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jatgd"]
+bg_color = Color(0.454902, 0.72549, 1, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_cb7q1"]
+font_size = 60
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_lobxb")
+
+[node name="inventory_bar" parent="." instance=ExtResource("1_xe1e8")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -50.0
+offset_right = 110.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(110, 40)
+theme_override_styles/panel = SubResource("StyleBoxFlat_qhkqk")
+script = null
+
+[node name="slot_bar" parent="inventory_bar" index="0" node_paths=PackedStringArray("bar_container")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -17.5
+offset_right = 100.0
+offset_bottom = 17.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_e8fq5")
+bar_container = NodePath(".")
+
+[node name="display_gems" type="Panel" parent="."]
+anchors_preset = -1
+anchor_top = 0.409
+anchor_bottom = 0.409
+offset_top = -15.032
+offset_right = 60.0
+offset_bottom = 14.968
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(0, 15)
+theme_override_styles/panel = SubResource("StyleBoxFlat_jatgd")
+script = ExtResource("4_5xbdi")
+
+[node name="Sprite2D" type="Sprite2D" parent="display_gems"]
+position = Vector2(10, 15)
+texture = ExtResource("8_p665x")
+
+[node name="Label" type="Label" parent="display_gems"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.464
+anchor_top = 0.5
+anchor_right = 0.464
+anchor_bottom = 0.5
+offset_left = -2.84
+offset_top = -55.0
+offset_right = 297.16
+offset_bottom = 28.0
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+pivot_offset = Vector2(-2.66667, 57.6667)
+text = "0"
+label_settings = SubResource("LabelSettings_cb7q1")
+
+[node name="inventory_window" parent="." instance=ExtResource("3_edm41")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -125.0
+offset_right = 250.0
+offset_bottom = 125.0
+
+[editable path="inventory_bar"]
