@@ -5,7 +5,7 @@
 ## 🚀 Setup
 1. **Clone the repo:**  
 
-´´git clone https://github.com/yourusername/emberlands.git´´
+´´´git clone https://github.com/yourusername/emberlands.git´´´
 
 2. **Open in Godot 4.x**
 3. **Run the game (F5)**
