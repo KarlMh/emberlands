@@ -44,12 +44,11 @@ var mining_power = 0
 @export var player_gems: int
 
 func _ready():
+	await get_tree().create_timer(0.01).timeout
+	
 	spawn_player()
 	blink_delay = get_blink_delay()
-
-	# Add the SeedPlantar instance to the scene
 	add_child(seed_planter)
-	await get_tree().process_frame
 	inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
 	inventory_manager.add_item(dl.create_item("CRAFTING_TABLE")) 
 
@@ -63,9 +62,10 @@ func _physics_process(delta: float) -> void:
 	handle_blink(delta)
 	handle_block_actions(delta)
 	craft("CRAFTING_TABLE", 1)
+	craft("WOODEN_PICKAXE", 1)
 
 func spawn_player():
-	var spawn_tile = Vector2i(randf_range(0, 99), 25)
+	var spawn_tile = blockLayer.spawn_tile
 	position = blockLayer.map_to_local(spawn_tile)
 	print("Player spawned at:", position)
 
@@ -256,6 +256,11 @@ func place_block() -> void:
 
 				# Remove the item from the inventory
 				inventory_manager.remove_item(selected_item, 1)
+				
+				var player_tile_pos = blockLayer.local_to_map(position)
+				if tile_pos == player_tile_pos and target_layer != bg_layer:
+					spawn_player()
+					print("DEAD!")  # Prevent placing on themselves
 
 
 				# Play the placement animation
@@ -287,9 +292,7 @@ func check_and_interact_with_nearby_block() -> bool:
 	for tile_pos in blockLayer.block_entities.keys():
 		if is_within_range_of_block(tile_pos, player_tile_pos):
 			var block_entity = blockLayer.block_entities[tile_pos]
-			print(block_entity.interact())
 			if block_entity and block_entity.interact():
-				print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 				return true
 	return false
 

@@ -106,7 +106,6 @@ func _on_erase_timeout(breakingLayer: TileMapLayer):
 		_block_timers[_position].queue_free()
 		_block_timers.erase(_position)
 
-# Drop Items (Overridden by subclasses)
 func drop_block() -> Array:
 	if not _destroyed:
 		return []
@@ -114,29 +113,29 @@ func drop_block() -> Array:
 	var drops = []
 	var block_name = dl.get_item_name_by_id(_id)
 
-	if block_name:
-		# Get block data using the name from DataLoader
-		var block_data = dl._get(block_name)
-
-		if block_data != null:
-			# Handle both primary and alternate drops (drop_chance is used for both)
-			var drop_chance = block_data.get("drop_chance", 1.0)
-			var alt_drop = block_data.get("alt_drop", null)
-
-			# Primary drop
-			if randf() <= drop_chance:
-				drops.append(dl.create_item(block_name))
-
-			# Alternate drop (if exists)
-			if alt_drop and randf() <= drop_chance:
-				drops.append(dl.create_item(alt_drop))
-
-			# Handle alt_drop if it exists, but no separate alt_drop_chance
-			if alt_drop and not randf() <= drop_chance:
-				print("Alternate drop failed for", alt_drop)
-		else:
-			print("Error: Block data not found for ID", _id)
-	else:
+	if not block_name:
 		print("Error: Block name not found for ID", _id)
+		return drops  # Return empty if the block name is invalid
+
+	var block_data = dl._get(block_name)
+
+	if not block_data:
+		print("Error: Block data not found for", block_name)
+		return drops  # Return empty if no block data exists
+
+	# Get drop properties
+	var drop_chance = block_data.get("drop_chance", 1.0)
+	var alt_drop = block_data.get("alt_drop", null)
+	var alt_drop_chance = block_data.get("alt_drop_chance", drop_chance)  # Use main drop chance if not set
+	var alt_drop_count = block_data.get("alt_drop_count", 1)  # Default to 1 if not set
+
+	# Primary drop
+	if randf() <= drop_chance:
+		drops.append(dl.create_item(block_name))
+
+	# Alternate drop (only if an alt_drop exists)
+	if alt_drop and randf() <= alt_drop_chance:
+		for i in range(alt_drop_count):  # Drop multiple alt drops based on alt_drop_count
+			drops.append(dl.create_item(alt_drop))
 
 	return drops

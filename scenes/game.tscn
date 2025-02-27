@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cv2kgylt7uhk4"]
+[gd_scene load_steps=39 format=3 uid="uid://cv2kgylt7uhk4"]
 
 [ext_resource type="PackedScene" uid="uid://n46n5hkwy7i" path="res://scenes/player.tscn" id="1_plyk1"]
 [ext_resource type="Texture2D" uid="uid://cyobbiir0ua2c" path="res://pixel_art/blocks/BLOCK_DIRT.png" id="2_6wxjt"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://b0istdyx235xb" path="res://pixel_art/backgrounds/BACKGROUND_CAVE.png" id="9_8kin8"]
 [ext_resource type="Texture2D" uid="uid://bu3od46bly55s" path="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" id="12_x5eag"]
 [ext_resource type="Script" path="res://scripts/background.gd" id="14_0qu6k"]
+[ext_resource type="Texture2D" uid="uid://ctw8q8jqbxki4" path="res://pixel_art/blocks/BLOCK_WOOD.png" id="14_5aa3o"]
 [ext_resource type="Texture2D" uid="uid://cqrsutg10qjsk" path="res://pixel_art/backgrounds/BACKGROUND_WOOD.png" id="16_7nnog"]
 [ext_resource type="Texture2D" uid="uid://bibya52blfhie" path="res://pixel_art/weathers/Clouds 5/1.png" id="16_w5jsq"]
 [ext_resource type="Texture2D" uid="uid://dqbyg0c1f6k4f" path="res://pixel_art/backgrounds/BACKGROUND_LEAF.png" id="17_6iu2a"]
@@ -88,6 +89,12 @@ texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nqkm1"]
+texture = ExtResource("14_5aa3o")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
 [sub_resource type="TileSet" id="TileSet_n25bb"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
@@ -101,6 +108,7 @@ sources/1 = SubResource("TileSetAtlasSource_5mbqy")
 sources/0 = SubResource("TileSetAtlasSource_urkp8")
 sources/301 = SubResource("TileSetAtlasSource_11jxo")
 sources/401 = SubResource("TileSetAtlasSource_fq1d3")
+sources/6 = SubResource("TileSetAtlasSource_nqkm1")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pq573"]
 resource_name = "cave_background"

@@ -21,7 +21,6 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 			# Check if the block is an interactive block
 			if is_interactive_block(id):
 				# Additional logic for interactive blocks, e.g., enable interaction
-				print("This block is interactive!AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 				self._is_interactive = true
 			else:
 				self._is_interactive = false

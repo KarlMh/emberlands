@@ -4,6 +4,8 @@ const WORLD_WIDTH = 100
 const WORLD_HEIGHT = 50
 const TILE_SIZE = 32  # Adjust this based on your game
 
+var spawn_tile = null
+
 var block_entities = {}
 var bg_entities = {}
 
@@ -76,11 +78,10 @@ func generate_world():
 
 				if is_surface_dirt:
 					set_cell(tile_pos, dl.BLOCK_DIRT["id"], Vector2i(0, 0))
-					block_entities[tile_pos] = BlockEntity.new( dl.BLOCK_DIRT["id"], tile_pos, self, true)
+					block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_DIRT["id"], tile_pos, self, true)
 
 					if randi() % 100 < 4:
 						generate_tree(tile_pos + Vector2i(0, -1))
-
 
 				else:
 					if randi() % 100 < 5:
@@ -98,7 +99,30 @@ func generate_world():
 				bg_layer.set_cell(tile_pos, dl.BACKGROUND_CAVE["id"], Vector2i(0, 0))
 				bg_entities[tile_pos] = BackgroundEntity.new(dl.BACKGROUND_CAVE["id"], tile_pos, self, true)
 
+	place_bedrock_spawn(dirt_start_y)
+	
 	print("World generated with cave background intact.")
+
+func place_bedrock_spawn(dirt_y):
+	var valid_positions = []
+
+	# Find all valid positions on the surface dirt layer
+	for x in range(1, WORLD_WIDTH - 1):  # Avoid placing at the edges
+		var tile_pos = Vector2i(x, dirt_y)
+
+		# Check if the tile is dirt and if there isn't a tree at the position
+		if get_cell_source_id(tile_pos) == dl.BLOCK_DIRT["id"] and tile_pos not in tree_positions:
+			valid_positions.append(tile_pos)
+
+	# Place bedrock at a random valid position
+	if valid_positions.size() > 0:
+		var bedrock_pos = valid_positions[randi() % valid_positions.size()]
+		set_cell(bedrock_pos, dl.BLOCK_BEDROCK["id"], Vector2i(0, 0))
+		block_entities[bedrock_pos] = BlockEntity.new(dl.BLOCK_BEDROCK["id"], bedrock_pos, self, false)
+		print("Placed single bedrock at:", bedrock_pos)
+		spawn_tile = bedrock_pos
+
+
 
 func is_adjacent_to_solid(tile_pos):
 	var directions = [
