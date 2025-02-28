@@ -41,6 +41,29 @@ func _on_animation_timeout():
 	# Update the tile map with the new tile (animation)
 	set_cell(spawn_tile, dl.SPAWN_POINT["id"], Vector2i(current_frame, 0))
 
+
+func update_block_below(tile_pos: Vector2i):
+	var below_pos = tile_pos + Vector2i(0, 1)  # Position of the block below
+
+	# Ensure the below position is within world bounds
+	if below_pos.y >= WORLD_HEIGHT:
+		return
+	
+	var below_id = get_cell_source_id(below_pos)
+	var above_id = get_cell_source_id(tile_pos)
+
+	# If placing a block above a dirt block, turn it into deep dirt
+	if below_id == dl.BLOCK_DIRT["id"] and above_id != dl.EMPTY["id"]:
+		set_cell(below_pos, dl.BLOCK_DEEP_DIRT["id"], Vector2i(0, 0))
+		block_entities[below_pos] = BlockEntity.new(dl.BLOCK_DEEP_DIRT["id"], below_pos, self, true)
+
+	# If deep dirt is exposed to air (no block above), turn it back into dirt
+	elif below_id == dl.BLOCK_DEEP_DIRT["id"] and above_id == dl.EMPTY["id"]:
+		set_cell(below_pos, dl.BLOCK_DIRT["id"], Vector2i(0, 0))
+		block_entities[below_pos] = BlockEntity.new(dl.BLOCK_DIRT["id"], below_pos, self, true)
+
+
+
 func generate_world():
 	randomize()
 

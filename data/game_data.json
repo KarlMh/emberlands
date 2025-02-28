@@ -4,7 +4,7 @@
 		"BLOCK_BEDROCK": { "id": 1, "hp": -1, "gems": 0, "icon": "res://pixel_art/blocks/BLOCK_BEDROCK.png" },
 		"SPAWN_POINT": { "id": 1000, "hp": -1, "gems": 0, "icon": "res://pixel_art/blocks/SPAWN_POINT.png" },
 		"BLOCK_DIRT": { "id": 2, "hp": 4, "gems": 3, "icon": "res://pixel_art/blocks/BLOCK_DIRT.png" },
-		"BLOCK_DEEP_DIRT": { "id": 3, "hp": 4, "gems": 3, "icon": "res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" },
+		"BLOCK_DEEP_DIRT": { "id": 3, "hp": 4, "gems": 3, "transform": "BLOCK_DIRT", "icon": "res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" },
 		"BLOCK_STONE": { "id": 4, "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_STONE.png" },
 		"BLOCK_MAGMA": { "id": 5, "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_MAGMA.png" },
 		"BLOCK_WOOD": { "id": 6, "hp": 4, "gems": 8, "icon": "res://pixel_art/blocks/BLOCK_WOOD.png" },

@@ -69,19 +69,33 @@ func create_item(name: String) -> Item:
 		for subcategory in game_data[category]:
 			if game_data[category][subcategory].has(name):
 				var item_data = game_data[category][subcategory][name]
+				
+				# Check for transformation
+				if item_data.has("transform"):
+					var transformed_name = item_data["transform"]
+					print("Transforming item:", name, "to", transformed_name)
+					return create_item(transformed_name)  # Recursively create the transformed item
+
 				var id = item_data["id"]
 				var icon = load(item_data["icon"])  # Load the icon image from the file path
 
-				# Check if the subcategory is "blocks"
+				# Check if the subcategory is "interactive_blocks"
 				if subcategory == "interactive_blocks":
 					var gems = item_data["gems"]
 					var interaction_type = item_data["interaction_type"]
 					var hp = item_data["hp"]
 					return Item.create_interactive_block(id, name, interaction_type, icon, gems)  # Create Block item
-					
+
 		# Check if the category exists and has the item by name
 		if game_data[category].has(name):
 			var item_data = game_data[category][name]
+			
+			# Check for transformation
+			if item_data.has("transform"):
+				var transformed_name = item_data["transform"]
+				print("Transforming item:", name, "to", transformed_name)
+				return create_item(transformed_name)  # Recursively create the transformed item
+
 			var id = item_data["id"]
 			var icon = load(item_data["icon"])  # Load the icon image from the file path
 

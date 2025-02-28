@@ -8,7 +8,7 @@ const WORLD_HEIGHT = 50
 const BLINK_DELAY_MIN = 4.0
 const BLINK_DELAY_MAX = 12.0
 const TIME_BETWEEN_ACTIONS = 0.4
-const BLOCK_PLACEMENT_RANGE = 2
+const BLOCK_PLACEMENT_RANGE = 3
 
 @onready var animated_sprite = $AnimationPlayer
 @onready var animated_sprite2 = $AnimationPlayer2
@@ -56,15 +56,19 @@ func _ready():
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
-	handle_jump()
-	handle_movement(delta)
-	handle_animations()
+	
+	if not is_frozen:
+		handle_jump()
+		handle_movement(delta)
+		handle_block_actions(delta)
+		craft("CRAFTING_TABLE", 1)
+		craft("WOODEN_PICKAXE", 1)
+	
 	move_and_slide()
+	handle_animations()
 	clamp_player_position()
 	handle_blink(delta)
-	handle_block_actions(delta)
-	craft("CRAFTING_TABLE", 1)
-	craft("WOODEN_PICKAXE", 1)
+
 
 func spawn_player():
 	var spawn_tile = blockLayer.spawn_tile
@@ -144,24 +148,13 @@ func break_block() -> void:
 	var tile_pos = blockLayer.local_to_map(mouse_pos)
 
 	if is_within_range(tile_pos):
-		# Check if there is a foreground block at the tile position
-		if blockLayer.get_cell_source_id(tile_pos) == dl.EMPTY['id']:
-			# No foreground block, check for background block
-			if blockLayer.bg_entities.has(tile_pos):
-				var bg_block = blockLayer.bg_entities[tile_pos]
-				if bg_block.reduce_hp(mining_power, bg_layer, breakingLayer):  # Reduce HP and check if destroyed
-					var dropped_item = bg_block.drop_block()
-					player_gems += bg_block.get_gems_to_drop()
-					if dropped_item:
-						for item in dropped_item:
-							inventory_manager.add_item(item)
-					bg_layer.set_cell(tile_pos, dl.EMPTY['id'])  # Remove background tile
-					var empty_bg_block = BackgroundEntity.new(dl.EMPTY['id'], tile_pos, self, false)  # is_background = true
-					blockLayer.bg_entities[tile_pos] = empty_bg_block
-		else:
-			# There is a foreground block, break it instead
+		# Check foreground block
+		if blockLayer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
 			if blockLayer.block_entities.has(tile_pos):
 				var block = blockLayer.block_entities[tile_pos]
+				var block_id = block.get_id()
+				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
+
 				if block.reduce_hp(mining_power, blockLayer, breakingLayer):
 					player_gems += block.get_gems_to_drop()
 					var dropped_item = block.drop_block()
@@ -169,11 +162,34 @@ func break_block() -> void:
 						for item in dropped_item:
 							inventory_manager.add_item(item)
 					blockLayer.set_cell(tile_pos, dl.EMPTY['id'])
-					var empty_block = BlockEntity.new(dl.EMPTY['id'], tile_pos, self, false)  # is_background = false
-					blockLayer.block_entities[tile_pos] = empty_block
+					blockLayer.block_entities[tile_pos] = BlockEntity.new(dl.EMPTY['id'], tile_pos, self, false)
 
-		# Check and remove tree if fully broken
+					# **Only update below if breaking dirt**
+					if is_dirt_block:
+						blockLayer.update_block_below(tile_pos)
+
+		# Check background block
+		elif blockLayer.bg_entities.has(tile_pos):
+			var bg_block = blockLayer.bg_entities[tile_pos]
+			var block_id = bg_block.get_id()
+			var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
+
+			if bg_block.reduce_hp(mining_power, bg_layer, breakingLayer):
+				var dropped_item = bg_block.drop_block()
+				player_gems += bg_block.get_gems_to_drop()
+				if dropped_item:
+					for item in dropped_item:
+						inventory_manager.add_item(item)
+				bg_layer.set_cell(tile_pos, dl.EMPTY['id'])
+				blockLayer.bg_entities[tile_pos] = BackgroundEntity.new(dl.EMPTY['id'], tile_pos, self, false)
+
+				# **Only update below if breaking dirt**
+				if is_dirt_block:
+					blockLayer.update_block_below(tile_pos)
+
+		# Remove tree if fully broken
 		blockLayer.remove_tree_if_fully_broken(tile_pos)
+
 
 
 func craft_item(item_name: String, quantity: int) -> bool:
@@ -226,8 +242,6 @@ func craft(item: String, quantity: int):
 
 
 
-
-
 func place_block() -> void:
 	if inventory_manager.get_selected_item() == null or inventory_manager.get_selected_item().get_id() == -10 or inventory_manager.get_selected_item().is_tool():
 		return
@@ -250,22 +264,33 @@ func place_block() -> void:
 				class_entity = BackgroundEntity
 			else: class_entity = BlockEntity if selected_item.is_block() else InteractiveBlockEntity
 
+			# Check the block above to determine whether to place deep dirt or normal dirt
+			var tile_above = tile_pos + Vector2i(0, -1)
+			var tile_above_id = target_layer.get_cell_source_id(tile_above)
+			var is_dirt_block = selected_item.get_id() == dl.BLOCK_DIRT["id"] or selected_item.get_id() == dl.BLOCK_DEEP_DIRT["id"]
+			var block_to_place_id = selected_item.get_id()
+			if is_dirt_block:
+				block_to_place_id = dl.BLOCK_DIRT["id"]  # Default to normal dirt
+				if tile_above_id == dl.BLOCK_DIRT["id"] or tile_above_id == dl.BLOCK_DEEP_DIRT["id"]:
+					# Transform to deep dirt if there's dirt above
+					block_to_place_id = dl.BLOCK_DEEP_DIRT["id"]
 			
-
 			# Check if the target tile is empty
 			if target_layer.get_cell_source_id(tile_pos) == dl.EMPTY['id']:
 				# Place the block
-				target_layer.set_cell(tile_pos, selected_item.get_id(), Vector2i(0, 0))
+				target_layer.set_cell(tile_pos, block_to_place_id, Vector2i(0, 0))
 				target_block_entities[tile_pos] = class_entity.new(
-					selected_item.get_id(),
+					block_to_place_id,
 					tile_pos,
 					self,  # parent_node
 					true
 				)
+				
+				if is_dirt_block:
+					blockLayer.update_block_below(tile_pos)
 
 				# Remove the item from the inventory
 				inventory_manager.remove_item(selected_item, 1)
-
 
 				# Play the placement animation
 				animated_sprite3.speed_scale = 1.5
@@ -284,14 +309,19 @@ func place_block() -> void:
 				print("Cannot place block: Tile is not empty.")
 		else:
 			print("Cannot place block: No item selected.")
+
 			
 	
-
+# Scaled Manhattan Distance
 func is_within_range(tile_pos: Vector2i) -> bool:
 	var player_tile_pos = blockLayer.local_to_map(position)
 	var distance_x = abs(tile_pos.x - player_tile_pos.x)
 	var distance_y = abs(tile_pos.y - player_tile_pos.y)
-	return distance_x <= BLOCK_PLACEMENT_RANGE and distance_y <= BLOCK_PLACEMENT_RANGE
+	
+	# Manhattan Distance but with reduced diagonal reach
+	return max(distance_x, distance_y) <= BLOCK_PLACEMENT_RANGE and (distance_x + distance_y) <= (BLOCK_PLACEMENT_RANGE + 1)
+
+
 
 func is_within_bounds(tile_pos: Vector2i) -> bool:
 	return tile_pos.x >= 0 and tile_pos.x < WORLD_WIDTH and tile_pos.y >= 0 and tile_pos.y < WORLD_HEIGHT
@@ -321,10 +351,8 @@ var is_frozen = false  # State to track if the player is frozen
 func freeze():
 	is_frozen = true
 	velocity = Vector2.ZERO  # Stop all movement
-	set_physics_process(false)  # Disable movement updates
 	print("❄️ Player is frozen!")
 
 func unfreeze():
 	is_frozen = false
-	set_physics_process(true)  # Re-enable movement updates
 	print("🔥 Player is unfrozen!")
