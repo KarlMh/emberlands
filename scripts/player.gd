@@ -27,6 +27,7 @@ const BLOCK_PLACEMENT_RANGE = 2
 
 @onready var inventory_manager = get_tree().get_root().find_child("slot_container", true, false)
 @onready var inventory_window = get_tree().get_root().find_child("inventory_window", true, false)
+@onready var options = get_tree().get_root().find_child("options", true, false)
 
 @onready var seed_planter = preload("res://scripts/seed_planter.gd").new()
 
@@ -125,7 +126,7 @@ func get_blink_delay() -> float:
 
 func handle_block_actions(delta: float):
 	action_timer += delta
-	if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_action_pressed("ui_break")) and !inventory_window.visible:
+	if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_action_pressed("ui_break")) and !inventory_window.visible and !options.visible:
 		animated_sprite3.speed_scale = 1.5
 		animated_sprite3.play("hand_movement")
 		if action_timer >= TIME_BETWEEN_ACTIONS:
@@ -256,11 +257,6 @@ func place_block() -> void:
 
 				# Remove the item from the inventory
 				inventory_manager.remove_item(selected_item, 1)
-				
-				var player_tile_pos = blockLayer.local_to_map(position)
-				if tile_pos == player_tile_pos and target_layer != bg_layer:
-					spawn_player()
-					print("DEAD!")  # Prevent placing on themselves
 
 
 				# Play the placement animation
@@ -268,6 +264,14 @@ func place_block() -> void:
 				animated_sprite3.play("hand_movement")
 
 				print("Placed block at position:", tile_pos)
+				
+				var player_tile_pos = blockLayer.local_to_map(position)
+				if tile_pos == player_tile_pos and target_layer != bg_layer:
+					freeze()
+					await get_tree().create_timer(0.8).timeout
+					spawn_player()
+					unfreeze()
+					print("DEAD!")  # Prevent placing on themselves
 			else:
 				print("Cannot place block: Tile is not empty.")
 		else:
@@ -302,3 +306,17 @@ func is_within_range_of_block(tile_pos: Vector2i, player_tile_pos: Vector2i) -> 
 	var distance_x = abs(tile_pos.x - player_tile_pos.x)
 	var distance_y = abs(tile_pos.y - player_tile_pos.y)
 	return distance_x <= 3 and distance_y <= 3
+	
+	
+var is_frozen = false  # State to track if the player is frozen
+
+func freeze():
+	is_frozen = true
+	velocity = Vector2.ZERO  # Stop all movement
+	set_physics_process(false)  # Disable movement updates
+	print("❄️ Player is frozen!")
+
+func unfreeze():
+	is_frozen = false
+	set_physics_process(true)  # Re-enable movement updates
+	print("🔥 Player is unfrozen!")

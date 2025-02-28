@@ -4,6 +4,8 @@ extends Control
 var is_inventory_open = false
 @onready var inventory_window = self
 
+@onready var options = get_tree().get_root().find_child("options", true, false)
+
 # Variables for dragging
 var is_dragging = false
 var drag_offset = Vector2()
@@ -56,9 +58,11 @@ func toggle_inventory():
 	# Reset the inventory window's position when opened
 	if is_inventory_open:
 		update_limits()
+		
+	options.visible = false
 
 
-func _process(delta):
+func _process(delta):	
 	if not is_dragging and velocity.length() > 0.1:  # Apply momentum only if there's enough velocity
 		velocity *= friction  # Apply friction for smooth slowdown
 		inventory_window.global_position += velocity  # Move the inventory window

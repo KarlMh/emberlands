@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://clmjiogjv36gg"]
+[gd_scene load_steps=13 format=3 uid="uid://clmjiogjv36gg"]
 
 [ext_resource type="Script" path="res://scripts/canvas_layer.gd" id="1_lobxb"]
 [ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_xe1e8"]
@@ -27,8 +27,6 @@ corner_radius_bottom_left = 10
 font_size = 60
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_noxan"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource("1_lobxb")
@@ -120,16 +118,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -125.0
-offset_top = -150.0
-offset_right = 125.0
-offset_bottom = 150.0
+offset_left = -150.0
+offset_top = -200.0
+offset_right = 150.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.5, 1.5)
-pivot_offset = Vector2(125, 150)
-size_flags_horizontal = 4
 script = ExtResource("7_c4sug")
+metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="options"]
 layout_mode = 1
@@ -138,10 +134,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -115.0
-offset_top = -140.0
-offset_right = 115.0
-offset_bottom = 140.0
+offset_left = -140.0
+offset_top = -190.0
+offset_right = 140.0
+offset_bottom = 190.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
@@ -149,65 +145,43 @@ theme_override_constants/separation = 10
 [node name="respawn_button" type="Button" parent="options/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Respawn"
+text = "RESPAWN"
 script = ExtResource("7_ijc23")
 
-[node name="main_menu_button" type="Button" parent="options/VBoxContainer"]
+[node name="respawn_button2" type="Button" parent="options/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Main Menu"
+text = "RESPAWN"
+script = ExtResource("7_ijc23")
 
-[node name="settings_button" type="Button" parent="options/VBoxContainer"]
+[node name="respawn_button3" type="Button" parent="options/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Settings"
+text = "RESPAWN"
+script = ExtResource("7_ijc23")
 
-[node name="shop_button" type="Button" parent="options/VBoxContainer"]
+[node name="respawn_button4" type="Button" parent="options/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "Shop"
+text = "RESPAWN"
+script = ExtResource("7_ijc23")
 
-[node name="repot_button" type="Button" parent="options/VBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-text = "Report"
-
-[node name="exit_button" type="Button" parent="options/VBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-text = "Exit"
-
-[node name="option_button_panel" type="Panel" parent="."]
+[node name="options_button" type="Button" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -50.0
-offset_bottom = 50.0
+offset_left = -79.0
+offset_bottom = 31.0
 grow_horizontal = 0
-scale = Vector2(1.5, 1.5)
-pivot_offset = Vector2(50, 0)
-theme_override_styles/panel = SubResource("StyleBoxEmpty_noxan")
-
-[node name="options_button" type="Button" parent="option_button_panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -18.0
-offset_top = -16.0
-offset_right = 18.0
-offset_bottom = 16.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(18, 16)
-size_flags_horizontal = 0
 focus_mode = 0
-text = "ESC"
+text = "OPTIONS"
 script = ExtResource("8_bkkwy")
+metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]
-[connection signal="pressed" from="option_button_panel/options_button" to="option_button_panel/options_button" method="_on_pressed"]
+[connection signal="pressed" from="options/VBoxContainer/respawn_button2" to="options/VBoxContainer/respawn_button2" method="_on_pressed"]
+[connection signal="pressed" from="options/VBoxContainer/respawn_button3" to="options/VBoxContainer/respawn_button3" method="_on_pressed"]
+[connection signal="pressed" from="options/VBoxContainer/respawn_button4" to="options/VBoxContainer/respawn_button4" method="_on_pressed"]
+[connection signal="pressed" from="options_button" to="options_button" method="_on_pressed"]
 
 [editable path="inventory_bar"]
