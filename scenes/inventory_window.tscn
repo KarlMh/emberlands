@@ -1,17 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://ul4ff2b876bs"]
+[gd_scene load_steps=5 format=3 uid="uid://ul4ff2b876bs"]
 
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="1_ib066"]
-[ext_resource type="Texture2D" uid="uid://bgrnoq0tkwyxs" path="res://pixel_art/ui/inventory.png" id="1_kvxuh"]
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="1_wrlxy"]
 [ext_resource type="Script" path="res://scripts/inventory_manager.gd" id="2_sb42w"]
 [ext_resource type="Script" path="res://scripts/hand_slot.gd" id="2_wn18w"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2ckp8"]
-texture = ExtResource("1_kvxuh")
-expand_margin_left = 15.0
-expand_margin_top = 15.0
-expand_margin_right = 15.0
-expand_margin_bottom = 15.0
 
 [node name="inventory_window" type="Panel"]
 anchors_preset = -1
@@ -26,7 +18,6 @@ offset_bottom = 125.272
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(250, 125)
-theme_override_styles/panel = SubResource("StyleBoxTexture_2ckp8")
 script = ExtResource("1_ib066")
 
 [node name="scroll_container" type="ScrollContainer" parent="."]

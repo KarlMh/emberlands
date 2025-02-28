@@ -3,6 +3,7 @@ class_name BaseBlock
 
 # Properties
 var _id: int
+var _name: String
 var _hp: float
 var _initial_hp: float
 var _position: Vector2i
@@ -21,6 +22,7 @@ var dl = DataLoader
 # Constructor
 func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool):
 	self._id = id
+	self._name = dl.get_item_name_by_id(id)
 	self._position = position
 	self._destroyed = false
 	self._can_be_damaged = can_be_damaged

@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cg4ukqpkgths8"]
+[gd_scene load_steps=3 format=3 uid="uid://cg4ukqpkgths8"]
 
 [ext_resource type="Script" path="res://scripts/inventory_slot.gd" id="1_nyulu"]
-[ext_resource type="Texture2D" uid="uid://da8gobdu7gi4p" path="res://pixel_art/ui/slot_sprite.png" id="2_y1wrv"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_vd027"]
 font_size = 200
@@ -13,7 +12,6 @@ shadow_size = 20
 custom_minimum_size = Vector2(32, 32)
 size_flags_vertical = 0
 focus_mode = 0
-flat = true
 script = ExtResource("1_nyulu")
 
 [node name="slot_border" type="TextureRect" parent="."]
@@ -29,7 +27,6 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_y1wrv")
 
 [node name="icon" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(32, 32)

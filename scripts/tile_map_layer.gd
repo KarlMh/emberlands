@@ -128,7 +128,7 @@ func place_bedrock_spawn(dirt_y):
 		var tile_pos = Vector2i(x, dirt_y)
 
 		# Check if the tile is dirt and if there isn't a tree at the position
-		if get_cell_source_id(tile_pos) == dl.BLOCK_DIRT["id"] and tile_pos not in tree_positions:
+		if get_cell_source_id(tile_pos) == dl.BLOCK_DIRT["id"] and !is_too_close_to_other_trees(tile_pos):
 			valid_positions.append(tile_pos)
 
 	# Place bedrock at a random valid position

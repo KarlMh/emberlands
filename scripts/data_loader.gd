@@ -65,6 +65,20 @@ func recursive_search(data, id: int) -> String:
 func create_item(name: String) -> Item:
 	# Iterate through all categories
 	for category in game_data:
+		# If the category contains subcategories, iterate through them
+		for subcategory in game_data[category]:
+			if game_data[category][subcategory].has(name):
+				var item_data = game_data[category][subcategory][name]
+				var id = item_data["id"]
+				var icon = load(item_data["icon"])  # Load the icon image from the file path
+
+				# Check if the subcategory is "blocks"
+				if subcategory == "interactive_blocks":
+					var gems = item_data["gems"]
+					var interaction_type = item_data["interaction_type"]
+					var hp = item_data["hp"]
+					return Item.create_interactive_block(id, name, interaction_type, icon, gems)  # Create Block item
+					
 		# Check if the category exists and has the item by name
 		if game_data[category].has(name):
 			var item_data = game_data[category][name]
@@ -95,34 +109,6 @@ func create_item(name: String) -> Item:
 			elif category == "seeds":
 				# Seed-specific data
 				return Item.create_seed(id, name, icon)  # Seeds may be treated as special tools or blocks
-
-		# If the category contains subcategories, iterate through them
-		for subcategory in game_data[category]:
-			if game_data[category][subcategory].has(name):
-				var item_data = game_data[category][subcategory][name]
-				var id = item_data["id"]
-				var icon = load(item_data["icon"])  # Load the icon image from the file path
-
-				# Check if the subcategory is "blocks"
-				if category == "blocks":
-					var gems = item_data["gems"]
-					var hp = item_data["hp"]
-					return Item.create_block(id, name, icon, gems)  # Create Block item
-
-				# Check if the subcategory is "backgrounds"
-				elif category == "backgrounds":
-					var gems = item_data["gems"]
-					var hp = item_data["hp"]
-					return Item.create_background_block(id, name, icon, gems)  # Create Background item
-
-				# Check if the subcategory is "items"
-				elif category == "items":
-					var damage = item_data["damage"]
-					return Item.create_tool(id, name, icon, damage)  # Create Tool item
-
-				# Check if the subcategory is "seeds"
-				elif category == "seeds":
-					return Item.create_seed(id, name, icon)  # Seeds may be treated as special tools or blocks
 
 	# Return null if item is not found
 	print("Item not found:", name)

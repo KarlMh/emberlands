@@ -11,7 +11,7 @@
 		
 		"interactive_blocks": {
 			"CRAFTING_TABLE": { "id": 401, "hp": 6, "gems": 6, "recipe":{"BLOCK_WOOD": 8}, 
-			"interaction_type": "crafting","icon": "res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" },
+				"interaction_type": "craft","icon": "res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" },
 		},
 	},
 	"backgrounds": {

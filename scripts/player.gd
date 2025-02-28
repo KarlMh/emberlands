@@ -33,6 +33,7 @@ const BLOCK_PLACEMENT_RANGE = 2
 
 const BlockEntity = preload("res://scripts/BlockEntity.gd")
 const BackgroundEntity = preload("res://scripts/BackgroundEntity.gd")
+const InteractiveBlockEntity = preload("res://scripts/InteractiveBlock.gd")
 
 var blink_timer = 0.0
 var can_blink = true
@@ -217,10 +218,12 @@ func craft_item(item_name: String, quantity: int) -> bool:
 	return true  # Indicate successful crafting
 
 
+func craft(item: String, quantity: int):
+	if Input.is_action_just_pressed("ui_craft"):
+		var nearby_block = check_and_interact_with_nearby_block()
+		if nearby_block and nearby_block.get_interaction_type() == "craft":
+			craft_item(item, quantity)
 
-func craft(item, quantity):
-	if Input.is_action_just_pressed("ui_craft") and check_and_interact_with_nearby_block():  # Only triggers once per press
-		craft_item(item, quantity)
 
 
 
@@ -242,7 +245,12 @@ func place_block() -> void:
 
 			var target_layer = bg_layer if selected_item.is_background() else blockLayer
 			var target_block_entities = blockLayer.bg_entities if selected_item.is_background() else blockLayer.block_entities
-			var class_entity = BackgroundEntity if selected_item.is_background() else BlockEntity
+			var class_entity
+			if selected_item.is_background():
+				class_entity = BackgroundEntity
+			else: class_entity = BlockEntity if selected_item.is_block() else InteractiveBlockEntity
+
+			
 
 			# Check if the target tile is empty
 			if target_layer.get_cell_source_id(tile_pos) == dl.EMPTY['id']:
@@ -289,16 +297,16 @@ func is_within_bounds(tile_pos: Vector2i) -> bool:
 	return tile_pos.x >= 0 and tile_pos.x < WORLD_WIDTH and tile_pos.y >= 0 and tile_pos.y < WORLD_HEIGHT
 	
 	
-func check_and_interact_with_nearby_block() -> bool:
+func check_and_interact_with_nearby_block() -> InteractiveBlockEntity:
 	var player_tile_pos = blockLayer.local_to_map(position)
 
 	# Iterate over all block entities in the foreground and background layers
 	for tile_pos in blockLayer.block_entities.keys():
 		if is_within_range_of_block(tile_pos, player_tile_pos):
 			var block_entity = blockLayer.block_entities[tile_pos]
-			if block_entity and block_entity.interact():
-				return true
-	return false
+			if block_entity is InteractiveBlockEntity:
+				return block_entity
+	return null
 
 
 # Helper method to check if a tile is within range of the player

@@ -1,6 +1,6 @@
 class_name Item
 
-enum ItemType { BLOCK, BACKGROUND_BLOCK, TOOL, SEED }
+enum ItemType { BLOCK, INTERACTIVE_BLOCK, BACKGROUND_BLOCK, TOOL, SEED }
 
 var item_id: int
 var item_name: String
@@ -21,6 +21,11 @@ func _init(id: int, name: String, icon: Texture2D, type: ItemType):
 # 🏗️ **FOREGROUND BLOCK Constructor** (For solid blocks)
 static func create_block(id: int, name: String, icon: Texture2D, gems: int) -> Item:
 	var item = Item.new(id, name, icon, ItemType.BLOCK)
+	item.item_gems = gems
+	return item
+	
+static func create_interactive_block(id: int, name: String, interactive_type: String, icon: Texture2D, gems: int) -> Item:
+	var item = Item.new(id, name, icon, ItemType.INTERACTIVE_BLOCK)
 	item.item_gems = gems
 	return item
 
@@ -56,6 +61,9 @@ func is_tool() -> bool:
 
 func is_block() -> bool:
 	return item_type == ItemType.BLOCK
+	
+func is_interactive_block() -> bool:
+	return item_type == ItemType.INTERACTIVE_BLOCK
 
 func is_background() -> bool:
 	return item_type == ItemType.BACKGROUND_BLOCK
