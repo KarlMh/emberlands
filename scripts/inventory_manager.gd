@@ -98,13 +98,19 @@ func sort_inventory():
 	var sorted_slots := []  
 
 	# 1️⃣ Collect non-empty slots **before clearing**
+	var inventory_info = ""  # String to collect all item info for later display
 	for slot in slots:
 		if slot.item:
 			sorted_slots.append({
 				"item": slot.item,
 				"item_count": slot.item_count
 			})
-			print("Collected:", slot.item.item_name, "Count:", slot.item_count)  # Debug
+			# Collect item info for display later
+			inventory_info += slot.item.item_name + " (Count: " + str(slot.item_count) + "), "
+
+	# Remove the trailing comma and space
+	if inventory_info.length() > 0:
+		print(inventory_info)
 
 	# 2️⃣ Sort items by ID **to ensure correct order**
 	sorted_slots.sort_custom(func(a, b):
@@ -126,6 +132,7 @@ func sort_inventory():
 	inventory_bar.update_bar_display()
 
 	print("Inventory sorted successfully.")
+
 
 
 

@@ -19,10 +19,27 @@ var dl = DataLoader
 const BlockEntity = preload("res://scripts/BlockEntity.gd")
 const BackgroundEntity = preload("res://scripts/BackgroundEntity.gd")
 
+# Timer for cycling through frames
+var animation_timer = Timer.new()
+var current_frame = 0
+
 func _ready():
 	noise.seed = randi()
 	noise.frequency = 0.1
 	generate_world()
+	
+	# Set up the animation timer to update the frame every 0.1 seconds
+	animation_timer.wait_time = 0.15
+	animation_timer.autostart = true
+	animation_timer.connect("timeout", Callable(self, "_on_animation_timeout"))
+	add_child(animation_timer)
+	
+func _on_animation_timeout():
+	
+	# Cycle through the frames in the tile set (6 frames total)
+	current_frame = (current_frame + 1) % 6
+	# Update the tile map with the new tile (animation)
+	set_cell(spawn_tile, dl.SPAWN_POINT["id"], Vector2i(current_frame, 0))
 
 func generate_world():
 	randomize()
@@ -120,7 +137,11 @@ func place_bedrock_spawn(dirt_y):
 		set_cell(bedrock_pos, dl.BLOCK_BEDROCK["id"], Vector2i(0, 0))
 		block_entities[bedrock_pos] = BlockEntity.new(dl.BLOCK_BEDROCK["id"], bedrock_pos, self, false)
 		print("Placed single bedrock at:", bedrock_pos)
-		spawn_tile = bedrock_pos
+		spawn_tile = bedrock_pos + Vector2i(0, -1)
+		set_cell(spawn_tile, dl.SPAWN_POINT["id"], Vector2i(0, 0))
+		block_entities[spawn_tile] = BlockEntity.new(dl.SPAWN_POINT["id"], spawn_tile, self, false)
+		bg_layer.set_cell(spawn_tile, dl.SPAWN_POINT["id"], Vector2i(0, 0))
+		bg_entities[spawn_tile] = BlockEntity.new(dl.SPAWN_POINT["id"], spawn_tile, self, false)
 
 
 

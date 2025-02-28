@@ -71,10 +71,8 @@ func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLa
 
 # Animation Handling
 func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLayer):
-	print("Starting break animation for:", _position)
 
 	if not breakingLayer:
-		print("ERROR: breakingLayer is null!")
 		return
 
 	if _destroyed:

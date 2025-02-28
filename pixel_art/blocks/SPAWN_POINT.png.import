@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bv2250utfhqvi"
-path="res://.godot/imported/CRAFTING_TABLE.png-3ac950fc00413701b9e993422e914076.ctex"
+uid="uid://cregdt65ppbwk"
+path="res://.godot/imported/SPAWN_POINT.png-84f5dcc02f158c934710ab7ea6fabbfd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://aseprite_files/CRAFTING_TABLE.png"
-dest_files=["res://.godot/imported/CRAFTING_TABLE.png-3ac950fc00413701b9e993422e914076.ctex"]
+source_file="res://pixel_art/blocks/SPAWN_POINT.png"
+dest_files=["res://.godot/imported/SPAWN_POINT.png-84f5dcc02f158c934710ab7ea6fabbfd.ctex"]
 
 [params]
 
