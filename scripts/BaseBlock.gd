@@ -73,7 +73,6 @@ func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLa
 
 # Animation Handling
 func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLayer):
-
 	if not breakingLayer:
 		return
 
@@ -85,11 +84,14 @@ func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLaye
 	var damage_index = clamp(int(((_initial_hp - _hp) / float(_initial_hp)) * total_frames), 0, total_frames)
 	breakingLayer.set_cell(_position, _tileset_source_id, Vector2i(damage_index, 0))
 
+	# If a timer already exists, reset it instead of creating a new one
 	if _block_timers.has(_position):
+		_block_timers[_position].start()  # Restart existing timer
 		return
 
+	# Create and start a new timer if it doesn't exist
 	var erase_timer = Timer.new()
-	erase_timer.wait_time = 5.0
+	erase_timer.wait_time = 4.0
 	erase_timer.one_shot = true
 	erase_timer.timeout.connect(_on_erase_timeout.bind(breakingLayer))
 	_parent_node.add_child(erase_timer)
@@ -105,6 +107,7 @@ func _on_erase_timeout(breakingLayer: TileMapLayer):
 	if _block_timers.has(_position):
 		_block_timers[_position].queue_free()
 		_block_timers.erase(_position)
+
 
 func drop_block() -> Array:
 	if not _destroyed:
