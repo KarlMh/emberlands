@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://n46n5hkwy7i"]
+[gd_scene load_steps=30 format=3 uid="uid://n46n5hkwy7i"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ga323"]
 [ext_resource type="Texture2D" uid="uid://curgmp0su2rn1" path="res://pixel_art/character/main_body.png" id="2_wcm0f"]
@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://bgkgv587okky5" path="res://pixel_art/character/feet_1.png" id="6_ga405"]
 [ext_resource type="Script" path="res://scripts/hand_item.gd" id="6_s4ba5"]
 [ext_resource type="Texture2D" uid="uid://c4lwg8ofuv26y" path="res://pixel_art/character/feet_2.png" id="7_654eq"]
+[ext_resource type="AudioStream" uid="uid://csoup6xdk6vv0" path="res://sounds/jump.wav" id="10_gulkr"]
+[ext_resource type="AudioStream" uid="uid://bplwols2uujms" path="res://sounds/break.wav" id="11_8ub18"]
+[ext_resource type="AudioStream" uid="uid://b20r7yg01e5xh" path="res://sounds/place.wav" id="12_88bb4"]
+[ext_resource type="AudioStream" uid="uid://drfkmddalvv60" path="res://sounds/death.wav" id="13_f133i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xtxnn"]
 size = Vector2(18, 30)
@@ -913,3 +917,16 @@ libraries = {
 libraries = {
 "": SubResource("AnimationLibrary_c7pat")
 }
+
+[node name="jump_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_gulkr")
+volume_db = -5.0
+
+[node name="break_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_8ub18")
+
+[node name="place_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_88bb4")
+
+[node name="death_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("13_f133i")

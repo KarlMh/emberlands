@@ -29,6 +29,12 @@ const BLOCK_PLACEMENT_RANGE = 3
 @onready var inventory_window = get_tree().get_root().find_child("inventory_window", true, false)
 @onready var options = get_tree().get_root().find_child("options", true, false)
 
+@onready var jump_sound = get_tree().get_root().find_child("jump_sound", true, false)
+@onready var break_sound = get_tree().get_root().find_child("break_sound", true, false)
+@onready var place_sound = get_tree().get_root().find_child("place_sound", true, false)
+@onready var death_sound = get_tree().get_root().find_child("death_sound", true, false)
+
+
 @onready var seed_planter = preload("res://scripts/seed_planter.gd").new()
 
 const BlockEntity = preload("res://scripts/BlockEntity.gd")
@@ -74,6 +80,12 @@ func spawn_player():
 	var spawn_tile = blockLayer.spawn_tile
 	position = blockLayer.map_to_local(spawn_tile)
 	print("Player spawned at:", position)
+	
+func respawn_player():
+	spawn_player()
+	if not death_sound.playing:  # Prevent overlapping sounds
+		death_sound.play()
+	
 
 func apply_gravity(delta: float):
 	if not is_on_floor():
@@ -82,6 +94,8 @@ func apply_gravity(delta: float):
 func handle_jump():
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		if not jump_sound.playing:  # Prevent overlapping sounds
+			jump_sound.play()
 		animated_sprite.play("jumping")
 	if Input.is_action_just_released("ui_accept") and velocity.y < 0:
 		velocity.y *= 0.4
@@ -154,7 +168,8 @@ func break_block() -> void:
 				var block = blockLayer.block_entities[tile_pos]
 				var block_id = block.get_id()
 				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
-
+				if not break_sound.playing:  # Prevent overlapping sounds
+						break_sound.play()
 				if block.reduce_hp(mining_power, blockLayer, breakingLayer):
 					player_gems += block.get_gems_to_drop()
 					var dropped_item = block.drop_block()
@@ -169,23 +184,26 @@ func break_block() -> void:
 						blockLayer.update_block_below(tile_pos)
 
 		# Check background block
-		elif blockLayer.bg_entities.has(tile_pos):
-			var bg_block = blockLayer.bg_entities[tile_pos]
-			var block_id = bg_block.get_id()
-			var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
+		elif bg_layer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
+			if blockLayer.bg_entities.has(tile_pos):
+				var bg_block = blockLayer.bg_entities[tile_pos]
+				var block_id = bg_block.get_id()
+				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
+				if not break_sound.playing:  # Prevent overlapping sounds
+					break_sound.play()
 
-			if bg_block.reduce_hp(mining_power, bg_layer, breakingLayer):
-				var dropped_item = bg_block.drop_block()
-				player_gems += bg_block.get_gems_to_drop()
-				if dropped_item:
-					for item in dropped_item:
-						inventory_manager.add_item(item)
-				bg_layer.set_cell(tile_pos, dl.EMPTY['id'])
-				blockLayer.bg_entities[tile_pos] = BackgroundEntity.new(dl.EMPTY['id'], tile_pos, self, false)
+				if bg_block.reduce_hp(mining_power, bg_layer, breakingLayer):
+					var dropped_item = bg_block.drop_block()
+					player_gems += bg_block.get_gems_to_drop()
+					if dropped_item:
+						for item in dropped_item:
+							inventory_manager.add_item(item)
+					bg_layer.set_cell(tile_pos, dl.EMPTY['id'])
+					blockLayer.bg_entities[tile_pos] = BackgroundEntity.new(dl.EMPTY['id'], tile_pos, self, false)
 
-				# **Only update below if breaking dirt**
-				if is_dirt_block:
-					blockLayer.update_block_below(tile_pos)
+					# **Only update below if breaking dirt**
+					if is_dirt_block:
+						blockLayer.update_block_below(tile_pos)
 
 		# Remove tree if fully broken
 		blockLayer.remove_tree_if_fully_broken(tile_pos)
@@ -295,16 +313,20 @@ func place_block() -> void:
 				# Play the placement animation
 				animated_sprite3.speed_scale = 1.5
 				animated_sprite3.play("hand_movement")
+				
+				if not place_sound.playing:  # Prevent overlapping sounds
+					place_sound.play()
 
 				print("Placed block at position:", tile_pos)
 				
 				var player_tile_pos = blockLayer.local_to_map(position)
 				if tile_pos == player_tile_pos and target_layer != bg_layer:
 					freeze()
-					await get_tree().create_timer(0.8).timeout
-					spawn_player()
+					await get_tree().create_timer(0.5).timeout
+					respawn_player()
 					unfreeze()
 					print("DEAD!")  # Prevent placing on themselves
+				
 			else:
 				print("Cannot place block: Tile is not empty.")
 		else:

@@ -16,8 +16,8 @@ func _on_pressed() -> void:
 	options.visible = false
 	
 	player.freeze()
-	await get_tree().create_timer(1.2).timeout
-	player.spawn_player()
+	await get_tree().create_timer(0.5).timeout
+	player.respawn_player()
 	player.unfreeze()
 	
 	# Start cooldown timer
