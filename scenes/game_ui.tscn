@@ -1,21 +1,22 @@
-[gd_scene load_steps=14 format=3 uid="uid://clmjiogjv36gg"]
+[gd_scene load_steps=15 format=3 uid="uid://cqmu0xy3fueuf"]
 
-[ext_resource type="Script" path="res://scripts/canvas_layer.gd" id="1_lobxb"]
-[ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_xe1e8"]
-[ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="2_e8fq5"]
-[ext_resource type="PackedScene" uid="uid://ul4ff2b876bs" path="res://scenes/inventory_window.tscn" id="3_edm41"]
-[ext_resource type="Script" path="res://scenes/display_gems.gd" id="4_5xbdi"]
-[ext_resource type="Script" path="res://scripts/options.gd" id="7_c4sug"]
-[ext_resource type="Script" path="res://scripts/respawn_button.gd" id="7_ijc23"]
-[ext_resource type="Script" path="res://scripts/options_button.gd" id="8_bkkwy"]
-[ext_resource type="Texture2D" uid="uid://ba1dptwycerkh" path="res://pixel_art/stuff/gems.png" id="8_p665x"]
+[ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_yorhh"]
+[ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="2_dqpr8"]
+[ext_resource type="Script" path="res://scenes/display_gems.gd" id="3_ck6tt"]
+[ext_resource type="Texture2D" uid="uid://ba1dptwycerkh" path="res://pixel_art/stuff/gems.png" id="4_80606"]
+[ext_resource type="PackedScene" uid="uid://ul4ff2b876bs" path="res://scenes/inventory_window.tscn" id="5_u2aqm"]
+[ext_resource type="Script" path="res://scripts/options.gd" id="6_cppry"]
+[ext_resource type="Script" path="res://scripts/respawn_button.gd" id="7_n8dry"]
+[ext_resource type="Script" path="res://scripts/main_menu_button.gd" id="8_3q1cn"]
+[ext_resource type="Script" path="res://scripts/exit_button.gd" id="9_op3db"]
+[ext_resource type="Script" path="res://scripts/options_button.gd" id="10_vnx7g"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qhkqk"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_on2y1"]
 bg_color = Color(0.227451, 0.717647, 1, 0.12549)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jatgd"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n55u8"]
 bg_color = Color(0.454902, 0.72549, 1, 0)
 border_color = Color(0.8, 0.8, 0.8, 0)
 corner_radius_top_left = 10
@@ -23,17 +24,23 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="LabelSettings" id="LabelSettings_cb7q1"]
+[sub_resource type="LabelSettings" id="LabelSettings_w4khy"]
 font_size = 60
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_noxan"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bsgeq"]
 
-[node name="CanvasLayer" type="CanvasLayer"]
-script = ExtResource("1_lobxb")
+[node name="game_ui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="inventory_bar" parent="." instance=ExtResource("1_xe1e8")]
+[node name="inventory_bar" parent="." instance=ExtResource("1_yorhh")]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -45,11 +52,10 @@ offset_right = 110.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(1.5, 1.5)
-pivot_offset = Vector2(110, 40)
-theme_override_styles/panel = SubResource("StyleBoxFlat_qhkqk")
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(110, 50)
+theme_override_styles/panel = SubResource("StyleBoxFlat_on2y1")
 script = null
-metadata/_edit_use_anchors_ = true
 
 [node name="slot_bar" parent="inventory_bar" index="0" node_paths=PackedStringArray("bar_container")]
 layout_mode = 1
@@ -64,26 +70,26 @@ offset_right = 100.0
 offset_bottom = 17.5
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_e8fq5")
+script = ExtResource("2_dqpr8")
 bar_container = NodePath(".")
 
 [node name="display_gems" type="Panel" parent="."]
-anchors_preset = -1
-anchor_top = 0.409
-anchor_bottom = 0.409
-offset_top = -15.032
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
 offset_right = 60.0
-offset_bottom = 14.968
+offset_bottom = 15.0
 grow_vertical = 2
-scale = Vector2(1.5, 1.5)
+scale = Vector2(2.5, 2.5)
 pivot_offset = Vector2(0, 15)
-theme_override_styles/panel = SubResource("StyleBoxFlat_jatgd")
-script = ExtResource("4_5xbdi")
-metadata/_edit_use_anchors_ = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_n55u8")
+script = ExtResource("3_ck6tt")
 
 [node name="Sprite2D" type="Sprite2D" parent="display_gems"]
 position = Vector2(10, 15)
-texture = ExtResource("8_p665x")
+texture = ExtResource("4_80606")
 
 [node name="Label" type="Label" parent="display_gems"]
 layout_mode = 1
@@ -100,9 +106,10 @@ grow_vertical = 2
 scale = Vector2(0.2, 0.2)
 pivot_offset = Vector2(-2.66667, 57.6667)
 text = "0"
-label_settings = SubResource("LabelSettings_cb7q1")
+label_settings = SubResource("LabelSettings_w4khy")
 
-[node name="inventory_window" parent="." instance=ExtResource("3_edm41")]
+[node name="inventory_window" parent="." instance=ExtResource("5_u2aqm")]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -112,9 +119,10 @@ offset_left = -250.0
 offset_top = -125.0
 offset_right = 250.0
 offset_bottom = 125.0
-metadata/_edit_use_anchors_ = true
+scale = Vector2(2.5, 2.5)
 
 [node name="options" type="Panel" parent="."]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -126,10 +134,10 @@ offset_right = 125.0
 offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.5, 1.5)
+scale = Vector2(2.5, 2.5)
 pivot_offset = Vector2(125, 150)
 size_flags_horizontal = 4
-script = ExtResource("7_c4sug")
+script = ExtResource("6_cppry")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="options"]
 layout_mode = 1
@@ -150,12 +158,13 @@ theme_override_constants/separation = 10
 layout_mode = 2
 focus_mode = 0
 text = "Respawn"
-script = ExtResource("7_ijc23")
+script = ExtResource("7_n8dry")
 
 [node name="main_menu_button" type="Button" parent="options/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
 text = "Main Menu"
+script = ExtResource("8_3q1cn")
 
 [node name="settings_button" type="Button" parent="options/VBoxContainer"]
 layout_mode = 2
@@ -176,17 +185,19 @@ text = "Report"
 layout_mode = 2
 focus_mode = 0
 text = "Exit"
+script = ExtResource("9_op3db")
 
 [node name="option_button_panel" type="Panel" parent="."]
+layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -50.0
 offset_bottom = 50.0
 grow_horizontal = 0
-scale = Vector2(1.5, 1.5)
+scale = Vector2(2.5, 2.5)
 pivot_offset = Vector2(50, 0)
-theme_override_styles/panel = SubResource("StyleBoxEmpty_noxan")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bsgeq")
 
 [node name="options_button" type="Button" parent="option_button_panel"]
 layout_mode = 1
@@ -205,9 +216,11 @@ pivot_offset = Vector2(18, 16)
 size_flags_horizontal = 0
 focus_mode = 0
 text = "ESC"
-script = ExtResource("8_bkkwy")
+script = ExtResource("10_vnx7g")
 
 [connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]
+[connection signal="pressed" from="options/VBoxContainer/main_menu_button" to="options/VBoxContainer/main_menu_button" method="_on_pressed"]
+[connection signal="pressed" from="options/VBoxContainer/exit_button" to="options/VBoxContainer/exit_button" method="_on_exit_button_pressed"]
 [connection signal="pressed" from="option_button_panel/options_button" to="option_button_panel/options_button" method="_on_pressed"]
 
 [editable path="inventory_bar"]

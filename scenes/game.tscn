@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://n46n5hkwy7i" path="res://scenes/player.tscn" id="1_plyk1"]
 [ext_resource type="Texture2D" uid="uid://cyobbiir0ua2c" path="res://pixel_art/blocks/BLOCK_DIRT.png" id="2_6wxjt"]
 [ext_resource type="Texture2D" uid="uid://dxhwh18fsq0or" path="res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" id="2_ph2l1"]
-[ext_resource type="PackedScene" uid="uid://clmjiogjv36gg" path="res://scenes/canvas_layer.tscn" id="2_xxj1d"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="3_xq4vh"]
 [ext_resource type="Texture2D" uid="uid://dip1w8ql50qc7" path="res://pixel_art/blocks/BLOCK_BEDROCK.png" id="4_7bq21"]
 [ext_resource type="Script" path="res://scripts/tile_map_layer.gd" id="4_423te"]
@@ -21,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://dqbyg0c1f6k4f" path="res://pixel_art/backgrounds/BACKGROUND_LEAF.png" id="17_6iu2a"]
 [ext_resource type="Texture2D" uid="uid://dg3j6rx51mcap" path="res://pixel_art/weathers/Clouds 5/3.png" id="17_h7iu3"]
 [ext_resource type="Texture2D" uid="uid://dsbod1ho4km4j" path="res://pixel_art/seeds/SEED_TREE.png" id="18_palsk"]
+[ext_resource type="PackedScene" uid="uid://cqmu0xy3fueuf" path="res://scenes/game_ui.tscn" id="21_w54kg"]
 
 [sub_resource type="GDScript" id="GDScript_owcbq"]
 script/source = "extends Node
@@ -253,6 +253,8 @@ z_as_relative = false
 tile_set = SubResource("TileSet_cpqtn")
 script = SubResource("GDScript_1gn7e")
 
-[node name="CanvasLayer" parent="." instance=ExtResource("2_xxj1d")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" parent="CanvasLayer" instance=ExtResource("21_w54kg")]
 
 [editable path="player"]

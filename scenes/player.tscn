@@ -833,7 +833,7 @@ _data = {
 }
 
 [node name="player" type="CharacterBody2D"]
-z_index = 11
+z_index = 20
 script = ExtResource("1_ga323")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
