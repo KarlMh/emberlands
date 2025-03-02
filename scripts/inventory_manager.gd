@@ -34,13 +34,14 @@ var sort_pending = false  # Track when sorting is needed
 func add_item(item: Item) -> void:
 	# First, add the item to the inventory
 	for slot in slots:
-		if slot.item and slot.item.item_id == item.item_id:
-			slot.item_count += 1
-			slot.set_item(slot.item)
-			slot.update_display()
-			inventory_bar.update_bar_display()
-			sort_pending = true  # Mark sorting needed
-			return
+		if slot.item: 
+			if slot.item.item_id == item.item_id:
+				slot.item_count += 1
+				slot.set_item(slot.item)
+				slot.update_display()
+				inventory_bar.update_bar_display()
+				sort_pending = true  # Mark sorting needed
+				return
 
 	for slot in slots:
 		if not slot.item:

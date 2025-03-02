@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtaer3hbfdvu1"
-path="res://.godot/imported/CRAFTING_TABLE.png-d776376418cdae9b66e7dadf32149562.ctex"
+uid="uid://w2doq7fubem5"
+path="res://.godot/imported/BLOCK_IRON.png-9c9f028cb77d656f3e2ae22e0aa84ebd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png"
-dest_files=["res://.godot/imported/CRAFTING_TABLE.png-d776376418cdae9b66e7dadf32149562.ctex"]
+source_file="res://pixel_art/blocks/BLOCK_IRON.png"
+dest_files=["res://.godot/imported/BLOCK_IRON.png-9c9f028cb77d656f3e2ae22e0aa84ebd.ctex"]
 
 [params]
 

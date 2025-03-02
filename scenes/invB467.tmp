@@ -377,16 +377,13 @@ offset_left = -60.0
 offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
-focus_mode = 0
 text = "CRAFT"
 script = ExtResource("6_ul72a")
 
-[node name="recipe_label" type="RichTextLabel" parent="inventory_window_panel/crafting_inventory/craft_info"]
+[node name="recipe_text" type="RichTextLabel" parent="inventory_window_panel/crafting_inventory/craft_info"]
 layout_mode = 0
-offset_right = 250.0
-offset_bottom = 80.0
-bbcode_enabled = true
-fit_content = true
+offset_right = 200.0
+offset_bottom = 20.0
 script = ExtResource("7_jivkt")
 
 [node name="craft_button_panel" type="Panel" parent="."]

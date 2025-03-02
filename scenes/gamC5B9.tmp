@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cregdt65ppbwk" path="res://pixel_art/blocks/SPAWN_POINT.png" id="8_2coof"]
 [ext_resource type="Texture2D" uid="uid://bqpceuwf666iu" path="res://pixel_art/blocks/BLOCK_MAGMA.png" id="8_lwuvm"]
 [ext_resource type="Texture2D" uid="uid://b0istdyx235xb" path="res://pixel_art/backgrounds/BACKGROUND_CAVE.png" id="9_8kin8"]
-[ext_resource type="Texture2D" uid="uid://dtaer3hbfdvu1" path="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" id="12_x5eag"]
+[ext_resource type="Texture2D" uid="uid://bu3od46bly55s" path="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" id="12_x5eag"]
 [ext_resource type="Script" path="res://scripts/background.gd" id="14_0qu6k"]
 [ext_resource type="Texture2D" uid="uid://ctw8q8jqbxki4" path="res://pixel_art/blocks/BLOCK_WOOD.png" id="14_5aa3o"]
 [ext_resource type="Texture2D" uid="uid://c8rsn68v3c0eb" path="res://pixel_art/interactive_blocks/FURNACE.png" id="14_foy6o"]
@@ -95,7 +95,7 @@ texture_region_size = Vector2i(32, 32)
 texture = ExtResource("12_x5eag")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -7.92739, 16, -7.92739, 16, 16, -16, 16)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -12.0314, 16, -12, 16, 16, -16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cebe8"]
 texture = ExtResource("14_foy6o")
@@ -107,7 +107,7 @@ texture_region_size = Vector2i(32, 32)
 texture = ExtResource("15_6ayvy")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -7, 16, -7, 16, 16, -16, 16)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16, -16, -7.00831)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7gdwm"]
 resource_name = "magma_block"
@@ -282,5 +282,3 @@ script = SubResource("GDScript_1gn7e")
 [node name="Control" parent="CanvasLayer" instance=ExtResource("21_w54kg")]
 
 [editable path="player"]
-[editable path="CanvasLayer/Control"]
-[editable path="CanvasLayer/Control/inventory_bar"]

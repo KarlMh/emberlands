@@ -1,9 +1,10 @@
 class_name Item
 
-enum ItemType { BLOCK, INTERACTIVE_BLOCK, BACKGROUND_BLOCK, TOOL, SEED }
+enum ItemType { BLOCK, INTERACTIVE_BLOCK, BACKGROUND_BLOCK, TOOL, SEED, RESOURCE}
 
 var item_id: int
 var item_name: String
+var crafting_tier: int
 var item_icon: Texture2D
 var item_type: ItemType
 
@@ -12,38 +13,44 @@ var item_gems: int = 0  # 💎 Gems for breaking blocks
 # Tool Properties
 var tool_power: float = 0  # Strength of the tool
 
-func _init(id: int, name: String, icon: Texture2D, type: ItemType):
+func _init(id: int, name: String, crafting_tier: int, icon: Texture2D, type: ItemType):
 	self.item_id = id
 	self.item_name = name
+	self.crafting_tier = crafting_tier
 	self.item_icon = icon
 	self.item_type = type
 
 # 🏗️ **FOREGROUND BLOCK Constructor** (For solid blocks)
-static func create_block(id: int, name: String, icon: Texture2D, gems: int) -> Item:
-	var item = Item.new(id, name, icon, ItemType.BLOCK)
+static func create_block(id: int, name: String, crafting_tier: int, icon: Texture2D, gems: int) -> Item:
+	var item = Item.new(id, name, crafting_tier, icon, ItemType.BLOCK)
 	item.item_gems = gems
 	return item
 	
-static func create_interactive_block(id: int, name: String, interactive_type: String, icon: Texture2D, gems: int) -> Item:
-	var item = Item.new(id, name, icon, ItemType.INTERACTIVE_BLOCK)
+static func create_interactive_block(id: int, name: String, crafting_tier: int, interactive_type: String, icon: Texture2D, gems: int) -> Item:
+	var item = Item.new(id, name, crafting_tier, icon, ItemType.INTERACTIVE_BLOCK)
 	item.item_gems = gems
 	return item
 
 # 🏗️ **BACKGROUND BLOCK Constructor** (For decorative/non-solid blocks)
-static func create_background_block(id: int, name: String, icon: Texture2D, gems: int) -> Item:
-	var item = Item.new(id, name, icon, ItemType.BACKGROUND_BLOCK)
+static func create_background_block(id: int, name: String, crafting_tier: int, icon: Texture2D, gems: int) -> Item:
+	var item = Item.new(id, name, crafting_tier, icon, ItemType.BACKGROUND_BLOCK)
 	item.item_gems = gems
 	return item
 
 # 🏗️ **SEED Constructor**
-static func create_seed(id: int, name: String, icon: Texture2D) -> Item:
-	var item = Item.new(id, name, icon, ItemType.SEED)
+static func create_seed(id: int, name: String, crafting_tier: int, icon: Texture2D) -> Item:
+	var item = Item.new(id, name, crafting_tier, icon, ItemType.SEED)
 	return item
 
 # 🔨 **TOOL Constructor**
-static func create_tool(id: int, name: String, icon: Texture2D, power: float) -> Item:
-	var item = Item.new(id, name, icon, ItemType.TOOL)
+static func create_tool(id: int, name: String, crafting_tier: int, icon: Texture2D, power: float) -> Item:
+	var item = Item.new(id, name, crafting_tier, icon, ItemType.TOOL)
 	item.tool_power = power
+	return item
+	
+# 🔨 **RESOURCE Constructor**
+static func create_resource(id: int, name: String, crafting_tier: int, icon: Texture2D) -> Item:
+	var item = Item.new(id, name, crafting_tier, icon, ItemType.RESOURCE)
 	return item
 
 # 📜 **Utility Methods**
@@ -67,3 +74,12 @@ func is_interactive_block() -> bool:
 
 func is_background() -> bool:
 	return item_type == ItemType.BACKGROUND_BLOCK
+	
+func is_seed() -> bool:
+	return item_type == ItemType.SEED
+	
+func is_resource() -> bool:
+	return item_type == ItemType.RESOURCE
+	
+func can_be_placed() -> bool:
+	return is_block() or is_interactive_block() or is_background() or is_seed()

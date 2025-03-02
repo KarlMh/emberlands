@@ -6,6 +6,9 @@ var is_inventory_open = false
 
 @onready var options = get_tree().get_root().find_child("options", true, false)
 
+@onready var main_inventory = get_tree().get_root().find_child("main_inventory", true, false)
+@onready var crafting_inventory = get_tree().get_root().find_child("crafting_inventory", true, false)
+
 # Variables for dragging
 var is_dragging = false
 var drag_offset = Vector2()
@@ -21,6 +24,8 @@ func _ready():
 
 	# Start with the inventory hidden
 	inventory_window.visible = false
+	main_inventory.visible = true
+	crafting_inventory.visible = false
 
 	# Update limits and size based on the current screen size
 	update_limits()
@@ -50,16 +55,27 @@ func _input(event):
 	# Check if the "E" key is pressed to toggle the inventory
 	if event.is_action_pressed("ui_inventory"):  # Ensure "ui_inventory" is set in the Input Map
 		toggle_inventory()
+	
+	
 
 func toggle_inventory():
 	is_inventory_open = !is_inventory_open
 	inventory_window.visible = is_inventory_open
 
+	
 	# Reset the inventory window's position when opened
 	if is_inventory_open:
 		update_limits()
 		
 	options.visible = false
+	
+func toggle_inventory_craft():
+	if crafting_inventory.visible == false:
+		crafting_inventory.visible = true
+	else:
+		crafting_inventory.visible = false
+
+
 
 
 func _process(delta):	

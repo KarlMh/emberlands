@@ -58,6 +58,33 @@ func recursive_search(data, id: int) -> String:
 			if result != "":
 				return result
 	return ""
+	
+# Method to get the name of an item based on its in-game name (ig_name) using recursive search
+func get_item_name_by_ig_name(ig_name: String) -> String:
+	# Start the recursive search from the game_data
+	var item_name = recursive_search_by_ig_name(game_data, ig_name)
+	
+	if item_name == "":
+		print("Item with in-game name", ig_name, "not found.")
+	
+	return item_name  # Return the item name (or empty string if not found)
+
+# Recursive function to search through all levels of categories and subcategories for ig_name
+func recursive_search_by_ig_name(data, ig_name: String) -> String:
+	if typeof(data) == TYPE_DICTIONARY:  # Ensure data is a dictionary
+		for key in data.keys():
+			var item_data = data[key]
+			# Check if the item has an 'ig_name' property
+			if typeof(item_data) == TYPE_DICTIONARY and item_data.has("ig_name") and item_data["ig_name"] == ig_name:
+				return key  # Return the name of the item/block/seed
+			# Recursively search subcategories
+			var result = recursive_search_by_ig_name(item_data, ig_name)
+			if result != "":
+				return result
+	return ""
+
+
+
 
 
 
@@ -84,7 +111,8 @@ func create_item(name: String) -> Item:
 					var gems = item_data["gems"]
 					var interaction_type = item_data["interaction_type"]
 					var hp = item_data["hp"]
-					return Item.create_interactive_block(id, name, interaction_type, icon, gems)  # Create Block item
+					var crafting_tier = item_data["crafting_tier"]
+					return Item.create_interactive_block(id, name, crafting_tier, interaction_type, icon, gems)  # Create Block item
 
 		# Check if the category exists and has the item by name
 		if game_data[category].has(name):
@@ -104,26 +132,76 @@ func create_item(name: String) -> Item:
 				# Block-specific data (e.g., gems and hp)
 				var gems = item_data["gems"]
 				var hp = item_data["hp"]
-				return Item.create_block(id, name, icon, gems)  # Create Block item
+				var crafting_tier = item_data["crafting_tier"]
+				return Item.create_block(id, name, crafting_tier, icon, gems)  # Create Block item
 
 			# Check if the category is "backgrounds"
 			elif category == "backgrounds":
 				# Background-specific data (e.g., gems and hp)
 				var gems = item_data["gems"]
 				var hp = item_data["hp"]
-				return Item.create_background_block(id, name, icon, gems)  # Create Background item
+				var crafting_tier = item_data["crafting_tier"]
+				return Item.create_background_block(id, name, crafting_tier, icon, gems)  # Create Background item
 
 			# Check if the category is "items"
 			elif category == "items":
 				# Item-specific data (e.g., damage)
 				var damage = item_data["damage"]
-				return Item.create_tool(id, name, icon, damage)  # Create Tool item
+				var crafting_tier = item_data["crafting_tier"]
+				return Item.create_tool(id, name, crafting_tier, icon, damage)  # Create Tool item
+				
+			elif category == "resources":
+				# Item-specific data 
+				var crafting_tier = item_data["crafting_tier"]
+				return Item.create_resource(id, name, crafting_tier,icon)  # Create Resource item
 
 			# Check if the category is "seeds"
 			elif category == "seeds":
 				# Seed-specific data
-				return Item.create_seed(id, name, icon)  # Seeds may be treated as special tools or blocks
+				var crafting_tier = item_data["crafting_tier"]
+				return Item.create_seed(id, name, crafting_tier, icon)  # Seeds may be treated as special tools or blocks
 
 	# Return null if item is not found
 	print("Item not found:", name)
 	return null
+	
+	
+	
+func get_craftable_and_smeltable_items() -> Dictionary:
+	var craftable_items = []
+	var smeltable_items = []
+	
+	# Loop through top-level categories (e.g., "blocks", "items", "resources", etc.)
+	for category in game_data.keys():
+		var category_data = game_data[category]
+		
+		# Loop through items in the category
+		for item_name in category_data.keys():
+			var item_data = category_data[item_name]
+			
+			# If the item has a recipe, it's craftable
+			if typeof(item_data) == TYPE_DICTIONARY and item_data.has("recipe"):
+				craftable_items.append(item_name)
+			
+			# If the item has a smelt_form, it's smeltable
+			if typeof(item_data) == TYPE_DICTIONARY and item_data.has("smelt_form"):
+				smeltable_items.append(item_name)
+			
+			# If the category contains subcategories (e.g., "interactive_blocks" inside "blocks")
+			if typeof(item_data) == TYPE_DICTIONARY:
+				for sub_item_name in item_data.keys():
+					var sub_item_data = item_data[sub_item_name]
+					
+					# If the sub-item has a recipe, it's craftable
+					if typeof(sub_item_data) == TYPE_DICTIONARY and sub_item_data.has("recipe"):
+						craftable_items.append(sub_item_name)
+					
+					# If the sub-item has a smelt_form, it's smeltable
+					if typeof(sub_item_data) == TYPE_DICTIONARY and sub_item_data.has("smelt_form"):
+						smeltable_items.append(sub_item_name)
+	
+	# Return as a dictionary
+	return {
+		"craftable": craftable_items,
+		"smeltable": smeltable_items
+	}

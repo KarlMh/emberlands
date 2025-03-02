@@ -920,7 +920,7 @@ libraries = {
 
 [node name="jump_sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_gulkr")
-volume_db = -5.0
+volume_db = -20.0
 
 [node name="break_sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("11_8ub18")

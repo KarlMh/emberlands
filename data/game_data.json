@@ -1,31 +1,35 @@
 {
 	"blocks": {
-		"EMPTY": { "id": -1, "hp": 0, "gems": 0, "icon": "res://pixel_art/blocks/EMPTY.png" },
-		"BLOCK_BEDROCK": { "id": 1, "hp": -1, "gems": 0, "icon": "res://pixel_art/blocks/BLOCK_BEDROCK.png" },
-		"SPAWN_POINT": { "id": 1000, "hp": -1, "gems": 0, "icon": "res://pixel_art/blocks/SPAWN_POINT.png" },
-		"BLOCK_DIRT": { "id": 2, "hp": 4, "gems": 3, "icon": "res://pixel_art/blocks/BLOCK_DIRT.png" },
-		"BLOCK_DEEP_DIRT": { "id": 3, "hp": 4, "gems": 3, "transform": "BLOCK_DIRT", "icon": "res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" },
-		"BLOCK_STONE": { "id": 4, "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_STONE.png" },
-		"BLOCK_MAGMA": { "id": 5, "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_MAGMA.png" },
-		"BLOCK_WOOD": { "id": 6, "hp": 4, "gems": 8, "icon": "res://pixel_art/blocks/BLOCK_WOOD.png" },
+		"EMPTY": { "id": -1, "ig_name": "Empty Block", "hp": 0, "gems": 0, "icon": "res://pixel_art/blocks/EMPTY.png", "crafting_tier": -1 },
+		"BLOCK_BEDROCK": { "id": 1, "ig_name": "Bedrock", "hp": -1, "gems": 0, "icon": "res://pixel_art/blocks/BLOCK_BEDROCK.png", "crafting_tier": -1 },
+		"SPAWN_POINT": { "id": 1000, "ig_name": "Spawn Point", "hp": -1, "gems": 0, "icon": "res://pixel_art/blocks/SPAWN_POINT.png", "crafting_tier": -1 },
+		"BLOCK_DIRT": { "id": 2, "ig_name": "Dirt Block", "hp": 4, "gems": 3, "icon": "res://pixel_art/blocks/BLOCK_DIRT.png", "crafting_tier": -1 },
+		"BLOCK_DEEP_DIRT": { "id": 3, "ig_name": "Deep Dirt Block", "hp": 4, "gems": 3, "transform": "BLOCK_DIRT", "icon": "res://pixel_art/blocks/BLOCK_DEEP_DIRT.png", "crafting_tier": -1 },
+		"BLOCK_STONE": { "id": 4, "ig_name": "Stone Block", "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_STONE.png", "crafting_tier": -1 },
+		"BLOCK_MAGMA": { "id": 5, "ig_name": "Magma Block", "hp": 6, "gems": 6, "icon": "res://pixel_art/blocks/BLOCK_MAGMA.png", "crafting_tier": -1 },
+		"BLOCK_WOOD": { "id": 6, "ig_name": "Wood Block", "hp": 4, "gems": 8, "icon": "res://pixel_art/blocks/BLOCK_WOOD.png", "crafting_tier": -1 },
+		"BLOCK_IRON": { "id": 7, "ig_name": "Iron Block", "hp": 8, "gems": 12, "smelt_form": {"IRON": 6}, "icon": "res://pixel_art/blocks/BLOCK_IRON.png", "crafting_tier": -1 },
 		
 		"interactive_blocks": {
-			"CRAFTING_TABLE": { "id": 401, "hp": 6, "gems": 6, "recipe":{"BLOCK_WOOD": 8}, 
-				"interaction_type": "craft","icon": "res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" },
+			"CRAFTING_TABLE": { "id": 401, "ig_name": "Crafting Table", "hp": 5, "gems": 6, "recipe": {"BLOCK_WOOD": 8}, "interaction_type": "craft", "icon": "res://pixel_art/interactive_blocks/CRAFTING_TABLE.png", "crafting_tier": 0 },
+			"FURNACE": { "id": 402, "ig_name": "Furnace", "hp": 6, "gems": 5, "recipe": {"BLOCK_WOOD": 4, "BLOCK_STONE": 2}, "interaction_type": "smelt", "icon": "res://pixel_art/interactive_blocks/FURNACE.png", "crafting_tier": 0 },
+			"RECYCLE_MACHINE": { "id": 403, "ig_name": "Recycle Machine", "hp": 8, "gems": 5, "interaction_type": "recycle", "icon": "res://pixel_art/interactive_blocks/RECYCLE_MACHINE.png", "crafting_tier": -1 },
 		},
 	},
+	
 	"backgrounds": {
-		"BACKGROUND_CAVE": { "id": 101, "hp": 4, "gems": 3, "icon": "res://pixel_art/backgrounds/BACKGROUND_CAVE.png" },
-		"BACKGROUND_WOOD": { "id": 102, "hp": 5, "gems": 8, "drop_chance": 0, "alt_drop": "BLOCK_WOOD", "alt_drop_chance": 1, "alt_drop_count": 2, "icon": "res://pixel_art/backgrounds/BACKGROUND_WOOD.png" },
-		"BACKGROUND_LEAF": { "id": 103, "hp": 4, "gems": 15, "drop_chance": 0.2, "alt_drop": "SEED_TREE", "alt_drop_chance": 0.2, "icon": "res://pixel_art/backgrounds/BACKGROUND_LEAF.png" }
+		"BACKGROUND_CAVE": { "id": 101, "ig_name": "Cave Background", "hp": 4, "gems": 3, "icon": "res://pixel_art/backgrounds/BACKGROUND_CAVE.png", "crafting_tier": -1 },
+		"BACKGROUND_WOOD": { "id": 102, "ig_name": "Wood Background", "hp": 5, "gems": 8, "drop_chance": 0, "alt_drop": "BLOCK_WOOD", "alt_drop_chance": 1, "alt_drop_count": 2, "icon": "res://pixel_art/backgrounds/BACKGROUND_WOOD.png", "crafting_tier": -1 },
+		"BACKGROUND_LEAF": { "id": 103, "ig_name": "Leaf Background", "hp": 4, "gems": 15, "drop_chance": 0.2, "alt_drop": "SEED_TREE", "alt_drop_chance": 0.2, "icon": "res://pixel_art/backgrounds/BACKGROUND_LEAF.png", "crafting_tier": -1 }
 	},
-	
 	"seeds": {
-		"SEED_TREE": { "id": 201, "drop_chance": 0.2, "icon": "res://pixel_art/seeds/SEED_TREE.png" }
+		"SEED_TREE": { "id": 201, "ig_name": "Tree Seed", "drop_chance": 0.2, "icon": "res://pixel_art/seeds/SEED_TREE.png", "crafting_tier": -1 }
 	},
-	
 	"items": {
-		"WOODEN_PICKAXE": { "id": 301, "damage": 1, "recipe":{"BLOCK_WOOD": 4, "BLOCK_STONE": 3}, "icon": "res://pixel_art/items/WOODEN_PICKAXE.png" },
-		"GOLDEN_PICKAXE": { "id": 302, "damage": 100, "icon": "res://pixel_art/items/GOLDEN_PICKAXE.png" },
+		"WOODEN_PICKAXE": { "id": 301, "ig_name": "Wooden Pickaxe", "damage": 1, "recipe": {"BLOCK_WOOD": 4, "BLOCK_STONE": 3}, "icon": "res://pixel_art/items/WOODEN_PICKAXE.png", "crafting_tier": 1 },
+		"GOLDEN_PICKAXE": { "id": 302, "ig_name": "Golden Pickaxe", "damage": 100, "icon": "res://pixel_art/items/GOLDEN_PICKAXE.png", "crafting_tier": -1 }
 	},
+	"resources": {
+		"IRON": { "id": 303, "ig_name": "Iron", "icon": "res://pixel_art/resources/IRON.png", "crafting_tier": -1 }
+	}
 }

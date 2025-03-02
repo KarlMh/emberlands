@@ -23,7 +23,7 @@ func _ready():
 
 	# Assign fixed items
 	if fixed_slots.size() >= 2:
-		var hand_item = Item.new(-10, "Hand", preload("res://pixel_art/items/PLAYER_HAND.png"), 0)
+		var hand_item = Item.new(-10, "Hand", -1, preload("res://pixel_art/items/PLAYER_HAND.png"), 0)
 
 
 		await get_tree().process_frame  # Wait for UI to be ready

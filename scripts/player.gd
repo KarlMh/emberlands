@@ -29,6 +29,9 @@ const BLOCK_PLACEMENT_RANGE = 3
 @onready var inventory_window = get_tree().get_root().find_child("inventory_window", true, false)
 @onready var options = get_tree().get_root().find_child("options", true, false)
 
+@onready var main_inventory = get_tree().get_root().find_child("main_inventory", true, false)
+@onready var crafting_inventory = get_tree().get_root().find_child("crafting_inventory", true, false)
+
 @onready var jump_sound = get_tree().get_root().find_child("jump_sound", true, false)
 @onready var break_sound = get_tree().get_root().find_child("break_sound", true, false)
 @onready var place_sound = get_tree().get_root().find_child("place_sound", true, false)
@@ -59,6 +62,10 @@ func _ready():
 	add_child(seed_planter)
 	inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
 	inventory_manager.add_item(dl.create_item("CRAFTING_TABLE")) 
+	inventory_manager.add_item(dl.create_item("FURNACE")) 
+	inventory_manager.add_item(dl.create_item("RECYCLE_MACHINE")) 
+	for i in range(100):
+		inventory_manager.add_item(dl.create_item("BLOCK_IRON")) 
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
@@ -67,8 +74,6 @@ func _physics_process(delta: float) -> void:
 		handle_jump()
 		handle_movement(delta)
 		handle_block_actions(delta)
-		craft("CRAFTING_TABLE", 1)
-		craft("WOODEN_PICKAXE", 1)
 	
 	move_and_slide()
 	handle_animations()
@@ -82,9 +87,9 @@ func spawn_player():
 	print("Player spawned at:", position)
 	
 func respawn_player():
-	spawn_player()
 	if not death_sound.playing:  # Prevent overlapping sounds
 		death_sound.play()
+	spawn_player()
 	
 
 func apply_gravity(delta: float):
@@ -102,15 +107,36 @@ func handle_jump():
 
 func handle_movement(delta: float):
 	var direction = Input.get_axis("ui_left", "ui_right")
+	
 	if direction:
 		velocity.x = direction * SPEED
+		
 		# Flip the player's scale.x based on the direction
 		if direction < 0:
 			visuals.scale.x = -1  # Mirror the player (facing left)
 		elif direction > 0:
 			visuals.scale.x = 1   # Reset to normal (facing right)
+		
+		# If stuck, try stepping up
+		if is_on_wall():
+			try_step_up()
+
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+func try_step_up():
+	var step_height = 10  # CAN BE FIXED!
+	var step_up_pos = position + Vector2(0, -step_height)  # Try moving up
+	
+	# Move player up slightly and check if they can move forward
+	position = step_up_pos
+	move_and_slide()
+
+	# If still stuck, move back down
+	if is_on_wall():
+		position.y += step_height
+
+
 
 func handle_animations():
 	if is_on_floor():
@@ -252,16 +278,61 @@ func craft_item(item_name: String, quantity: int) -> bool:
 	return true  # Indicate successful crafting
 
 
-func craft(item: String, quantity: int):
-	if Input.is_action_just_pressed("ui_craft"):
-		var nearby_block = check_and_interact_with_nearby_block()
-		if nearby_block and nearby_block.get_interaction_type() == "craft":
-			craft_item(item, quantity)
+
+func smelt_item(item_name: String, quantity: int) -> bool:
+	if quantity <= 0:
+		print("❌ Error: Invalid smelt quantity: ", quantity)
+		return false
+
+	# Validate if the item exists
+	var item_data = dl._get(item_name)
+	if not item_data:
+		print("❌ Error: Item does not exist: ", item_name)
+		return false
+
+	# Ensure the item has a smelting output
+	var smelt_result = item_data.get("smelt_form")
+	if not smelt_result:
+		print("⚠️ Error: This item cannot be smelted: ", item_name)
+		return false
+
+	# ✅ **First Pass: Check if the player has enough of the item to smelt**
+	var available_amount = inventory_manager.get_item_count(item_name)
+	if available_amount < quantity:
+		print("❌ Not enough ", item_name, " to smelt ", quantity, " times")
+		print("Missing: ", quantity - available_amount, " more of ", item_name)
+		return false  # Abort if not enough items to smelt
+
+	# ✅ **Second Pass: Remove the item being smelted**
+	inventory_manager.remove_item(inventory_manager.get_item_by_name(item_name), quantity)
+
+	# ✅ **Final Step: Add the resulting items**
+	for output_item in smelt_result:
+		var output_quantity = smelt_result[output_item] * quantity  # Multiply output by smelted quantity
+		for i in range(output_quantity):
+			inventory_manager.add_item(dl.create_item(output_item))
+
+
+	return true  # Indicate successful smelting
+
+
+func interact_craft() -> bool:
+	var nearby_block = check_and_interact_with_nearby_block()
+	if nearby_block and nearby_block.get_interaction_type() == "craft":
+		return true
+	return false
+	
+func interact_smelt() -> bool:
+	var nearby_block = check_and_interact_with_nearby_block()
+	if nearby_block and nearby_block.get_interaction_type() == "smelt":
+		return true
+	return false
 
 
 
 func place_block() -> void:
-	if inventory_manager.get_selected_item() == null or inventory_manager.get_selected_item().get_id() == -10 or inventory_manager.get_selected_item().is_tool():
+	var item = inventory_manager.get_selected_item()
+	if item == null or item.get_id() == -10 or !item.can_be_placed():
 		return
 	var mouse_pos = get_global_mouse_position()
 	var tile_pos = blockLayer.local_to_map(mouse_pos)
@@ -322,7 +393,6 @@ func place_block() -> void:
 				var player_tile_pos = blockLayer.local_to_map(position)
 				if tile_pos == player_tile_pos and target_layer != bg_layer:
 					freeze()
-					await get_tree().create_timer(0.5).timeout
 					respawn_player()
 					unfreeze()
 					print("DEAD!")  # Prevent placing on themselves

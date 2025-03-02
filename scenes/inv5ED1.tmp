@@ -1,13 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://ul4ff2b876bs"]
+[gd_scene load_steps=10 format=3 uid="uid://ul4ff2b876bs"]
 
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="1_ib066"]
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="1_wrlxy"]
 [ext_resource type="Script" path="res://scripts/inventory_manager.gd" id="2_sb42w"]
 [ext_resource type="Script" path="res://scripts/hand_slot.gd" id="2_wn18w"]
+[ext_resource type="Texture2D" uid="uid://cavnvs88k2gbn" path="res://pixel_art/resources/IRON.png" id="5_5sp7p"]
 [ext_resource type="Script" path="res://scripts/carft_item_list.gd" id="5_e71hm"]
 [ext_resource type="Script" path="res://scripts/craft_toggle.gd" id="5_svfjm"]
-[ext_resource type="Script" path="res://scripts/craft_button.gd" id="6_ul72a"]
-[ext_resource type="Script" path="res://scripts/recipe_text.gd" id="7_jivkt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_olefg"]
 
@@ -350,44 +349,20 @@ offset_right = 350.0
 grow_vertical = 0
 script = SubResource("GDScript_2gnq8")
 
-[node name="craft_item_list" type="ItemList" parent="inventory_window_panel/crafting_inventory"]
-layout_mode = 2
-offset_right = 350.0
-offset_bottom = 125.0
-focus_mode = 0
-script = ExtResource("5_e71hm")
-
-[node name="craft_info" type="Panel" parent="inventory_window_panel/crafting_inventory"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -125.0
-offset_right = 350.0
-grow_vertical = 0
-
-[node name="craft_button" type="Button" parent="inventory_window_panel/crafting_inventory/craft_info"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -40.0
-grow_horizontal = 0
-grow_vertical = 0
-focus_mode = 0
-text = "CRAFT"
-script = ExtResource("6_ul72a")
-
-[node name="recipe_label" type="RichTextLabel" parent="inventory_window_panel/crafting_inventory/craft_info"]
+[node name="scroll_container_2" type="ScrollContainer" parent="inventory_window_panel/crafting_inventory"]
 layout_mode = 0
-offset_right = 250.0
-offset_bottom = 80.0
-bbcode_enabled = true
-fit_content = true
-script = ExtResource("7_jivkt")
+offset_right = 350.0
+offset_bottom = 250.0
+horizontal_scroll_mode = 0
+
+[node name="margin_conatiner_2" type="MarginContainer" parent="inventory_window_panel/crafting_inventory/scroll_container_2"]
+layout_mode = 2
+
+[node name="carft_item_list" type="ItemList" parent="inventory_window_panel/crafting_inventory/scroll_container_2/margin_conatiner_2"]
+layout_mode = 2
+item_count = 1
+item_0/icon = ExtResource("5_5sp7p")
+script = ExtResource("5_e71hm")
 
 [node name="craft_button_panel" type="Panel" parent="."]
 layout_mode = 1
@@ -404,8 +379,6 @@ focus_mode = 0
 flat = true
 script = ExtResource("5_svfjm")
 
-[connection signal="item_selected" from="inventory_window_panel/crafting_inventory/craft_item_list" to="inventory_window_panel/crafting_inventory/craft_item_list" method="_on_item_selected"]
-[connection signal="pressed" from="inventory_window_panel/crafting_inventory/craft_info/craft_button" to="inventory_window_panel/crafting_inventory/craft_info/craft_button" method="_on_pressed"]
 [connection signal="pressed" from="craft_button_panel/craft_toggle" to="craft_button_panel/craft_toggle" method="_on_pressed"]
 
 [editable path="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1/head_slot"]

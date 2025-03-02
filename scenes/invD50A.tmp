@@ -377,16 +377,13 @@ offset_left = -60.0
 offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
-focus_mode = 0
 text = "CRAFT"
 script = ExtResource("6_ul72a")
 
-[node name="recipe_label" type="RichTextLabel" parent="inventory_window_panel/crafting_inventory/craft_info"]
+[node name="recipe_text" type="RichTextLabel" parent="inventory_window_panel/crafting_inventory/craft_info"]
 layout_mode = 0
-offset_right = 250.0
-offset_bottom = 80.0
-bbcode_enabled = true
-fit_content = true
+offset_right = 200.0
+offset_bottom = 20.0
 script = ExtResource("7_jivkt")
 
 [node name="craft_button_panel" type="Panel" parent="."]
@@ -404,7 +401,6 @@ focus_mode = 0
 flat = true
 script = ExtResource("5_svfjm")
 
-[connection signal="item_selected" from="inventory_window_panel/crafting_inventory/craft_item_list" to="inventory_window_panel/crafting_inventory/craft_item_list" method="_on_item_selected"]
 [connection signal="pressed" from="inventory_window_panel/crafting_inventory/craft_info/craft_button" to="inventory_window_panel/crafting_inventory/craft_info/craft_button" method="_on_pressed"]
 [connection signal="pressed" from="craft_button_panel/craft_toggle" to="craft_button_panel/craft_toggle" method="_on_pressed"]
 
