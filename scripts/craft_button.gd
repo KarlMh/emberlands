@@ -16,7 +16,8 @@ func _on_pressed() -> void:
 	var selected_index = craft_item_list.get_selected_items()
 	if !selected_index:
 		return
-	var selected_item_name = craft_item_list.get_item_text(selected_index[0])  # Get the name of the selected item
+	var item_name = craft_item_list.get_item_text(selected_index[0])  # Get the name of the selected item
+	var selected_item_name = dl.get_item_name_by_ig_name(item_name)
 	if player.interact_craft() or dl._get(selected_item_name)["crafting_tier"] == 0:
 		if craft_item_list != null:
 			if selected_index.size() > 0:  # Ensure at least one item is selected
