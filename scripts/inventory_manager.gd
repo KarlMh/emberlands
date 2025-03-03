@@ -5,15 +5,19 @@ var inventory_bar: Node  # Reference to the inventory bar system
 var slots: Array = []  # Holds all inventory slots
 var selected_slot: Control = null  # Track the currently selected slot
 var hand_slot
+# Load the scene resource
+var inventory_slot_scene = load("res://scenes/inventory_slot.tscn")
 
 func _ready():
 	inventory_bar = get_tree().get_root().find_child("slot_bar", true, false)
 	hand_slot = get_tree().get_root().find_child("hand_slot", true, false)
 	# Initialize inventory slots
-	for child in self.get_children():
-		if child is Control:  # Ensure it's an inventory slot
-			slots.append(child)
-			child.connect("gui_input", Callable(self, "_on_slot_gui_input").bind(child))
+	for i in range(20):
+		# Instance the scene
+		var inventory_slot_instance = inventory_slot_scene.instantiate()
+		add_child(inventory_slot_instance)
+		slots.append(inventory_slot_instance)
+		inventory_slot_instance.connect("gui_input", Callable(self, "_on_slot_gui_input").bind(inventory_slot_instance))
 
 # Handle input events on slots
 func _on_slot_gui_input(event: InputEvent, slot: Control):

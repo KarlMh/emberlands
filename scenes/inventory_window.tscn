@@ -1,13 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://ul4ff2b876bs"]
+[gd_scene load_steps=14 format=3 uid="uid://ul4ff2b876bs"]
 
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="1_ib066"]
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="1_wrlxy"]
 [ext_resource type="Script" path="res://scripts/inventory_manager.gd" id="2_sb42w"]
-[ext_resource type="Script" path="res://scripts/hand_slot.gd" id="2_wn18w"]
 [ext_resource type="Script" path="res://scripts/carft_item_list.gd" id="5_e71hm"]
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="5_ibg6k"]
 [ext_resource type="Script" path="res://scripts/craft_toggle.gd" id="5_svfjm"]
 [ext_resource type="Script" path="res://scripts/craft_button.gd" id="6_ul72a"]
 [ext_resource type="Script" path="res://scripts/recipe_text.gd" id="7_jivkt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ao4hy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_olefg"]
 
@@ -26,6 +28,11 @@ func _process(delta: float) -> void:
 	pass
 "
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h2ase"]
+
+[sub_resource type="Theme" id="Theme_ulw1c"]
+Button/colors/font_color = Color(1, 1, 1, 1)
+
 [node name="inventory_window" type="Control"]
 layout_mode = 3
 anchors_preset = 8
@@ -33,30 +40,39 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -140.0
-offset_right = 250.0
-offset_bottom = 110.0
+offset_left = -300.0
+offset_top = -136.0
+offset_right = 300.0
+offset_bottom = 136.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(300, 136)
+theme = ExtResource("5_ibg6k")
 script = ExtResource("1_ib066")
 
-[node name="inventory_window_panel" type="Panel" parent="."]
+[node name="holder" type="Panel" parent="."]
+z_index = -1
+layout_mode = 1
+offset_right = 600.0
+offset_bottom = 272.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ao4hy")
+
+[node name="inventory_window_panel" type="Panel" parent="holder"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -250.0
+offset_left = -300.0
 offset_top = -250.0
-offset_right = 250.0
+offset_right = 300.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(250, 140)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_olefg")
 
-[node name="main_inventory" type="Panel" parent="inventory_window_panel"]
+[node name="main_inventory" type="Panel" parent="holder/inventory_window_panel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -65,7 +81,123 @@ offset_top = -250.0
 offset_right = 350.0
 grow_vertical = 0
 
-[node name="scroll_container" type="ScrollContainer" parent="inventory_window_panel/main_inventory"]
+[node name="scroll_container" type="ScrollContainer" parent="holder/inventory_window_panel/main_inventory"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -110.0
+offset_right = 160.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(140, 130)
+horizontal_scroll_mode = 0
+
+[node name="margin_conatiner" type="MarginContainer" parent="holder/inventory_window_panel/main_inventory/scroll_container"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="slot_container" type="GridContainer" parent="holder/inventory_window_panel/main_inventory/scroll_container/margin_conatiner"]
+z_index = 1
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 6
+script = ExtResource("2_sb42w")
+
+[node name="secondary_inventory" type="Panel" parent="holder/inventory_window_panel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -125.0
+offset_bottom = 125.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(140, 0)
+
+[node name="MarginContainer" type="MarginContainer" parent="holder/inventory_window_panel/secondary_inventory"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -108.0
+offset_right = 108.0
+offset_bottom = 84.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="head_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="chest_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="pants_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="shoes_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="something_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="hand_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="wing_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("1_wrlxy")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="crafting_inventory" type="Panel" parent="holder/inventory_window_panel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -250.0
+offset_right = 350.0
+grow_vertical = 0
+script = SubResource("GDScript_2gnq8")
+
+[node name="craft_selection" type="Panel" parent="holder/inventory_window_panel/crafting_inventory"]
+layout_mode = 0
+offset_right = 350.0
+offset_bottom = 125.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_h2ase")
+
+[node name="scroll_container_2" type="ScrollContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -80,285 +212,21 @@ grow_vertical = 0
 pivot_offset = Vector2(140, 130)
 horizontal_scroll_mode = 0
 
-[node name="margin_conatiner" type="MarginContainer" parent="inventory_window_panel/main_inventory/scroll_container"]
+[node name="margin_conatiner_2" type="MarginContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection/scroll_container_2"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="slot_container" type="GridContainer" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner"]
+[node name="craft_list" type="GridContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection/scroll_container_2/margin_conatiner_2"]
 layout_mode = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 8
-script = ExtResource("2_sb42w")
-
-[node name="inventory_slot" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot2" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot3" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot4" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot5" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot6" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot7" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot8" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot9" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot10" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot11" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot12" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot13" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot14" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot15" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot16" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot17" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot18" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot19" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot20" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot21" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot22" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot23" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot24" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot25" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot26" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot27" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot28" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot29" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot30" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot31" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot32" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot33" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot34" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot35" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot36" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot37" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot38" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot39" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot40" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot41" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot42" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot43" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot44" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot45" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot46" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot47" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot48" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot49" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot50" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot51" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot52" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot53" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot54" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot55" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot56" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot57" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot58" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot59" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="inventory_slot60" parent="inventory_window_panel/main_inventory/scroll_container/margin_conatiner/slot_container" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-
-[node name="secondary_inventory" type="Panel" parent="inventory_window_panel"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -250.0
-grow_horizontal = 0
-grow_vertical = 0
-pivot_offset = Vector2(140, 0)
-
-[node name="equipment_inventory" type="Control" parent="inventory_window_panel/secondary_inventory"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -100.0
-offset_bottom = 250.0
-grow_horizontal = 0
-
-[node name="wearables_container_1" type="VBoxContainer" parent="inventory_window_panel/secondary_inventory/equipment_inventory"]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 50.0
-offset_bottom = 168.0
-theme_override_constants/separation = 10
-
-[node name="head_slot" parent="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-script = ExtResource("2_wn18w")
-
-[node name="chest_slot" parent="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-script = ExtResource("2_wn18w")
-
-[node name="pants_slot" parent="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-script = ExtResource("2_wn18w")
-
-[node name="boot_slot" parent="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-script = ExtResource("2_wn18w")
-
-[node name="wearables_container_2" type="VBoxContainer" parent="inventory_window_panel/secondary_inventory/equipment_inventory"]
-layout_mode = 0
-offset_left = 52.0
-offset_top = 52.0
-offset_right = 92.0
-offset_bottom = 92.0
-
-[node name="hand_slot" parent="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_2" instance=ExtResource("1_wrlxy")]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 4
-
-[node name="crafting_inventory" type="Panel" parent="inventory_window_panel"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -250.0
-offset_right = 350.0
-grow_vertical = 0
-script = SubResource("GDScript_2gnq8")
-
-[node name="craft_item_list" type="ItemList" parent="inventory_window_panel/crafting_inventory"]
-layout_mode = 2
-offset_right = 350.0
-offset_bottom = 125.0
-focus_mode = 0
-same_column_width = true
 script = ExtResource("5_e71hm")
 
-[node name="craft_info" type="Panel" parent="inventory_window_panel/crafting_inventory"]
+[node name="craft_info" type="Panel" parent="holder/inventory_window_panel/crafting_inventory"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -367,7 +235,7 @@ offset_top = -125.0
 offset_right = 350.0
 grow_vertical = 0
 
-[node name="craft_button" type="Button" parent="inventory_window_panel/crafting_inventory/craft_info"]
+[node name="craft_button" type="Button" parent="holder/inventory_window_panel/crafting_inventory/craft_info"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -381,38 +249,52 @@ offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
-text = "CRAFT"
+theme = SubResource("Theme_ulw1c")
+text = "craft item"
 script = ExtResource("6_ul72a")
 
-[node name="recipe_label" type="RichTextLabel" parent="inventory_window_panel/crafting_inventory/craft_info"]
-layout_mode = 0
-offset_right = 250.0
-offset_bottom = 80.0
-bbcode_enabled = true
-fit_content = true
-script = ExtResource("7_jivkt")
+[node name="item_craft_info" type="Node2D" parent="holder/inventory_window_panel/crafting_inventory/craft_info/craft_button"]
 
-[node name="craft_button_panel" type="Panel" parent="."]
-layout_mode = 1
-offset_left = 5.0
-offset_top = -25.0
-offset_right = 45.0
-offset_bottom = 1.0
-
-[node name="craft_toggle" type="Button" parent="craft_button_panel"]
+[node name="MarginContainer" type="MarginContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_info"]
 layout_mode = 0
 offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="recipe_label" type="Label" parent="holder/inventory_window_panel/crafting_inventory/craft_info/MarginContainer"]
+layout_mode = 2
+script = ExtResource("7_jivkt")
+
+[node name="craft_button_panel" type="Panel" parent="holder"]
+layout_mode = 1
+offset_right = 40.0
 offset_bottom = 25.0
+
+[node name="craft_toggle" type="Button" parent="holder/craft_button_panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -12.5
+offset_right = 20.0
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
 focus_mode = 0
 flat = true
 script = ExtResource("5_svfjm")
 
-[connection signal="item_selected" from="inventory_window_panel/crafting_inventory/craft_item_list" to="inventory_window_panel/crafting_inventory/craft_item_list" method="_on_item_selected"]
-[connection signal="pressed" from="inventory_window_panel/crafting_inventory/craft_info/craft_button" to="inventory_window_panel/crafting_inventory/craft_info/craft_button" method="_on_pressed"]
-[connection signal="pressed" from="craft_button_panel/craft_toggle" to="craft_button_panel/craft_toggle" method="_on_pressed"]
+[connection signal="pressed" from="holder/inventory_window_panel/crafting_inventory/craft_info/craft_button" to="holder/inventory_window_panel/crafting_inventory/craft_info/craft_button" method="_on_pressed"]
+[connection signal="pressed" from="holder/craft_button_panel/craft_toggle" to="holder/craft_button_panel/craft_toggle" method="_on_pressed"]
 
-[editable path="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1/head_slot"]
-[editable path="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1/chest_slot"]
-[editable path="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1/pants_slot"]
-[editable path="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_1/boot_slot"]
-[editable path="inventory_window_panel/secondary_inventory/equipment_inventory/wearables_container_2/hand_slot"]
+[editable path="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer/head_slot"]
+[editable path="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer/chest_slot"]
+[editable path="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer/pants_slot"]
+[editable path="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer/shoes_slot"]
+[editable path="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer/something_slot"]
+[editable path="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer2/hand_slot"]
+[editable path="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer2/wing_slot"]

@@ -1,24 +1,29 @@
-[gd_scene load_steps=4 format=3 uid="uid://dh1sg8vfhieu2"]
+[gd_scene load_steps=3 format=3 uid="uid://dh1sg8vfhieu2"]
 
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="1_ct0op"]
-[ext_resource type="Script" path="res://scripts/inventory_slot.gd" id="1_owbwp"]
 [ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="1_rohpo"]
 
 [node name="inventory_bar" type="Panel"]
-offset_right = 220.0
-offset_bottom = 40.0
+offset_right = 400.0
+offset_bottom = 80.0
 scale = Vector2(2, 2)
 script = ExtResource("1_rohpo")
 
 [node name="slot_bar" type="GridContainer" parent="."]
-layout_mode = 0
-offset_left = 10.0
-offset_top = 4.0
-offset_right = 210.0
-offset_bottom = 39.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -20.0
+offset_right = 150.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/h_separation = 10
 columns = 5
-script = ExtResource("1_owbwp")
 
 [node name="inventory_slot" parent="slot_bar" instance=ExtResource("1_ct0op")]
 layout_mode = 2

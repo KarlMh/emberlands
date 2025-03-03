@@ -1,33 +1,37 @@
 extends Button
 
 @onready var player = get_tree().get_root().find_child("player", true, false)
-@onready var craft_item_list = get_tree().get_root().find_child("craft_item_list", true, false)
+@onready var craft_list = get_tree().get_root().find_child("craft_list", true, false)  # GridContainer containing the buttons
 
 var dl = DataLoader
 
+var name_holder: String
+
 func _ready() -> void:
-	# Check if the craft_item_list node is valid
-	if craft_item_list == null:
-		print("Error: craft_item_list node not found!")
+	# Ensure craft_list is valid
+	if craft_list == null:
+		print("Error: craft_list node not found!")
 		return
+	
+	# Connect the button's pressed signal to the on_pressed function
+	self.pressed.connect(_on_pressed)
 
 func _on_pressed() -> void:
-	# Check if craft_item_list is valid
-	var selected_index = craft_item_list.get_selected_items()
-	if !selected_index:
+	# Loop through all the buttons in the GridContainer (craft_list)
+	
+	var item_name = get_child(0).name  # Get the name of the button (which corresponds to the item name)
+	print("Selected item:", item_name)  # Debugging line
+	
+	if item_name == null:
 		return
-	var item_name = craft_item_list.get_item_text(selected_index[0])  # Get the name of the selected item
-	var selected_item_name = dl.get_item_name_by_ig_name(item_name)
-	if player.interact_craft() or dl._get(selected_item_name)["crafting_tier"] == 0:
-		if craft_item_list != null:
-			if selected_index.size() > 0:  # Ensure at least one item is selected
-				print("Selected item:", selected_item_name)  # Debugging line
 
-				# Call the player's craft_item function with the selected item's name
-				player.craft_item(selected_item_name, 1)
-			else:
-				print("No item selected!")  # Handle case where no item is selected
-		else:
-			print("craft_item_list is null, unable to process selection.")
+	# Use the item name to craft the item
+	if player.interact_craft() or dl._get(item_name)["crafting_tier"] == 0:
+		# Call the player's craft_item function with the selected item's name
+		player.craft_item(item_name, 1)
 	else:
-		print("not next to crafting table")
+		print("Not next to crafting table")
+	return  # Exit once the selected button is found and processed
+	
+	# If no button was pressed, handle that case
+	print("No item selected!")

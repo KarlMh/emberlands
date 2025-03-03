@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://cqmu0xy3fueuf"]
+[gd_scene load_steps=15 format=3 uid="uid://cqmu0xy3fueuf"]
 
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_m15es"]
 [ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_yorhh"]
 [ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="2_dqpr8"]
-[ext_resource type="Script" path="res://scenes/display_gems.gd" id="3_ck6tt"]
+[ext_resource type="Script" path="res://scripts/display_gems.gd" id="3_ck6tt"]
 [ext_resource type="Texture2D" uid="uid://ba1dptwycerkh" path="res://pixel_art/stuff/gems.png" id="4_80606"]
 [ext_resource type="PackedScene" uid="uid://ul4ff2b876bs" path="res://scenes/inventory_window.tscn" id="5_u2aqm"]
 [ext_resource type="Script" path="res://scripts/options.gd" id="6_cppry"]
@@ -33,6 +34,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_m15es")
 
 [node name="inventory_bar" parent="." instance=ExtResource("1_yorhh")]
 layout_mode = 1
@@ -41,29 +43,21 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -110.0
-offset_top = -50.0
-offset_right = 110.0
-offset_bottom = 0.0
+offset_left = -125.0
+offset_top = -44.9999
+offset_right = 125.0
+offset_bottom = 5.00012
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(2.5, 2.5)
-pivot_offset = Vector2(110, 50)
+pivot_offset = Vector2(125, 50)
 script = null
 
 [node name="slot_bar" parent="inventory_bar" index="0" node_paths=PackedStringArray("bar_container")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
 offset_left = -100.0
 offset_top = -17.5
 offset_right = 100.0
 offset_bottom = 17.5
-grow_horizontal = 2
-grow_vertical = 2
 script = ExtResource("2_dqpr8")
 bar_container = NodePath(".")
 
@@ -92,20 +86,18 @@ anchor_left = 0.464
 anchor_top = 0.5
 anchor_right = 0.464
 anchor_bottom = 0.5
-offset_left = -2.84
-offset_top = -55.0
-offset_right = 297.16
-offset_bottom = 28.0
+offset_left = -5.24
+offset_top = -51.3998
+offset_right = 152.76
+offset_bottom = -1.39978
 grow_vertical = 2
 scale = Vector2(0.2, 0.2)
 pivot_offset = Vector2(-2.66667, 57.6667)
-text = "0"
 label_settings = SubResource("LabelSettings_w4khy")
 
 [node name="inventory_window" parent="." instance=ExtResource("5_u2aqm")]
 layout_mode = 1
 scale = Vector2(2.5, 2.5)
-pivot_offset = Vector2(250, 140)
 
 [node name="options" type="Panel" parent="."]
 layout_mode = 1
@@ -179,7 +171,7 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -50.0
-offset_bottom = 50.0
+offset_bottom = 40.0
 grow_horizontal = 0
 scale = Vector2(2.5, 2.5)
 pivot_offset = Vector2(50, 0)
@@ -192,16 +184,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -18.0
-offset_top = -16.0
-offset_right = 18.0
-offset_bottom = 16.0
+offset_left = -20.0
+offset_top = -15.0
+offset_right = 20.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(18, 16)
 size_flags_horizontal = 0
 focus_mode = 0
-text = "ESC"
+text = "esc"
+icon_alignment = 1
+expand_icon = true
 script = ExtResource("10_vnx7g")
 
 [connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]
