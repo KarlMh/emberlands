@@ -44,6 +44,8 @@ const BlockEntity = preload("res://scripts/BlockEntity.gd")
 const BackgroundEntity = preload("res://scripts/BackgroundEntity.gd")
 const InteractiveBlockEntity = preload("res://scripts/InteractiveBlock.gd")
 
+@onready var ProCam2D = get_tree().get_root().find_child("ProCam2D", true, false)
+
 var blink_timer = 0.0
 var can_blink = true
 var blink_delay = BLINK_DELAY_MIN
@@ -321,6 +323,17 @@ func interact_smelt() -> bool:
 	if nearby_block and nearby_block.get_interaction_type() == "smelt":
 		return true
 	return false
+	
+func check_and_interact_with_nearby_block() -> InteractiveBlockEntity:
+	var player_tile_pos = blockLayer.local_to_map(position)
+
+	# Iterate over all block entities in the foreground and background layers
+	for tile_pos in blockLayer.block_entities.keys():
+		if is_within_range_of_block(tile_pos, player_tile_pos):
+			var block_entity = blockLayer.block_entities[tile_pos]
+			if block_entity is InteractiveBlockEntity:
+				return block_entity
+	return null
 
 
 
@@ -411,18 +424,6 @@ func is_within_range(tile_pos: Vector2i) -> bool:
 
 func is_within_bounds(tile_pos: Vector2i) -> bool:
 	return tile_pos.x >= 0 and tile_pos.x < WORLD_WIDTH and tile_pos.y >= 0 and tile_pos.y < WORLD_HEIGHT
-	
-	
-func check_and_interact_with_nearby_block() -> InteractiveBlockEntity:
-	var player_tile_pos = blockLayer.local_to_map(position)
-
-	# Iterate over all block entities in the foreground and background layers
-	for tile_pos in blockLayer.block_entities.keys():
-		if is_within_range_of_block(tile_pos, player_tile_pos):
-			var block_entity = blockLayer.block_entities[tile_pos]
-			if block_entity is InteractiveBlockEntity:
-				return block_entity
-	return null
 
 
 # Helper method to check if a tile is within range of the player

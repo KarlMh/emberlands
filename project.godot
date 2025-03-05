@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 DataLoader="*res://scripts/data_loader.gd"
+procam="*res://addons/ProCam2D/scripts/autoload.gd"
 
 [display]
 
@@ -25,6 +26,10 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/ProCam2D/plugin.cfg", "res://addons/beautify_code_on_save/plugin.cfg", "res://addons/tileset_collision_generator_free_version/plugin.cfg")
 
 [global_group]
 

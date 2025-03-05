@@ -1,0 +1,119 @@
+[gd_resource type="TileSet" load_steps=26 format=3 uid="uid://cu5sw4wtrwqio"]
+
+[ext_resource type="Texture2D" uid="uid://dip1w8ql50qc7" path="res://pixel_art/blocks/BLOCK_BEDROCK.png" id="1_r84mu"]
+[ext_resource type="Texture2D" uid="uid://cregdt65ppbwk" path="res://pixel_art/blocks/SPAWN_POINT.png" id="2_eymir"]
+[ext_resource type="Texture2D" uid="uid://cyobbiir0ua2c" path="res://pixel_art/blocks/BLOCK_DIRT.png" id="3_ybpp3"]
+[ext_resource type="Texture2D" uid="uid://dxhwh18fsq0or" path="res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" id="4_vinxg"]
+[ext_resource type="Texture2D" uid="uid://dsbod1ho4km4j" path="res://pixel_art/seeds/SEED_TREE.png" id="5_72ngo"]
+[ext_resource type="Texture2D" uid="uid://eht5jespb615" path="res://pixel_art/blocks/BLOCK_STONE.png" id="6_c087b"]
+[ext_resource type="Texture2D" uid="uid://dtaer3hbfdvu1" path="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" id="7_j43h0"]
+[ext_resource type="Texture2D" uid="uid://c8rsn68v3c0eb" path="res://pixel_art/interactive_blocks/FURNACE.png" id="8_8dh5d"]
+[ext_resource type="Texture2D" uid="uid://baqhghssdu1fx" path="res://pixel_art/interactive_blocks/RECYCLE_MACHINE.png" id="9_asgin"]
+[ext_resource type="Texture2D" uid="uid://bqpceuwf666iu" path="res://pixel_art/blocks/BLOCK_MAGMA.png" id="10_qnmsp"]
+[ext_resource type="Texture2D" uid="uid://ctw8q8jqbxki4" path="res://pixel_art/blocks/BLOCK_WOOD.png" id="11_w3biu"]
+[ext_resource type="Texture2D" uid="uid://w2doq7fubem5" path="res://pixel_art/blocks/BLOCK_IRON.png" id="12_7btor"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_urkp8"]
+resource_name = "empty_bedrock"
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5mbqy"]
+resource_name = "bedrock"
+texture = ExtResource("1_r84mu")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5yc2m"]
+resource_name = "SPAWN_POINT"
+texture = ExtResource("2_eymir")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnejx"]
+resource_name = "dirt_block"
+texture = ExtResource("3_ybpp3")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ggnev"]
+resource_name = "dirt_block_2"
+texture = ExtResource("4_vinxg")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_11jxo"]
+resource_name = "tree_seed"
+texture = ExtResource("5_72ngo")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o81tf"]
+resource_name = "stone_block"
+texture = ExtResource("6_c087b")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fq1d3"]
+texture = ExtResource("7_j43h0")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -7.92739, 16, -7.92739, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cebe8"]
+texture = ExtResource("8_8dh5d")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-14.975, 2.63966, -14.9435, 0, -13.9727, -0.138687, -13.9033, -2.01096, -13.2099, -2.14964, -13.0019, -2.98176, -12.1697, -3.05111, -11.823, -4.1606, -11.0603, -4.29928, -10.8522, -5.1314, -9.95076, -5.20075, -9.95076, -6.03287, -8.97996, -6.10221, -8.84127, -7.07302, -8.21718, -7.07302, -7.80112, -7.97448, -6.13688, -8.04382, -5.72082, -9.01463, -4.05658, -9.22266, -3.98724, -13.938, -2.94709, -14.9088, 3.08578, -14.9782, 3.22446, -14.0073, 4.05658, -13.938, 3.98724, -9.08397, 6.13688, -9.01463, 6.20622, -8.18251, 8.14784, -7.97448, 8.21718, -7.00367, 9.81208, -7.00367, 10.0201, -8.04382, 11.0603, -8.11316, 10.9216, -8.87594, 12.1004, -9.15331, 12.0311, -10.9562, 12.9325, -10.8869, 12.7245, -11.9964, 14.8048, -12.0657, 15.1515, -10.9562, 16, -10.7617, 15.9364, -9.24964, 15.1781, -8.7312, 15.1781, -7.81747, 12.4369, -8.12204, 12.1323, -7.10679, 11.3201, -6.70069, 11.6247, -5.88848, 10.2033, -5.88848, 10.2033, -4.87323, 11.117, -4.7717, 11.2186, -3.9595, 12.3354, -4.06102, 12.2338, -3.04577, 13.2491, -3.04577, 13.046, -2.23356, 13.8582, -2.13204, 13.9598, -0.203051, 14.975, 0, 14.8735, 16, -14.975, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2rfj3"]
+texture = ExtResource("9_asgin")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -7, 16, -7, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7gdwm"]
+resource_name = "magma_block"
+texture = ExtResource("10_qnmsp")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nqkm1"]
+texture = ExtResource("11_w3biu")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ecj38"]
+texture = ExtResource("12_7btor")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[resource]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+sources/5 = SubResource("TileSetAtlasSource_7gdwm")
+sources/4 = SubResource("TileSetAtlasSource_o81tf")
+sources/3 = SubResource("TileSetAtlasSource_ggnev")
+sources/2 = SubResource("TileSetAtlasSource_nnejx")
+sources/1 = SubResource("TileSetAtlasSource_5mbqy")
+sources/0 = SubResource("TileSetAtlasSource_urkp8")
+sources/301 = SubResource("TileSetAtlasSource_11jxo")
+sources/401 = SubResource("TileSetAtlasSource_fq1d3")
+sources/6 = SubResource("TileSetAtlasSource_nqkm1")
+sources/1000 = SubResource("TileSetAtlasSource_5yc2m")
+sources/402 = SubResource("TileSetAtlasSource_cebe8")
+sources/7 = SubResource("TileSetAtlasSource_ecj38")
+sources/403 = SubResource("TileSetAtlasSource_2rfj3")

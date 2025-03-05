@@ -1,28 +1,17 @@
-[gd_scene load_steps=47 format=3 uid="uid://cv2kgylt7uhk4"]
+[gd_scene load_steps=22 format=3 uid="uid://cv2kgylt7uhk4"]
 
 [ext_resource type="PackedScene" uid="uid://n46n5hkwy7i" path="res://scenes/player.tscn" id="1_plyk1"]
-[ext_resource type="Texture2D" uid="uid://cyobbiir0ua2c" path="res://pixel_art/blocks/BLOCK_DIRT.png" id="2_6wxjt"]
-[ext_resource type="Texture2D" uid="uid://dxhwh18fsq0or" path="res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" id="2_ph2l1"]
-[ext_resource type="Script" uid="uid://ds41fq0e7jc1a" path="res://scripts/camera.gd" id="3_xq4vh"]
-[ext_resource type="Texture2D" uid="uid://dip1w8ql50qc7" path="res://pixel_art/blocks/BLOCK_BEDROCK.png" id="4_7bq21"]
 [ext_resource type="Script" uid="uid://bity3v7hchsxn" path="res://scripts/tile_map_layer.gd" id="4_423te"]
 [ext_resource type="Texture2D" uid="uid://dildi66sphnaf" path="res://pixel_art/weathers/purple_gaze_bg/2.png" id="4_bjnf3"]
 [ext_resource type="Texture2D" uid="uid://dm4lwd8oju2xu" path="res://pixel_art/blocks/animations/breaking_sheet.png" id="6_3wswg"]
-[ext_resource type="Texture2D" uid="uid://eht5jespb615" path="res://pixel_art/blocks/BLOCK_STONE.png" id="7_55eor"]
-[ext_resource type="Texture2D" uid="uid://cregdt65ppbwk" path="res://pixel_art/blocks/SPAWN_POINT.png" id="8_2coof"]
-[ext_resource type="Texture2D" uid="uid://bqpceuwf666iu" path="res://pixel_art/blocks/BLOCK_MAGMA.png" id="8_lwuvm"]
+[ext_resource type="PackedScene" uid="uid://bmvjbeiau1clg" path="res://scenes/camera_2d.tscn" id="6_kvuet"]
+[ext_resource type="TileSet" uid="uid://cu5sw4wtrwqio" path="res://scenes/blockLayer.tres" id="7_kvuet"]
 [ext_resource type="Texture2D" uid="uid://b0istdyx235xb" path="res://pixel_art/backgrounds/BACKGROUND_CAVE.png" id="9_8kin8"]
-[ext_resource type="Texture2D" uid="uid://dtaer3hbfdvu1" path="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" id="12_x5eag"]
 [ext_resource type="Script" uid="uid://ckmr8k0hulsgi" path="res://scripts/background.gd" id="14_0qu6k"]
-[ext_resource type="Texture2D" uid="uid://ctw8q8jqbxki4" path="res://pixel_art/blocks/BLOCK_WOOD.png" id="14_5aa3o"]
-[ext_resource type="Texture2D" uid="uid://c8rsn68v3c0eb" path="res://pixel_art/interactive_blocks/FURNACE.png" id="14_foy6o"]
-[ext_resource type="Texture2D" uid="uid://baqhghssdu1fx" path="res://pixel_art/interactive_blocks/RECYCLE_MACHINE.png" id="15_6ayvy"]
 [ext_resource type="Texture2D" uid="uid://cqrsutg10qjsk" path="res://pixel_art/backgrounds/BACKGROUND_WOOD.png" id="16_7nnog"]
 [ext_resource type="Texture2D" uid="uid://bibya52blfhie" path="res://pixel_art/weathers/Clouds 5/1.png" id="16_w5jsq"]
 [ext_resource type="Texture2D" uid="uid://dqbyg0c1f6k4f" path="res://pixel_art/backgrounds/BACKGROUND_LEAF.png" id="17_6iu2a"]
-[ext_resource type="Texture2D" uid="uid://w2doq7fubem5" path="res://pixel_art/blocks/BLOCK_IRON.png" id="17_eyabg"]
 [ext_resource type="Texture2D" uid="uid://dg3j6rx51mcap" path="res://pixel_art/weathers/Clouds 5/3.png" id="17_h7iu3"]
-[ext_resource type="Texture2D" uid="uid://dsbod1ho4km4j" path="res://pixel_art/seeds/SEED_TREE.png" id="18_palsk"]
 [ext_resource type="PackedScene" uid="uid://cqmu0xy3fueuf" path="res://scenes/game_ui.tscn" id="21_w54kg"]
 
 [sub_resource type="GDScript" id="GDScript_owcbq"]
@@ -36,116 +25,6 @@ func _ready():
 	tilemap = $\"../TileMapLayer\"
 	inventory_manager = get_node(\"CanvasLayer/inventory_window/slot_container\")
 "
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_urkp8"]
-resource_name = "empty_bedrock"
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5mbqy"]
-resource_name = "bedrock"
-texture = ExtResource("4_7bq21")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-0:0/0/custom_data_0 = -1
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5yc2m"]
-resource_name = "SPAWN_POINT"
-texture = ExtResource("8_2coof")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nnejx"]
-resource_name = "dirt_block"
-texture = ExtResource("2_6wxjt")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-0:0/0/custom_data_0 = 3
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ggnev"]
-resource_name = "dirt_block_2"
-texture = ExtResource("2_ph2l1")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-0:0/0/custom_data_0 = 3
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_11jxo"]
-resource_name = "tree_seed"
-texture = ExtResource("18_palsk")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o81tf"]
-resource_name = "stone_block"
-texture = ExtResource("7_55eor")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fq1d3"]
-texture = ExtResource("12_x5eag")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -7.92739, 16, -7.92739, 16, 16, -16, 16)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cebe8"]
-texture = ExtResource("14_foy6o")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-14.975, 2.63966, -14.9435, 0, -13.9727, -0.138687, -13.9033, -2.01096, -13.2099, -2.14964, -13.0019, -2.98176, -12.1697, -3.05111, -11.823, -4.1606, -11.0603, -4.29928, -10.8522, -5.1314, -9.95076, -5.20075, -9.95076, -6.03287, -8.97996, -6.10221, -8.84127, -7.07302, -8.21718, -7.07302, -7.80112, -7.97448, -6.13688, -8.04382, -5.72082, -9.01463, -4.05658, -9.22266, -3.98724, -13.938, -2.94709, -14.9088, 3.08578, -14.9782, 3.22446, -14.0073, 4.05658, -13.938, 3.98724, -9.08397, 6.13688, -9.01463, 6.20622, -8.18251, 8.14784, -7.97448, 8.21718, -7.00367, 9.81208, -7.00367, 10.0201, -8.04382, 11.0603, -8.11316, 10.9216, -8.87594, 12.1004, -9.15331, 12.0311, -10.9562, 12.9325, -10.8869, 12.7245, -11.9964, 14.8048, -12.0657, 15.1515, -10.9562, 16, -10.7617, 15.9364, -9.24964, 15.1781, -8.7312, 15.1781, -7.81747, 12.4369, -8.12204, 12.1323, -7.10679, 11.3201, -6.70069, 11.6247, -5.88848, 10.2033, -5.88848, 10.2033, -4.87323, 11.117, -4.7717, 11.2186, -3.9595, 12.3354, -4.06102, 12.2338, -3.04577, 13.2491, -3.04577, 13.046, -2.23356, 13.8582, -2.13204, 13.9598, -0.203051, 14.975, 0, 14.8735, 16, -14.975, 16)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2rfj3"]
-texture = ExtResource("15_6ayvy")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -7, 16, -7, 16, 16, -16, 16)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7gdwm"]
-resource_name = "magma_block"
-texture = ExtResource("8_lwuvm")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nqkm1"]
-texture = ExtResource("14_5aa3o")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ecj38"]
-texture = ExtResource("17_eyabg")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
-
-[sub_resource type="TileSet" id="TileSet_n25bb"]
-tile_size = Vector2i(32, 32)
-physics_layer_0/collision_layer = 1
-custom_data_layer_0/name = "hp"
-custom_data_layer_0/type = 2
-sources/5 = SubResource("TileSetAtlasSource_7gdwm")
-sources/4 = SubResource("TileSetAtlasSource_o81tf")
-sources/3 = SubResource("TileSetAtlasSource_ggnev")
-sources/2 = SubResource("TileSetAtlasSource_nnejx")
-sources/1 = SubResource("TileSetAtlasSource_5mbqy")
-sources/0 = SubResource("TileSetAtlasSource_urkp8")
-sources/301 = SubResource("TileSetAtlasSource_11jxo")
-sources/401 = SubResource("TileSetAtlasSource_fq1d3")
-sources/6 = SubResource("TileSetAtlasSource_nqkm1")
-sources/1000 = SubResource("TileSetAtlasSource_5yc2m")
-sources/402 = SubResource("TileSetAtlasSource_cebe8")
-sources/7 = SubResource("TileSetAtlasSource_ecj38")
-sources/403 = SubResource("TileSetAtlasSource_2rfj3")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pq573"]
 resource_name = "cave_background"
@@ -259,12 +138,11 @@ flip_v = true
 
 [node name="player" parent="." instance=ExtResource("1_plyk1")]
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(3, 3)
-script = ExtResource("3_xq4vh")
+[node name="Camera2D" parent="." instance=ExtResource("6_kvuet")]
+zoom = Vector2(2, 2)
 
 [node name="blockLayer" type="TileMapLayer" parent="."]
-tile_set = SubResource("TileSet_n25bb")
+tile_set = ExtResource("7_kvuet")
 script = ExtResource("4_423te")
 
 [node name="backgroundLayer" type="TileMapLayer" parent="."]
