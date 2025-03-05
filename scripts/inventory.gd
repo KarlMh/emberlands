@@ -9,6 +9,8 @@ var is_inventory_open = false
 @onready var main_inventory = get_tree().get_root().find_child("main_inventory", true, false)
 @onready var crafting_inventory = get_tree().get_root().find_child("crafting_inventory", true, false)
 
+@onready var craft_toggle = get_tree().get_root().find_child("craft_toggle", true, false)
+
 # Variables for dragging
 var is_dragging = false
 var drag_offset = Vector2()
@@ -59,6 +61,9 @@ func _input(event):
 	
 
 func toggle_inventory():
+	crafting_inventory.visible = false
+	main_inventory.visible = true
+	craft_toggle.text = "<-" if crafting_inventory.visible else "->"
 	is_inventory_open = !is_inventory_open
 	inventory_window.visible = is_inventory_open
 
@@ -74,7 +79,6 @@ func toggle_inventory_craft():
 		crafting_inventory.visible = true
 	else:
 		crafting_inventory.visible = false
-
 
 
 

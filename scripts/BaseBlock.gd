@@ -31,6 +31,9 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 # Getters
 func get_id() -> int:
 	return _id
+	
+func get_name() -> String:
+	return _name
 
 func get_hp() -> int:
 	return _hp

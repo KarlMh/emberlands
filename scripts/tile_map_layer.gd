@@ -63,6 +63,9 @@ func update_block_below(tile_pos: Vector2i):
 		block_entities[below_pos] = BlockEntity.new(dl.BLOCK_DIRT["id"], below_pos, self, true)
 
 
+func get_block_name_at_position(pos):
+	return block_entities[pos].get_name()
+
 
 func generate_world():
 	randomize()

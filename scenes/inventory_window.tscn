@@ -1,13 +1,13 @@
 [gd_scene load_steps=14 format=3 uid="uid://ul4ff2b876bs"]
 
-[ext_resource type="Script" path="res://scripts/inventory.gd" id="1_ib066"]
+[ext_resource type="Script" uid="uid://5r3jyg718s4" path="res://scripts/inventory.gd" id="1_ib066"]
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="1_wrlxy"]
-[ext_resource type="Script" path="res://scripts/inventory_manager.gd" id="2_sb42w"]
-[ext_resource type="Script" path="res://scripts/carft_item_list.gd" id="5_e71hm"]
+[ext_resource type="Script" uid="uid://c1bupg71ax8gy" path="res://scripts/inventory_manager.gd" id="2_sb42w"]
+[ext_resource type="Script" uid="uid://cs0h2vmlljdgs" path="res://scripts/carft_item_list.gd" id="5_e71hm"]
 [ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="5_ibg6k"]
-[ext_resource type="Script" path="res://scripts/craft_toggle.gd" id="5_svfjm"]
-[ext_resource type="Script" path="res://scripts/craft_button.gd" id="6_ul72a"]
-[ext_resource type="Script" path="res://scripts/recipe_text.gd" id="7_jivkt"]
+[ext_resource type="Script" uid="uid://2rm1y7ilh52r" path="res://scripts/craft_toggle.gd" id="5_svfjm"]
+[ext_resource type="Script" uid="uid://dqns1hql6jm1u" path="res://scripts/craft_button.gd" id="6_ul72a"]
+[ext_resource type="Script" uid="uid://iscfm3btldfq" path="res://scripts/recipe_text.gd" id="7_jivkt"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ao4hy"]
 

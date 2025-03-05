@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dh1sg8vfhieu2"]
 
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="1_ct0op"]
-[ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="1_rohpo"]
+[ext_resource type="Script" uid="uid://rbke1qof2r7r" path="res://scripts/inventory_bar.gd" id="1_rohpo"]
 
 [node name="inventory_bar" type="Panel"]
 offset_right = 400.0

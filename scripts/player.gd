@@ -119,22 +119,16 @@ func handle_movement(delta: float):
 		
 		# If stuck, try stepping up
 		if is_on_wall():
-			try_step_up()
+			pass
 
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
+		
 
-func try_step_up():
-	var step_height = 10  # CAN BE FIXED!
-	var step_up_pos = position + Vector2(0, -step_height)  # Try moving up
-	
-	# Move player up slightly and check if they can move forward
-	position = step_up_pos
-	move_and_slide()
 
-	# If still stuck, move back down
-	if is_on_wall():
-		position.y += step_height
+
+
+
 
 
 

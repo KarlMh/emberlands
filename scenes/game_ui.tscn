@@ -2,15 +2,15 @@
 
 [ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_m15es"]
 [ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_yorhh"]
-[ext_resource type="Script" path="res://scripts/inventory_bar.gd" id="2_dqpr8"]
-[ext_resource type="Script" path="res://scripts/display_gems.gd" id="3_ck6tt"]
+[ext_resource type="Script" uid="uid://rbke1qof2r7r" path="res://scripts/inventory_bar.gd" id="2_dqpr8"]
+[ext_resource type="Script" uid="uid://c5lxu8umbfs8l" path="res://scripts/display_gems.gd" id="3_ck6tt"]
 [ext_resource type="Texture2D" uid="uid://ba1dptwycerkh" path="res://pixel_art/stuff/gems.png" id="4_80606"]
 [ext_resource type="PackedScene" uid="uid://ul4ff2b876bs" path="res://scenes/inventory_window.tscn" id="5_u2aqm"]
-[ext_resource type="Script" path="res://scripts/options.gd" id="6_cppry"]
-[ext_resource type="Script" path="res://scripts/respawn_button.gd" id="7_n8dry"]
-[ext_resource type="Script" path="res://scripts/main_menu_button.gd" id="8_3q1cn"]
-[ext_resource type="Script" path="res://scripts/exit_button.gd" id="9_op3db"]
-[ext_resource type="Script" path="res://scripts/options_button.gd" id="10_vnx7g"]
+[ext_resource type="Script" uid="uid://cf1w30b0pb2j3" path="res://scripts/options.gd" id="6_cppry"]
+[ext_resource type="Script" uid="uid://cpba6o2rj85y" path="res://scripts/respawn_button.gd" id="7_n8dry"]
+[ext_resource type="Script" uid="uid://d3jeyqx5nytu1" path="res://scripts/main_menu_button.gd" id="8_3q1cn"]
+[ext_resource type="Script" uid="uid://bbhhxtd4mu6il" path="res://scripts/exit_button.gd" id="9_op3db"]
+[ext_resource type="Script" uid="uid://bysipgc0mns7m" path="res://scripts/options_button.gd" id="10_vnx7g"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n55u8"]
 bg_color = Color(0.454902, 0.72549, 1, 0)

@@ -1,21 +1,21 @@
 [gd_scene load_steps=30 format=3 uid="uid://n46n5hkwy7i"]
 
-[ext_resource type="Script" path="res://scripts/player.gd" id="1_ga323"]
+[ext_resource type="Script" uid="uid://d2gj4b2vpai33" path="res://scripts/player.gd" id="1_ga323"]
 [ext_resource type="Texture2D" uid="uid://curgmp0su2rn1" path="res://pixel_art/character/main_body.png" id="2_wcm0f"]
 [ext_resource type="Texture2D" uid="uid://dr4mduqf5tksc" path="res://pixel_art/character/eyes.png" id="3_w1nqg"]
 [ext_resource type="Texture2D" uid="uid://dmut65yf17whv" path="res://pixel_art/character/eye_lids.png" id="4_7engq"]
 [ext_resource type="Texture2D" uid="uid://b7e0icej03wq6" path="res://pixel_art/character/front_hand.png" id="4_oj1ag"]
 [ext_resource type="Texture2D" uid="uid://bh3bqe7ws6dw6" path="res://pixel_art/character/back_hand.png" id="5_vnqwe"]
 [ext_resource type="Texture2D" uid="uid://bgkgv587okky5" path="res://pixel_art/character/feet_1.png" id="6_ga405"]
-[ext_resource type="Script" path="res://scripts/hand_item.gd" id="6_s4ba5"]
+[ext_resource type="Script" uid="uid://cdgayji5u7rty" path="res://scripts/hand_item.gd" id="6_s4ba5"]
 [ext_resource type="Texture2D" uid="uid://c4lwg8ofuv26y" path="res://pixel_art/character/feet_2.png" id="7_654eq"]
 [ext_resource type="AudioStream" uid="uid://csoup6xdk6vv0" path="res://sounds/jump.wav" id="10_gulkr"]
 [ext_resource type="AudioStream" uid="uid://bplwols2uujms" path="res://sounds/break.wav" id="11_8ub18"]
 [ext_resource type="AudioStream" uid="uid://b20r7yg01e5xh" path="res://sounds/place.wav" id="12_88bb4"]
 [ext_resource type="AudioStream" uid="uid://drfkmddalvv60" path="res://sounds/death.wav" id="13_f133i"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xtxnn"]
-size = Vector2(18, 30)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jej6c"]
+radius = 9.0
 
 [sub_resource type="Animation" id="Animation_xhi3o"]
 length = 0.001
@@ -640,11 +640,11 @@ tracks/11/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gqldb"]
 _data = {
-"RESET": SubResource("Animation_xhi3o"),
-"blink": SubResource("Animation_gc5kh"),
-"falling": SubResource("Animation_4erno"),
-"jumping": SubResource("Animation_qvper"),
-"walking": SubResource("Animation_8qlhc")
+&"RESET": SubResource("Animation_xhi3o"),
+&"blink": SubResource("Animation_gc5kh"),
+&"falling": SubResource("Animation_4erno"),
+&"jumping": SubResource("Animation_qvper"),
+&"walking": SubResource("Animation_8qlhc")
 }
 
 [sub_resource type="Animation" id="Animation_wewrx"]
@@ -705,8 +705,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_atwjf"]
 _data = {
-"RESET": SubResource("Animation_wewrx"),
-"blink": SubResource("Animation_0dcug")
+&"RESET": SubResource("Animation_wewrx"),
+&"blink": SubResource("Animation_0dcug")
 }
 
 [sub_resource type="Animation" id="Animation_5ewap"]
@@ -767,8 +767,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oqvpw"]
 _data = {
-"RESET": SubResource("Animation_5ewap"),
-"hand_movement": SubResource("Animation_irj8n")
+&"RESET": SubResource("Animation_5ewap"),
+&"hand_movement": SubResource("Animation_irj8n")
 }
 
 [sub_resource type="Animation" id="Animation_rs3ac"]
@@ -828,8 +828,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_c7pat"]
 _data = {
-"RESET": SubResource("Animation_rs3ac"),
-"falling": SubResource("Animation_hrnxi")
+&"RESET": SubResource("Animation_rs3ac"),
+&"falling": SubResource("Animation_hrnxi")
 }
 
 [node name="player" type="CharacterBody2D"]
@@ -837,8 +837,9 @@ z_index = 20
 script = ExtResource("1_ga323")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
 position = Vector2(0, -15)
-shape = SubResource("RectangleShape2D_xtxnn")
+shape = SubResource("CapsuleShape2D_jej6c")
 
 [node name="visuals" type="Node2D" parent="."]
 
@@ -900,22 +901,22 @@ texture = ExtResource("7_654eq")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_gqldb")
+&"": SubResource("AnimationLibrary_gqldb")
 }
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_atwjf")
+&"": SubResource("AnimationLibrary_atwjf")
 }
 
 [node name="AnimationPlayer3" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_oqvpw")
+&"": SubResource("AnimationLibrary_oqvpw")
 }
 
 [node name="AnimationPlayer4" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_c7pat")
+&"": SubResource("AnimationLibrary_c7pat")
 }
 
 [node name="jump_sound" type="AudioStreamPlayer2D" parent="."]
