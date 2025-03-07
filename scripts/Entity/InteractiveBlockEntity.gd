@@ -1,5 +1,5 @@
-extends Block
-class_name InteractiveBlock
+extends BlockEntity
+class_name InteractiveBlockEntity
 
 # New properties specific to interactive blocks
 var _interaction_type: String = ""

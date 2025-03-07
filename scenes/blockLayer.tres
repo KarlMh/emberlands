@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dxhwh18fsq0or" path="res://pixel_art/blocks/BLOCK_DEEP_DIRT.png" id="4_vinxg"]
 [ext_resource type="Texture2D" uid="uid://dsbod1ho4km4j" path="res://pixel_art/seeds/SEED_TREE.png" id="5_72ngo"]
 [ext_resource type="Texture2D" uid="uid://eht5jespb615" path="res://pixel_art/blocks/BLOCK_STONE.png" id="6_c087b"]
-[ext_resource type="Texture2D" uid="uid://dtaer3hbfdvu1" path="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" id="7_j43h0"]
+[ext_resource type="Texture2D" uid="uid://u26358dygdq0" path="res://pixel_art/interactive_blocks/CRAFTING_TABLE.png" id="7_j43h0"]
 [ext_resource type="Texture2D" uid="uid://c8rsn68v3c0eb" path="res://pixel_art/interactive_blocks/FURNACE.png" id="8_8dh5d"]
 [ext_resource type="Texture2D" uid="uid://baqhghssdu1fx" path="res://pixel_art/interactive_blocks/RECYCLE_MACHINE.png" id="9_asgin"]
 [ext_resource type="Texture2D" uid="uid://bqpceuwf666iu" path="res://pixel_art/blocks/BLOCK_MAGMA.png" id="10_qnmsp"]
@@ -68,7 +68,7 @@ texture_region_size = Vector2i(32, 32)
 texture = ExtResource("7_j43h0")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -7.92739, 16, -7.92739, 16, 16, -16, 16)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12.7146, 2.88688, 14.0659, 2.76403, 13.5745, 16, -12.7146, 16)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cebe8"]
 texture = ExtResource("8_8dh5d")

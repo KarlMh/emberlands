@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ceavctoewrltg"
-path="res://.godot/imported/menu.png-4084af614ac0749b66bb9e99b02f6538.ctex"
+uid="uid://cnpuwu0qwyfe3"
+path="res://.godot/imported/PICKUP_TOOL.png-93126df779eb06289de1c514cabd887e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/menu.png"
-dest_files=["res://.godot/imported/menu.png-4084af614ac0749b66bb9e99b02f6538.ctex"]
+source_file="res://pixel_art/items/PICKUP_TOOL.png"
+dest_files=["res://.godot/imported/PICKUP_TOOL.png-93126df779eb06289de1c514cabd887e.ctex"]
 
 [params]
 

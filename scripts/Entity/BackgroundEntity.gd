@@ -1,5 +1,5 @@
-extends BaseBlock
-class_name BackgroundBlock
+extends BaseBlockEntity
+class_name BackgroundEntity
 
 # Constructor
 func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool):

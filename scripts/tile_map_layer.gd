@@ -16,8 +16,8 @@ var dl = DataLoader
 
 @onready var noise = FastNoiseLite.new()
 
-const BlockEntity = preload("res://scripts/BlockEntity.gd")
-const BackgroundEntity = preload("res://scripts/BackgroundEntity.gd")
+const BlockEntity = preload("res://scripts/Entity/BlockEntity.gd")
+const BackgroundEntity = preload("res://scripts/Entity/BackgroundEntity.gd")
 
 # Timer for cycling through frames
 var animation_timer = Timer.new()

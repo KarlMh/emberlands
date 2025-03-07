@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bmvjbeiau1clg" path="res://scenes/camera_2d.tscn" id="6_kvuet"]
 [ext_resource type="TileSet" uid="uid://cu5sw4wtrwqio" path="res://scenes/blockLayer.tres" id="7_kvuet"]
 [ext_resource type="Texture2D" uid="uid://b0istdyx235xb" path="res://pixel_art/backgrounds/BACKGROUND_CAVE.png" id="9_8kin8"]
-[ext_resource type="Script" uid="uid://ckmr8k0hulsgi" path="res://scripts/background.gd" id="14_0qu6k"]
+[ext_resource type="Script" uid="uid://ckmr8k0hulsgi" path="res://scripts/scene_background.gd" id="14_0qu6k"]
 [ext_resource type="Texture2D" uid="uid://cqrsutg10qjsk" path="res://pixel_art/backgrounds/BACKGROUND_WOOD.png" id="16_7nnog"]
 [ext_resource type="Texture2D" uid="uid://bibya52blfhie" path="res://pixel_art/weathers/Clouds 5/1.png" id="16_w5jsq"]
 [ext_resource type="Texture2D" uid="uid://dqbyg0c1f6k4f" path="res://pixel_art/backgrounds/BACKGROUND_LEAF.png" id="17_6iu2a"]
@@ -70,7 +70,7 @@ script/source = "extends Node2D
 class_name BlockAnimation
 
 @export var tileset_source_id: int = 0
-const BlockEntity = preload(\"res://scripts/BlockEntity.gd\")
+const BlockEntity = preload(\"res://scripts/Entity/BlockEntity.gd\")
 
 func start_break_animation(block_position: Vector2i, current_hp: int, max_hp: int, tilemap_layer: TileMapLayer, tilemap_layer2: TileMapLayer, erase_timer: Timer):
 	print(\"start_break_animation called\")

@@ -1,5 +1,5 @@
 extends Object
-class_name BaseBlock
+class_name BaseBlockEntity
 
 # Properties
 var _id: int

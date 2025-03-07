@@ -19,14 +19,8 @@ func _ready():
 func set_item(new_item: Item) -> void:
 	item = new_item
 	if item:
-		if item.item_type == Item.ItemType.TOOL or item.item_type == Item.ItemType.SEED:
-			# Create an AtlasTexture to crop the 16x16 section
-			var atlas_texture = AtlasTexture.new()
-			atlas_texture.atlas = item.item_icon  # Original 32x32 texture
-			atlas_texture.region = Rect2(0, 0, 16, 16)  # Crop top-left 16x16
-			icon.texture = atlas_texture
-		else:
-			icon.texture = item.item_icon  # Use full texture for other items
+	
+		icon.texture = item.item_icon  # Use full texture for other items
 
 		update_display()
 	else:

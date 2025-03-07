@@ -867,7 +867,7 @@ position = Vector2(-7, -16)
 position = Vector2(-1, 9)
 
 [node name="hand_item" type="Sprite2D" parent="visuals/front_arm/front_hand"]
-position = Vector2(13, 8)
+position = Vector2(0, -1)
 script = ExtResource("6_s4ba5")
 
 [node name="Sprite2D" type="Sprite2D" parent="visuals/front_arm/front_hand"]

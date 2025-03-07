@@ -26,8 +26,8 @@
 		"SEED_TREE": { "id": 201, "ig_name": "Tree Seed", "drop_chance": 0.2, "icon": "res://pixel_art/seeds/SEED_TREE.png", "crafting_tier": -1 }
 	},
 	"items": {
-		"WOODEN_PICKAXE": { "id": 301, "ig_name": "Wooden Pickaxe", "damage": 1, "recipe": {"WOODEN_LOG": 20, "SMALL_ROCK": 12}, "icon": "res://pixel_art/items/WOODEN_PICKAXE.png", "crafting_tier": 1 },
-		"GOLDEN_PICKAXE": { "id": 302, "ig_name": "Golden Pickaxe", "damage": 100, "icon": "res://pixel_art/items/GOLDEN_PICKAXE.png", "crafting_tier": -1 }
+		"WOODEN_PICKAXE": { "id": 301, "ig_name": "Wooden Pickaxe", "tool_power": 1, "recipe": {"WOODEN_LOG": 20, "SMALL_ROCK": 12}, "icon": "res://pixel_art/items/WOODEN_PICKAXE.png", "crafting_tier": 1 },
+		"GOLDEN_PICKAXE": { "id": 302, "ig_name": "Golden Pickaxe", "tool_power": 100, "icon": "res://pixel_art/items/GOLDEN_PICKAXE.png", "crafting_tier": -1 }
 	},
 	"resources": {
 		"IRON": { "id": 303, "ig_name": "Iron", "icon": "res://pixel_art/resources/IRON.png", "crafting_tier": -1 },

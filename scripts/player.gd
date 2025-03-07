@@ -40,11 +40,9 @@ const BLOCK_PLACEMENT_RANGE = 3
 
 @onready var seed_planter = preload("res://scripts/seed_planter.gd").new()
 
-const BlockEntity = preload("res://scripts/BlockEntity.gd")
-const BackgroundEntity = preload("res://scripts/BackgroundEntity.gd")
-const InteractiveBlockEntity = preload("res://scripts/InteractiveBlock.gd")
-
-@onready var ProCam2D = get_tree().get_root().find_child("ProCam2D", true, false)
+const BlockEntity = preload("res://scripts/Entity/BlockEntity.gd")
+const BackgroundEntity = preload("res://scripts/Entity/BackgroundEntity.gd")
+const InteractiveBlockEntity = preload("res://scripts/Entity/InteractiveBlockEntity.gd")
 
 var blink_timer = 0.0
 var can_blink = true
@@ -174,6 +172,41 @@ func handle_block_actions(delta: float):
 			action_timer = 0
 			break_block()
 			place_block()
+			pick_up_block()
+			
+			
+func pick_up_block():
+	if inventory_manager.get_selected_item() == null or inventory_manager.get_selected_item().get_id() != -11:
+		return
+	
+	var mouse_pos = get_global_mouse_position()
+	var tile_pos = blockLayer.local_to_map(mouse_pos)
+
+	if is_within_range(tile_pos):
+		# Try picking from foreground (blockLayer) first
+		if blockLayer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
+			pick_up_from_layer(blockLayer, blockLayer.block_entities, tile_pos)
+
+		# If no block in foreground, check background (bg_layer)
+		elif bg_layer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
+			pick_up_from_layer(bg_layer, blockLayer.bg_entities, tile_pos)
+
+# Helper function to handle block pickup from any layer
+func pick_up_from_layer(layer, entity_dict, tile_pos):
+	var block = entity_dict.get(tile_pos, null)
+
+	if block and block.can_be_damaged():
+		var block_name = block.get_name()
+		print(block_name, "AAAAAAAAAAAA")
+		# Add the block back to inventory
+		inventory_manager.add_item(dl.create_item(block_name))
+
+		# Remove block from the world
+		layer.set_cell(tile_pos, dl.EMPTY['id'])
+		entity_dict.erase(tile_pos)
+
+
+
 
 
 func break_block() -> void:
@@ -339,7 +372,7 @@ func check_and_interact_with_nearby_block() -> InteractiveBlockEntity:
 
 func place_block() -> void:
 	var item = inventory_manager.get_selected_item()
-	if item == null or item.get_id() == -10 or !item.can_be_placed():
+	if item == null or item.get_id() == -10 or !item.can_be_placed() or inventory_manager.get_selected_item().get_id() == -11:
 		return
 	var mouse_pos = get_global_mouse_position()
 	var tile_pos = blockLayer.local_to_map(mouse_pos)
@@ -353,12 +386,12 @@ func place_block() -> void:
 				seed_planter.plant_seed(tile_pos, selected_item, blockLayer, inventory_manager)
 				return
 
-			var target_layer = bg_layer if selected_item.is_background() else blockLayer
-			var target_block_entities = blockLayer.bg_entities if selected_item.is_background() else blockLayer.block_entities
+			var target_layer = bg_layer if selected_item is Background else blockLayer
+			var target_block_entities = blockLayer.bg_entities if selected_item is Background else blockLayer.block_entities
 			var class_entity
-			if selected_item.is_background():
+			if selected_item is Background:
 				class_entity = BackgroundEntity
-			else: class_entity = BlockEntity if selected_item.is_block() else InteractiveBlockEntity
+			else: class_entity = BlockEntity if selected_item is Block else InteractiveBlockEntity
 
 			# Check the block above to determine whether to place deep dirt or normal dirt
 			var tile_above = tile_pos + Vector2i(0, -1)

@@ -1,5 +1,5 @@
-extends BaseBlock
-class_name Block
+extends BaseBlockEntity
+class_name BlockEntity
 
 var _craft = false
 var _smelt = false

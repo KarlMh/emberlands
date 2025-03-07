@@ -112,7 +112,7 @@ func create_item(name: String) -> Item:
 					var interaction_type = item_data["interaction_type"]
 					var hp = item_data["hp"]
 					var crafting_tier = item_data["crafting_tier"]
-					return Item.create_interactive_block(id, name, crafting_tier, interaction_type, icon, gems)  # Create Block item
+					return InteractiveBlock.new(id, name, crafting_tier, interaction_type, icon, gems)  # Create Block item
 
 		# Check if the category exists and has the item by name
 		if game_data[category].has(name):
@@ -133,7 +133,7 @@ func create_item(name: String) -> Item:
 				var gems = item_data["gems"]
 				var hp = item_data["hp"]
 				var crafting_tier = item_data["crafting_tier"]
-				return Item.create_block(id, name, crafting_tier, icon, gems)  # Create Block item
+				return Block.new(id, name, crafting_tier, icon, gems)  # Create Block item
 
 			# Check if the category is "backgrounds"
 			elif category == "backgrounds":
@@ -141,25 +141,25 @@ func create_item(name: String) -> Item:
 				var gems = item_data["gems"]
 				var hp = item_data["hp"]
 				var crafting_tier = item_data["crafting_tier"]
-				return Item.create_background_block(id, name, crafting_tier, icon, gems)  # Create Background item
+				return Background.new(id, name, crafting_tier, icon, gems)  # Create Background item
 
 			# Check if the category is "items"
 			elif category == "items":
 				# Item-specific data (e.g., damage)
-				var damage = item_data["damage"]
+				var tool_power = item_data["tool_power"]
 				var crafting_tier = item_data["crafting_tier"]
-				return Item.create_tool(id, name, crafting_tier, icon, damage)  # Create Tool item
+				return Tool.new(id, name, crafting_tier, icon, tool_power)  # Create Tool item
 				
 			elif category == "resources":
 				# Item-specific data 
 				var crafting_tier = item_data["crafting_tier"]
-				return Item.create_resource(id, name, crafting_tier,icon)  # Create Resource item
+				return Resources.new(id, name, crafting_tier,icon)  # Create Resource item
 
 			# Check if the category is "seeds"
 			elif category == "seeds":
 				# Seed-specific data
 				var crafting_tier = item_data["crafting_tier"]
-				return Item.create_seed(id, name, crafting_tier, icon)  # Seeds may be treated as special tools or blocks
+				return Seed.new(id, name, crafting_tier, icon)  # Seeds may be treated as special tools or blocks
 
 	# Return null if item is not found
 	print("Item not found:", name)

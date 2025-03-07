@@ -23,7 +23,8 @@ func _ready():
 
 	# Assign fixed items
 	if fixed_slots.size() >= 2:
-		var hand_item = Item.new(-10, "Hand", -1, preload("res://pixel_art/items/PLAYER_HAND.png"), 0)
+		var hand_item = Item.new(-10, "HAND", -1, preload("res://pixel_art/items/PLAYER_HAND.png"), 0)
+		var pickup_tool_item = Item.new(-11, "PICKUP_TOOL", -1, preload("res://pixel_art/items/PICKUP_TOOL.png"), 0)
 
 
 		await get_tree().process_frame  # Wait for UI to be ready
@@ -33,6 +34,10 @@ func _ready():
 		fixed_slots[0].set_item(hand_item)
 		fixed_slots[0].item_count = 1
 		fixed_slots[0].update_display()
+		
+		fixed_slots[1].set_item(pickup_tool_item)
+		fixed_slots[1].item_count = 1
+		fixed_slots[1].update_display()
 
 	# Set the initial selected slot (default to first slot)
 	selected_slot_index = 0
@@ -69,7 +74,7 @@ func update_selection_visual():
 
 # Add an item to the dynamic inventory (last three slots only)
 func add_to_bar(slot: Control):
-	if not slot or not slot.item or slot.item.is_tool():
+	if not slot or not slot.item or slot.item is Tool:
 		return
 
 	# Check if item is already in dynamic slots
