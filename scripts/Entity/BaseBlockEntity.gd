@@ -17,8 +17,10 @@ var _parent_node: Node
 # Animation properties
 var _tileset_source_id: int = 0
 var _block_timers: Dictionary = {}
+var _loader: ProgressBar = null  # Track the loader instance
 
 var dl = DataLoader
+
 
 # Constructor
 func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool):
@@ -58,19 +60,73 @@ func is_destroyed() -> bool:
 func can_be_damaged() -> bool:
 	return _can_be_damaged
 	
-func pick_up_block(blockLayer: TileMapLayer, breakingLayer: TileMapLayer):
-	if !_can_be_damaged or _destroyed or self._hp != self._initial_hp:
-		return false  # Block can't be damaged or is already destroyed
+func get_loader() -> ProgressBar:
+	return _loader
 
-	self._pickup_hp -= 1.5
-	_start_break_animation(blockLayer, breakingLayer, false)  # Start the break animation
+func pick_up_block():
+	if !_can_be_damaged or _destroyed or _pickup_hp <= 0:
+		return false  # Block can't be picked up
+
+	# Spawn loader only if it doesn't exist
+	if _loader == null:
+		_loader = _spawn_loader()
+
+	self._pickup_hp -= 1
+	_loader.value = (1.0 - (_pickup_hp / _initial_hp)) * 100  # Update progress
 
 	if self._pickup_hp <= 0:
 		self._pickup_hp = 0
 		_destroyed = true
-		return true  # Block is now destroyed
+		_remove_loader()  # Remove loader when block is fully picked up
+		return true  # Block is now picked up
 
-	return false  # Block is damaged but not destroyed
+	return false  # Block is in progress of being picked up
+
+	
+
+# Function to spawn the progress bar
+func _spawn_loader() -> ProgressBar:
+	print("LOAAAAADDDDERRRRR")
+	var loader = ProgressBar.new()
+	loader.show_percentage = false
+	loader.size = Vector2(30, 8)  # Adjust size
+	loader.min_value = 0
+	loader.max_value = 100
+	loader.value = 0  # Start at 0%
+	
+	var bar_style = StyleBoxFlat.new()
+	bar_style.bg_color = Color(137, 207, 240, 1.0)  # Bright green bar
+	bar_style.corner_radius_top_left = 1
+	bar_style.corner_radius_top_right = 1
+	bar_style.corner_radius_bottom_left = 1
+	bar_style.corner_radius_bottom_right = 1
+	loader.add_theme_stylebox_override("fill", bar_style)
+
+	# Set custom color for the progress bar
+	var bg_style = StyleBoxFlat.new()
+	bg_style.bg_color = Color(0, 0, 0, 0.5)  # Semi-transparent black
+	bg_style.corner_radius_top_left = 1
+	bg_style.corner_radius_top_right = 1
+	bg_style.corner_radius_bottom_left = 1
+	bg_style.corner_radius_bottom_right = 1
+	loader.add_theme_stylebox_override("background", bg_style)
+
+	# Position it below the block
+	var loader_position = _position * 32 + Vector2i(0, 22)  
+	loader.position = loader_position
+	loader.position.x = (_position.x * 32) + (32 - loader.size.x) / 2
+
+
+	_parent_node.add_child(loader)
+	return loader
+
+
+# Function to remove the progress bar
+func _remove_loader():
+	if _loader:
+		set_hp()
+		_loader.queue_free()  # Remove it from the scene
+		_loader = null  # Reset reference
 
 # Reduce HP
 func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLayer) -> bool:
@@ -127,6 +183,7 @@ func _on_erase_timeout(breakingLayer: TileMapLayer, breaking: bool):
 		if breaking:
 			breakingLayer.erase_cell(_position)
 		self.set_hp()
+		_remove_loader()
 
 	if _block_timers.has(_position):
 		_block_timers[_position].queue_free()

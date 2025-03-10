@@ -4,7 +4,7 @@ class_name InteractiveBlockEntity
 # New properties specific to interactive blocks
 var _interaction_type: String = ""
 
-# Constructor
+# Consztructor
 func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool):
 	super(id, position, parent_node, can_be_damaged)  # Call parent constructor
 	

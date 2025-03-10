@@ -7,7 +7,7 @@ const WORLD_WIDTH = 100
 const WORLD_HEIGHT = 50
 const BLINK_DELAY_MIN = 4.0
 const BLINK_DELAY_MAX = 12.0
-const TIME_BETWEEN_ACTIONS = 0.4
+const TIME_BETWEEN_ACTIONS = 0.3
 const BLOCK_PLACEMENT_RANGE = 3
 
 @onready var animated_sprite = $AnimationPlayer
@@ -173,8 +173,23 @@ func handle_block_actions(delta: float):
 			break_block()
 			place_block()
 			pick_up_block()
+	else:
+		remove_loader()
 			
 			
+			
+var _current_block: BaseBlockEntity = null  # Track the currently active block
+
+# Function to remove the loader if the current block is different from the new one
+func remove_old_loader(current_block, block):
+	if block != current_block:
+		current_block._remove_loader()
+		
+func remove_loader():
+	if _current_block:
+		_current_block._remove_loader()
+		_current_block = null
+
 func pick_up_block():
 	if inventory_manager.get_selected_item() == null or inventory_manager.get_selected_item().get_id() != -11:
 		return
@@ -193,11 +208,16 @@ func pick_up_block():
 
 # Helper function to handle block pickup from any layer
 func pick_up_from_layer(layer, entity_dict, tile_pos):
-	var block = entity_dict.get(tile_pos, null)
+	var block = entity_dict.get(tile_pos)
+
 	var is_dirt_block = block.get_id() == dl.BLOCK_DIRT["id"] or block.get_id() == dl.BLOCK_DEEP_DIRT["id"]
 
 	if block and block.can_be_damaged():
-		if block.pick_up_block(blockLayer, breakingLayer):
+		# Remove loader from the old block if it's different from the current one
+		if _current_block:
+			remove_old_loader(_current_block, block)
+
+		if block.pick_up_block():
 			var block_name = block.get_name()
 			print(block_name, "AAAAAAAAAAAA")
 			# Add the block back to inventory
@@ -212,8 +232,9 @@ func pick_up_from_layer(layer, entity_dict, tile_pos):
 			
 		if is_dirt_block:
 			blockLayer.update_block_below(tile_pos)
-
-
+		
+		# Set the current block as the picked block		
+		_current_block = block
 
 
 
@@ -399,7 +420,8 @@ func place_block() -> void:
 			var class_entity
 			if selected_item is Background:
 				class_entity = BackgroundEntity
-			else: class_entity = BlockEntity if selected_item is Block else InteractiveBlockEntity
+			else: 
+				class_entity = BlockEntity if selected_item is Block else InteractiveBlockEntity
 
 			# Check the block above to determine whether to place deep dirt or normal dirt
 			var tile_above = tile_pos + Vector2i(0, -1)
