@@ -6,6 +6,7 @@ var _id: int
 var _name: String
 var _hp: float
 var _initial_hp: float
+var _pickup_hp: float
 var _position: Vector2i
 var _gems_to_drop: int
 var _destroyed: bool = false
@@ -40,6 +41,7 @@ func get_hp() -> int:
 
 func set_hp():
 	self._hp = self.get_initial_hp()
+	self._pickup_hp = self.get_initial_hp()
 
 func get_initial_hp() -> int:
 	return _initial_hp
@@ -55,17 +57,31 @@ func is_destroyed() -> bool:
 
 func can_be_damaged() -> bool:
 	return _can_be_damaged
+	
+func pick_up_block(blockLayer: TileMapLayer, breakingLayer: TileMapLayer):
+	if !_can_be_damaged or _destroyed or self._hp != self._initial_hp:
+		return false  # Block can't be damaged or is already destroyed
+
+	self._pickup_hp -= 1.5
+	_start_break_animation(blockLayer, breakingLayer, false)  # Start the break animation
+
+	if self._pickup_hp <= 0:
+		self._pickup_hp = 0
+		_destroyed = true
+		return true  # Block is now destroyed
+
+	return false  # Block is damaged but not destroyed
 
 # Reduce HP
 func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLayer) -> bool:
-	if !_can_be_damaged or _destroyed:
+	if !_can_be_damaged or _destroyed or self._pickup_hp != self._initial_hp:
 		return false  # Block can't be damaged or is already destroyed
 
 	if self._hp == self._initial_hp:
 		self._hp -= amount
 
 	self._hp -= 1
-	_start_break_animation(blockLayer, breakingLayer)  # Start the break animation
+	_start_break_animation(blockLayer, breakingLayer, true)  # Start the break animation
 
 	if self._hp <= 0:
 		self._hp = 0
@@ -75,7 +91,7 @@ func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLa
 	return false  # Block is damaged but not destroyed
 
 # Animation Handling
-func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLayer):
+func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLayer, breaking: bool):
 	if not breakingLayer:
 		return
 
@@ -85,7 +101,9 @@ func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLaye
 
 	var total_frames = 6
 	var damage_index = clamp(int(((_initial_hp - _hp) / float(_initial_hp)) * total_frames), 0, total_frames)
-	breakingLayer.set_cell(_position, _tileset_source_id, Vector2i(damage_index, 0))
+	
+	if breaking:
+		breakingLayer.set_cell(_position, _tileset_source_id, Vector2i(damage_index, 0))
 
 	# If a timer already exists, reset it instead of creating a new one
 	if _block_timers.has(_position):
@@ -94,17 +112,20 @@ func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLaye
 
 	# Create and start a new timer if it doesn't exist
 	var erase_timer = Timer.new()
-	erase_timer.wait_time = 4.0
+	var waiting_time = 4.0 if breaking else 0.0
+	
+	erase_timer.wait_time = waiting_time
 	erase_timer.one_shot = true
-	erase_timer.timeout.connect(_on_erase_timeout.bind(breakingLayer))
+	erase_timer.timeout.connect(_on_erase_timeout.bind(breakingLayer, breaking))
 	_parent_node.add_child(erase_timer)
 
 	erase_timer.start()
 	_block_timers[_position] = erase_timer
 
-func _on_erase_timeout(breakingLayer: TileMapLayer):
+func _on_erase_timeout(breakingLayer: TileMapLayer, breaking: bool):
 	if breakingLayer:
-		breakingLayer.erase_cell(_position)
+		if breaking:
+			breakingLayer.erase_cell(_position)
 		self.set_hp()
 
 	if _block_timers.has(_position):

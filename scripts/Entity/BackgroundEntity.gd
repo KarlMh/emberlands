@@ -16,6 +16,7 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 			# Set properties using the fetched block data
 			self._hp = block_data["hp"]
 			self._initial_hp = block_data["hp"]
+			self._pickup_hp = self._initial_hp
 			self._gems_to_drop = randf_range(block_data["gems"]/2, block_data["gems"])
 		else:
 			self._hp = 0

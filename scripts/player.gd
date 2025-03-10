@@ -194,16 +194,24 @@ func pick_up_block():
 # Helper function to handle block pickup from any layer
 func pick_up_from_layer(layer, entity_dict, tile_pos):
 	var block = entity_dict.get(tile_pos, null)
+	var is_dirt_block = block.get_id() == dl.BLOCK_DIRT["id"] or block.get_id() == dl.BLOCK_DEEP_DIRT["id"]
 
 	if block and block.can_be_damaged():
-		var block_name = block.get_name()
-		print(block_name, "AAAAAAAAAAAA")
-		# Add the block back to inventory
-		inventory_manager.add_item(dl.create_item(block_name))
+		if block.pick_up_block(blockLayer, breakingLayer):
+			var block_name = block.get_name()
+			print(block_name, "AAAAAAAAAAAA")
+			# Add the block back to inventory
+			inventory_manager.add_item(dl.create_item(block_name))
 
-		# Remove block from the world
-		layer.set_cell(tile_pos, dl.EMPTY['id'])
-		entity_dict.erase(tile_pos)
+			# Remove block from the world
+			layer.set_cell(tile_pos, dl.EMPTY['id'])
+			entity_dict.erase(tile_pos)
+			
+			if not place_sound.playing:  # Prevent overlapping sounds
+				place_sound.play()
+			
+		if is_dirt_block:
+			blockLayer.update_block_below(tile_pos)
 
 
 
