@@ -127,11 +127,6 @@ func handle_movement(delta: float):
 
 
 
-
-
-
-
-
 func handle_animations():
 	if is_on_floor():
 		if abs(velocity.x) > 1:
@@ -160,8 +155,10 @@ func handle_blink(delta: float):
 		can_blink = true
 		blink_delay = get_blink_delay()
 
+
 func get_blink_delay() -> float:
 	return randf_range(BLINK_DELAY_MIN, BLINK_DELAY_MAX)
+
 
 func handle_block_actions(delta: float):
 	action_timer += delta
@@ -179,11 +176,7 @@ func handle_block_actions(delta: float):
 			
 			
 var _current_block: BaseBlockEntity = null  # Track the currently active block
-
-# Function to remove the loader if the current block is different from the new one
-func remove_old_loader(current_block, block):
-	if block != current_block:
-		current_block._remove_loader()
+	
 		
 func remove_loader():
 	if _current_block:
@@ -205,36 +198,50 @@ func pick_up_block():
 		# If no block in foreground, check background (bg_layer)
 		elif bg_layer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
 			pick_up_from_layer(bg_layer, blockLayer.bg_entities, tile_pos)
+		
+		else:
+			remove_loader()
+	else:
+		remove_loader()
 
 # Helper function to handle block pickup from any layer
 func pick_up_from_layer(layer, entity_dict, tile_pos):
 	var block = entity_dict.get(tile_pos)
+	if not block:
+		return  # Ensure block exists before proceeding
 
 	var is_dirt_block = block.get_id() == dl.BLOCK_DIRT["id"] or block.get_id() == dl.BLOCK_DEEP_DIRT["id"]
 
-	if block and block.can_be_damaged():
+	if block.can_be_damaged():
 		# Remove loader from the old block if it's different from the current one
-		if _current_block:
-			remove_old_loader(_current_block, block)
+		if _current_block and _current_block != block:
+			remove_loader()
+
+		# Check if tile position has changed before removing loader
+		if _current_block and _current_block.get_position() != tile_pos:
+			remove_loader()
+		print(tile_pos)
 
 		if block.pick_up_block():
 			var block_name = block.get_name()
-			print(block_name, "AAAAAAAAAAAA")
+			
 			# Add the block back to inventory
 			inventory_manager.add_item(dl.create_item(block_name))
 
 			# Remove block from the world
 			layer.set_cell(tile_pos, dl.EMPTY['id'])
 			entity_dict.erase(tile_pos)
-			
+
 			if not place_sound.playing:  # Prevent overlapping sounds
 				place_sound.play()
 			
-		if is_dirt_block:
-			blockLayer.update_block_below(tile_pos)
+			# Update adjacent blocks if necessary
+			if is_dirt_block:
+				blockLayer.update_block_below(tile_pos)
 		
 		# Set the current block as the picked block		
 		_current_block = block
+
 
 
 
@@ -252,7 +259,7 @@ func break_block() -> void:
 				var block = blockLayer.block_entities[tile_pos]
 				var block_id = block.get_id()
 				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
-				if not break_sound.playing:  # Prevent overlapping sounds
+				if not break_sound.playing and block.is_losing_health():  # Prevent overlapping sounds
 						break_sound.play()
 				if block.reduce_hp(mining_power, blockLayer, breakingLayer):
 					player_gems += block.get_gems_to_drop()
@@ -273,7 +280,7 @@ func break_block() -> void:
 				var bg_block = blockLayer.bg_entities[tile_pos]
 				var block_id = bg_block.get_id()
 				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
-				if not break_sound.playing:  # Prevent overlapping sounds
+				if not break_sound.playing and bg_block.is_losing_health():  # Prevent overlapping sounds
 					break_sound.play()
 
 				if bg_block.reduce_hp(mining_power, bg_layer, breakingLayer):

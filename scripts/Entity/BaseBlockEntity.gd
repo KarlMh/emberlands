@@ -62,9 +62,13 @@ func can_be_damaged() -> bool:
 	
 func get_loader() -> ProgressBar:
 	return _loader
+	
+func is_losing_health() -> bool:
+	# Returns true if current health is less than the initial health
+	return _hp < _initial_hp
 
 func pick_up_block():
-	if !_can_be_damaged or _destroyed or _pickup_hp <= 0:
+	if !_can_be_damaged or _destroyed or _pickup_hp <= 0 or self._hp != self._initial_hp:
 		return false  # Block can't be picked up
 
 	# Spawn loader only if it doesn't exist
