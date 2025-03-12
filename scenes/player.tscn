@@ -1,6 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://n46n5hkwy7i"]
+[gd_scene load_steps=31 format=3 uid="uid://n46n5hkwy7i"]
 
 [ext_resource type="Script" uid="uid://d2gj4b2vpai33" path="res://scripts/player.gd" id="1_ga323"]
+[ext_resource type="PackedScene" uid="uid://bxxevecuv6b5j" path="res://scenes/camera_2d.tscn" id="2_f1ej7"]
 [ext_resource type="Texture2D" uid="uid://curgmp0su2rn1" path="res://pixel_art/character/main_body.png" id="2_wcm0f"]
 [ext_resource type="Texture2D" uid="uid://dr4mduqf5tksc" path="res://pixel_art/character/eyes.png" id="3_w1nqg"]
 [ext_resource type="Texture2D" uid="uid://dmut65yf17whv" path="res://pixel_art/character/eye_lids.png" id="4_7engq"]
@@ -840,6 +841,8 @@ script = ExtResource("1_ga323")
 z_index = 1
 position = Vector2(0, -15)
 shape = SubResource("CapsuleShape2D_jej6c")
+
+[node name="Camera2D" parent="." instance=ExtResource("2_f1ej7")]
 
 [node name="visuals" type="Node2D" parent="."]
 

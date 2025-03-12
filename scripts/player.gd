@@ -3,8 +3,8 @@ extends CharacterBody2D
 const SPEED = 200.0
 const JUMP_VELOCITY = -400.0
 const TILE_SIZE = 32
-const WORLD_WIDTH = 100
-const WORLD_HEIGHT = 50
+const WORLD_WIDTH = 200
+const WORLD_HEIGHT = 100
 const BLINK_DELAY_MIN = 4.0
 const BLINK_DELAY_MAX = 12.0
 const TIME_BETWEEN_ACTIONS = 0.3
@@ -15,7 +15,7 @@ const BLOCK_PLACEMENT_RANGE = 3
 @onready var animated_sprite3 = $AnimationPlayer3
 @onready var animated_sprite4 = $AnimationPlayer4
 
-@onready var blockLayer = $"../blockLayer"
+@onready var blockLayer = get_tree().get_root().find_child("blockLayer", true, false)
 @onready var breakingLayer = $"../breakingLayer"
 @onready var bg_layer = $"../backgroundLayer"
 
@@ -23,7 +23,7 @@ const BLOCK_PLACEMENT_RANGE = 3
 
 @onready var erase_timer = $"../breakingLayer/erase_timer"
 @onready var visuals = $visuals
-@onready var camera = $Camera2D
+@onready var camera = get_tree().get_root().find_child("Camera2D", true, false)
 
 @onready var inventory_manager = get_tree().get_root().find_child("slot_container", true, false)
 @onready var inventory_window = get_tree().get_root().find_child("inventory_window", true, false)
@@ -60,12 +60,8 @@ func _ready():
 	spawn_player()
 	blink_delay = get_blink_delay()
 	add_child(seed_planter)
+	
 	inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
-	inventory_manager.add_item(dl.create_item("CRAFTING_TABLE")) 
-	inventory_manager.add_item(dl.create_item("FURNACE")) 
-	inventory_manager.add_item(dl.create_item("RECYCLE_MACHINE")) 
-	for i in range(100):
-		inventory_manager.add_item(dl.create_item("BLOCK_IRON")) 
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)

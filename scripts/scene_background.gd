@@ -11,8 +11,8 @@ func _ready():
 	var layers = get_children()
 
 	# Ensure we have at least three layers to avoid errors
-	if layers.size() > 2:
-		clouds_layer = layers[2]  # Assuming clouds are the third layer
+	if layers.size() >= 2:
+		clouds_layer = layers[0]  # Assuming clouds are the third layer
 		clouds2_layer = layers[1] # Assuming clouds2 is the second layer
 		original_offset_x = clouds_layer.motion_offset.x
 		original_offset_x2 = clouds2_layer.motion_offset.x

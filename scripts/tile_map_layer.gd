@@ -1,7 +1,7 @@
 extends TileMapLayer  # Ensure this is TileMapLayer, NOT TileMap
 
-const WORLD_WIDTH = 100
-const WORLD_HEIGHT = 50
+const WORLD_WIDTH = 200
+const WORLD_HEIGHT = 100
 const TILE_SIZE = 32  # Adjust this based on your game
 
 var spawn_tile = null
@@ -76,57 +76,68 @@ func generate_world():
 
 	var noise = FastNoiseLite.new()
 	noise.seed = randi()
-	noise.frequency = 0.1
+	noise.frequency = 0.05  # Lower frequency for smoother hills
+	noise.fractal_octaves = 3
 
+	# Generate terrain heightmap
+	var heightmap = []
+	for x in range(WORLD_WIDTH):
+		var height_variation = int(noise.get_noise_1d(x) * 6)  # Hill variation
+		heightmap.append(dirt_start_y + height_variation)
+
+	# Generate cave path
 	var cave_path = []
 	var cave_y = cave_start_y - randi() % max_cave_height
-
 	for x in range(WORLD_WIDTH):
 		cave_y = clamp(cave_y + randi() % 3 - 1, cave_start_y - max_cave_height, cave_start_y)
 		cave_path.append(Vector2i(x, cave_y))
 
 	var final_cave_tiles = []
 	for tile in cave_path:
-		for offset_x in range(-2, 3):
-			for offset_y in range(-1, 2):
+		for offset_x in range(-2, 3):  # Horizontal range (same)
+			for offset_y in range(-2, 3):  # Increased vertical range for taller path
 				var new_tile = Vector2i(tile.x + offset_x, tile.y + offset_y)
 				if new_tile.x >= 0 and new_tile.x < WORLD_WIDTH and new_tile.y >= 0 and new_tile.y < WORLD_HEIGHT:
 					final_cave_tiles.append(new_tile)
 
+
+	# Generate world
 	for x in range(WORLD_WIDTH):
+		var surface_y = heightmap[x]
+
 		for y in range(WORLD_HEIGHT + 10):
 			var tile_pos = Vector2i(x, y)
 
-			if y >= WORLD_HEIGHT - 1 and x != 0 and x != WORLD_WIDTH - 1:
+			# Bedrock at world boundaries and bottom
+			if y >= WORLD_HEIGHT - 1 or x == 0 or x == WORLD_WIDTH - 1 or y == 0:
 				set_cell(tile_pos, dl.BLOCK_BEDROCK["id"], Vector2i(0, 0))
 				block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_BEDROCK["id"], tile_pos, self, false)
 				continue
 
-			elif x == 0 or x == WORLD_WIDTH - 1 or y == 0:
-				set_cell(tile_pos, dl.BLOCK_BEDROCK["id"], Vector2i(0, 0))
-				block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_BEDROCK["id"], tile_pos, self, false)
-				continue
-
+			# Cave generation
 			elif tile_pos in final_cave_tiles:
 				erase_cell(tile_pos)
 				block_entities[tile_pos] = BlockEntity.new(dl.EMPTY["id"], tile_pos, self, false)
 
-				if randi() % 100 < 8:
-					if is_adjacent_to_solid(tile_pos):
-						set_cell(tile_pos, dl.BLOCK_MAGMA["id"], Vector2i(0, 0))
-						block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_MAGMA["id"], tile_pos, self, true)
+				# Random magma deposits inside caves
+				if randi() % 100 < 8 and is_adjacent_to_solid(tile_pos):
+					set_cell(tile_pos, dl.BLOCK_MAGMA["id"], Vector2i(0, 0))
+					block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_MAGMA["id"], tile_pos, self, true)
 
-			elif y >= dirt_start_y:
-				var is_surface_dirt = y == dirt_start_y
+			# Terrain generation
+			elif y >= surface_y:
+				var is_surface_dirt = y == surface_y
 
 				if is_surface_dirt:
 					set_cell(tile_pos, dl.BLOCK_DIRT["id"], Vector2i(0, 0))
 					block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_DIRT["id"], tile_pos, self, true)
 
+					# Tree generation (low chance)
 					if randi() % 100 < 4:
 						generate_tree(tile_pos + Vector2i(0, -1))
 
 				else:
+					# Underground dirt and stone layers
 					if randi() % 100 < 5:
 						set_cell(tile_pos, dl.BLOCK_STONE["id"], Vector2i(0, 0))
 						block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_STONE["id"], tile_pos, self, true)
@@ -138,36 +149,54 @@ func generate_world():
 				erase_cell(tile_pos)
 				block_entities[tile_pos] = BlockEntity.new(dl.EMPTY["id"], tile_pos, self, false)
 
-			if y >= dirt_start_y and x > 0 and x < WORLD_WIDTH - 1:
+			# Background layer inside terrain
+			if y >= surface_y and x > 0 and x < WORLD_WIDTH - 1:
 				bg_layer.set_cell(tile_pos, dl.BACKGROUND_CAVE["id"], Vector2i(0, 0))
 				bg_entities[tile_pos] = BackgroundEntity.new(dl.BACKGROUND_CAVE["id"], tile_pos, self, true)
 
-	place_bedrock_spawn(dirt_start_y)
-	
-	print("World generated with cave background intact.")
+	if !place_bedrock_spawn(dirt_start_y):
+		generate_world()
+		
+	print("World generated with smooth hills and cave background intact.")
+
 
 func place_bedrock_spawn(dirt_y):
 	var valid_positions = []
 
-	# Find all valid positions on the surface dirt layer
-	for x in range(1, WORLD_WIDTH - 1):  # Avoid placing at the edges
-		var tile_pos = Vector2i(x, dirt_y)
+	# Find all valid flat positions on the surface dirt layer
+	for x in range(2, WORLD_WIDTH - 3):  # Avoid placing at the edges
+		var is_flat = true
 
-		# Check if the tile is dirt and if there isn't a tree at the position
-		if get_cell_source_id(tile_pos) == dl.BLOCK_DIRT["id"] and !is_too_close_to_other_trees(tile_pos):
-			valid_positions.append(tile_pos)
+		# Check if the next 5 tiles are all dirt and free of obstacles
+		for i in range(5):
+			var check_pos = Vector2i(x + i, dirt_y)
+			if get_cell_source_id(check_pos) != dl.BLOCK_DIRT["id"] or is_too_close_to_other_trees(check_pos):
+				is_flat = false
+				break
 
-	# Place bedrock at a random valid position
+		if is_flat:
+			valid_positions.append(Vector2i(x + 2, dirt_y))  # Middle of the 5-block flat area
+
+	# Place bedrock at a valid position
 	if valid_positions.size() > 0:
 		var bedrock_pos = valid_positions[randi() % valid_positions.size()]
 		set_cell(bedrock_pos, dl.BLOCK_BEDROCK["id"], Vector2i(0, 0))
 		block_entities[bedrock_pos] = BlockEntity.new(dl.BLOCK_BEDROCK["id"], bedrock_pos, self, false)
+
 		print("Placed single bedrock at:", bedrock_pos)
+
+		# Set the spawn point above the bedrock
 		spawn_tile = bedrock_pos + Vector2i(0, -1)
 		set_cell(spawn_tile, dl.SPAWN_POINT["id"], Vector2i(0, 0))
 		block_entities[spawn_tile] = BlockEntity.new(dl.SPAWN_POINT["id"], spawn_tile, self, false)
 		bg_layer.set_cell(spawn_tile, dl.SPAWN_POINT["id"], Vector2i(0, 0))
 		bg_entities[spawn_tile] = BlockEntity.new(dl.SPAWN_POINT["id"], spawn_tile, self, false)
+		
+		return true
+		
+	else: 
+		return false
+
 
 
 
