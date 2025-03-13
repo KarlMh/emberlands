@@ -178,6 +178,7 @@ func remove_loader():
 	if _current_block:
 		_current_block._remove_loader()
 		_current_block = null
+		
 
 func pick_up_block():
 	if inventory_manager.get_selected_item() == null or inventory_manager.get_selected_item().get_id() != -11:
@@ -252,10 +253,13 @@ func break_block() -> void:
 		# Check foreground block
 		if blockLayer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
 			if blockLayer.block_entities.has(tile_pos):
+				remove_loader()
+				if _current_block and _current_block.get_position() != tile_pos:
+					remove_loader()
 				var block = blockLayer.block_entities[tile_pos]
 				var block_id = block.get_id()
 				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
-				if not break_sound.playing and block.is_losing_health():  # Prevent overlapping sounds
+				if not break_sound.playing and !block.is_being_picked_up() and block.can_be_damaged():  # Prevent overlapping sounds
 						break_sound.play()
 				if block.reduce_hp(mining_power, blockLayer, breakingLayer):
 					player_gems += block.get_gems_to_drop()
@@ -276,7 +280,7 @@ func break_block() -> void:
 				var bg_block = blockLayer.bg_entities[tile_pos]
 				var block_id = bg_block.get_id()
 				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
-				if not break_sound.playing and bg_block.is_losing_health():  # Prevent overlapping sounds
+				if not break_sound.playing and !bg_block.is_being_picked_up() and bg_block.can_be_damaged():  # Prevent overlapping sounds
 					break_sound.play()
 
 				if bg_block.reduce_hp(mining_power, bg_layer, breakingLayer):
@@ -412,6 +416,8 @@ func place_block() -> void:
 	if is_within_range(tile_pos) and is_within_bounds(tile_pos):
 		# Determine which layer to use (foreground or background)
 		var selected_item = inventory_manager.get_selected_item()
+		if _current_block and _current_block.get_position() != tile_pos:
+			remove_loader()
 		if selected_item:
 			if selected_item.get_id() == dl.SEED_TREE["id"]:
 				# Call the seed planter to plant the seed
@@ -444,7 +450,7 @@ func place_block() -> void:
 				target_block_entities[tile_pos] = class_entity.new(
 					block_to_place_id,
 					tile_pos,
-					self,  # parent_node
+					blockLayer,  # parent_node
 					true
 				)
 				

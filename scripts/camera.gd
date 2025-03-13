@@ -2,7 +2,7 @@ extends Camera2D
 
 @export var world_width: int = 6400  # World width in pixels (200 * 32)
 @export var world_height: int = 3200  # World height in pixels (100 * 32)
-@export var zoom_speed: float = 0.1   # Speed of zoom (scroll sensitivity)
+@export var zoom_speed: float = 0.2   # Speed of zoom (scroll sensitivity)
 
 var target_zoom: float = 4   # Current zoom level
 var target_position: Vector2  # Position the camera should move to

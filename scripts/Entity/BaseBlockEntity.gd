@@ -63,9 +63,9 @@ func can_be_damaged() -> bool:
 func get_loader() -> ProgressBar:
 	return _loader
 	
-func is_losing_health() -> bool:
+func is_being_picked_up() -> bool:
 	# Returns true if current health is less than the initial health
-	return _hp < _initial_hp
+	return _pickup_hp < _initial_hp
 
 func pick_up_block():
 	if !_can_be_damaged or _destroyed or _pickup_hp <= 0 or self._hp != self._initial_hp:
@@ -91,37 +91,42 @@ func pick_up_block():
 # Function to spawn the progress bar
 func _spawn_loader() -> ProgressBar:
 	print("LOAAAAADDDDERRRRR")
+	
 	var loader = ProgressBar.new()
 	loader.show_percentage = false
-	loader.size = Vector2(30, 8)  # Adjust size
+	loader.size = Vector2(32, 32)  # Slightly larger for visibility
 	loader.min_value = 0
-	loader.max_value = 100
+	loader.max_value = 70
 	loader.value = 0  # Start at 0%
-	
-	var bar_style = StyleBoxFlat.new()
-	bar_style.bg_color = Color(137, 207, 240, 1.0)  # Bright green bar
-	bar_style.corner_radius_top_left = 1
-	bar_style.corner_radius_top_right = 1
-	bar_style.corner_radius_bottom_left = 1
-	bar_style.corner_radius_bottom_right = 1
-	loader.add_theme_stylebox_override("fill", bar_style)
 
-	# Set custom color for the progress bar
+	# Create the fill style (progress bar itself)
+	var fill_style = StyleBoxFlat.new()
+	fill_style.bg_color = Color(229 / 255.0, 255 / 255.0, 204 / 255.0)
+	fill_style.corner_radius_top_left = 1
+	fill_style.corner_radius_top_right = 1
+	fill_style.corner_radius_bottom_left = 1
+	fill_style.corner_radius_bottom_right = 1
+	loader.add_theme_stylebox_override("fill", fill_style)
+
+	# Create the background style
 	var bg_style = StyleBoxFlat.new()
-	bg_style.bg_color = Color(0, 0, 0, 0.5)  # Semi-transparent black
-	bg_style.corner_radius_top_left = 1
-	bg_style.corner_radius_top_right = 1
-	bg_style.corner_radius_bottom_left = 1
-	bg_style.corner_radius_bottom_right = 1
+	bg_style.bg_color = Color(0, 0, 0, 0)  # Darker semi-transparent background
+	bg_style.corner_radius_top_left = 2
+	bg_style.corner_radius_top_right = 2
+	bg_style.corner_radius_bottom_left = 2
+	bg_style.corner_radius_bottom_right = 2
 	loader.add_theme_stylebox_override("background", bg_style)
 
-	# Position it below the block
-	var loader_position = _position * 32 + Vector2i(0, 22)  
+	# Center the progress bar below the block
+	var block_size = 32
+	var loader_position = _position * block_size
 	loader.position = loader_position
-	loader.position.x = (_position.x * 32) + (32 - loader.size.x) / 2
 
-
+	# Add to parent node
 	_parent_node.add_child(loader)
+	
+	print(_parent_node)
+	
 	return loader
 
 
