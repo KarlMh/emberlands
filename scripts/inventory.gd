@@ -8,8 +8,10 @@ var is_inventory_open = false
 
 @onready var main_inventory = get_tree().get_root().find_child("main_inventory", true, false)
 @onready var crafting_inventory = get_tree().get_root().find_child("crafting_inventory", true, false)
+@onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
 
 @onready var craft_toggle = get_tree().get_root().find_child("craft_toggle", true, false)
+
 
 # Variables for dragging
 var is_dragging = false
@@ -73,6 +75,7 @@ func toggle_inventory():
 		update_limits()
 		
 	options.visible = false
+	SmeltingPanel.visible = false
 	
 func toggle_inventory_craft():
 	if crafting_inventory.visible == false:

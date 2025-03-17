@@ -47,6 +47,7 @@ offset_bottom = 136.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(300, 136)
+mouse_filter = 2
 theme = ExtResource("5_ibg6k")
 script = ExtResource("1_ib066")
 
@@ -55,6 +56,7 @@ z_index = -1
 layout_mode = 1
 offset_right = 600.0
 offset_bottom = 272.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ao4hy")
 
 [node name="inventory_window_panel" type="Panel" parent="holder"]
@@ -70,6 +72,7 @@ offset_right = 300.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(250, 140)
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_olefg")
 
 [node name="main_inventory" type="Panel" parent="holder/inventory_window_panel"]
@@ -80,6 +83,7 @@ anchor_bottom = 1.0
 offset_top = -250.0
 offset_right = 350.0
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="scroll_container" type="ScrollContainer" parent="holder/inventory_window_panel/main_inventory"]
 layout_mode = 1
@@ -95,10 +99,12 @@ offset_bottom = 110.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(140, 130)
+mouse_filter = 2
 horizontal_scroll_mode = 0
 
 [node name="margin_conatiner" type="MarginContainer" parent="holder/inventory_window_panel/main_inventory/scroll_container"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
@@ -107,10 +113,96 @@ theme_override_constants/margin_bottom = 4
 [node name="slot_container" type="GridContainer" parent="holder/inventory_window_panel/main_inventory/scroll_container/margin_conatiner"]
 z_index = 1
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 6
 script = ExtResource("2_sb42w")
+
+[node name="crafting_inventory" type="Panel" parent="holder/inventory_window_panel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -250.0
+offset_right = 350.0
+grow_vertical = 0
+mouse_filter = 2
+script = SubResource("GDScript_2gnq8")
+
+[node name="craft_selection" type="Panel" parent="holder/inventory_window_panel/crafting_inventory"]
+layout_mode = 0
+offset_right = 350.0
+offset_bottom = 125.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_h2ase")
+
+[node name="scroll_container_2" type="ScrollContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.5
+offset_top = -47.5
+offset_right = 157.5
+offset_bottom = 47.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(140, 130)
+mouse_filter = 2
+horizontal_scroll_mode = 0
+
+[node name="craft_list" type="GridContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection/scroll_container_2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 8
+script = ExtResource("5_e71hm")
+
+[node name="craft_info" type="Panel" parent="holder/inventory_window_panel/crafting_inventory"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -125.0
+offset_right = 350.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="craft_button" type="Button" parent="holder/inventory_window_panel/crafting_inventory/craft_info"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -70.0
+offset_top = -50.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+focus_mode = 0
+theme = SubResource("Theme_ulw1c")
+text = "craft item"
+script = ExtResource("6_ul72a")
+
+[node name="item_craft_info" type="Node2D" parent="holder/inventory_window_panel/crafting_inventory/craft_info/craft_button"]
+
+[node name="MarginContainer" type="MarginContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_info"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="recipe_label" type="Label" parent="holder/inventory_window_panel/crafting_inventory/craft_info/MarginContainer"]
+layout_mode = 2
+script = ExtResource("7_jivkt")
 
 [node name="secondary_inventory" type="Panel" parent="holder/inventory_window_panel"]
 layout_mode = 1
@@ -125,6 +217,7 @@ offset_bottom = 125.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(140, 0)
+mouse_filter = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="holder/inventory_window_panel/secondary_inventory"]
 layout_mode = 1
@@ -135,13 +228,16 @@ offset_left = -108.0
 offset_right = 108.0
 offset_bottom = 84.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="head_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer" instance=ExtResource("1_wrlxy")]
 layout_mode = 2
@@ -170,6 +266,7 @@ size_flags_vertical = 4
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="hand_slot" parent="holder/inventory_window_panel/secondary_inventory/MarginContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("1_wrlxy")]
 layout_mode = 2
@@ -180,91 +277,6 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
-
-[node name="crafting_inventory" type="Panel" parent="holder/inventory_window_panel"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -250.0
-offset_right = 350.0
-grow_vertical = 0
-script = SubResource("GDScript_2gnq8")
-
-[node name="craft_selection" type="Panel" parent="holder/inventory_window_panel/crafting_inventory"]
-layout_mode = 0
-offset_right = 350.0
-offset_bottom = 125.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_h2ase")
-
-[node name="scroll_container_2" type="ScrollContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -172.5
-offset_top = -125.0
-offset_right = 172.5
-grow_horizontal = 2
-grow_vertical = 0
-pivot_offset = Vector2(140, 130)
-horizontal_scroll_mode = 0
-
-[node name="margin_conatiner_2" type="MarginContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection/scroll_container_2"]
-layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="craft_list" type="GridContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_selection/scroll_container_2/margin_conatiner_2"]
-layout_mode = 2
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 8
-script = ExtResource("5_e71hm")
-
-[node name="craft_info" type="Panel" parent="holder/inventory_window_panel/crafting_inventory"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -125.0
-offset_right = 350.0
-grow_vertical = 0
-
-[node name="craft_button" type="Button" parent="holder/inventory_window_panel/crafting_inventory/craft_info"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -70.0
-offset_top = -50.0
-offset_right = -10.0
-offset_bottom = -10.0
-grow_horizontal = 0
-grow_vertical = 0
-focus_mode = 0
-theme = SubResource("Theme_ulw1c")
-text = "craft item"
-script = ExtResource("6_ul72a")
-
-[node name="item_craft_info" type="Node2D" parent="holder/inventory_window_panel/crafting_inventory/craft_info/craft_button"]
-
-[node name="MarginContainer" type="MarginContainer" parent="holder/inventory_window_panel/crafting_inventory/craft_info"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-
-[node name="recipe_label" type="Label" parent="holder/inventory_window_panel/crafting_inventory/craft_info/MarginContainer"]
-layout_mode = 2
-script = ExtResource("7_jivkt")
 
 [node name="craft_button_panel" type="Panel" parent="holder"]
 layout_mode = 1
@@ -278,10 +290,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -12.5
-offset_right = 20.0
-offset_bottom = 12.5
+offset_left = -25.5
+offset_top = -15.0
+offset_right = 25.5
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0

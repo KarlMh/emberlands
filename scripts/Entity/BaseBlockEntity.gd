@@ -13,6 +13,7 @@ var _destroyed: bool = false
 var _can_be_damaged: bool = true
 var _is_interactive: bool = false
 var _parent_node: Node
+var _canvas_node: Node
 
 # Animation properties
 var _tileset_source_id: int = 0
@@ -30,6 +31,7 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 	self._destroyed = false
 	self._can_be_damaged = can_be_damaged
 	self._parent_node = parent_node
+	_canvas_node = self._parent_node.get_tree().get_root().find_child("CanvasLayer2", true, false)
 
 # Getters
 func get_id() -> int:
@@ -43,7 +45,6 @@ func get_hp() -> int:
 
 func set_hp():
 	self._hp = self.get_initial_hp()
-	self._pickup_hp = self.get_initial_hp()
 
 func get_initial_hp() -> int:
 	return _initial_hp
@@ -68,7 +69,7 @@ func is_being_picked_up() -> bool:
 	return _pickup_hp < _initial_hp
 
 func pick_up_block():
-	if !_can_be_damaged or _destroyed or _pickup_hp <= 0 or self._hp != self._initial_hp:
+	if !can_be_damaged() or _destroyed or _pickup_hp <= 0 or self._hp != self._initial_hp:
 		return false  # Block can't be picked up
 
 	# Spawn loader only if it doesn't exist
@@ -133,7 +134,7 @@ func _spawn_loader() -> ProgressBar:
 # Function to remove the progress bar
 func _remove_loader():
 	if _loader:
-		set_hp()
+		self._pickup_hp = self.get_initial_hp()
 		_loader.queue_free()  # Remove it from the scene
 		_loader = null  # Reset reference
 
@@ -141,7 +142,8 @@ func _remove_loader():
 func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLayer) -> bool:
 	if !_can_be_damaged or _destroyed or self._pickup_hp != self._initial_hp:
 		return false  # Block can't be damaged or is already destroyed
-
+	_remove_loader()
+	
 	if self._hp == self._initial_hp:
 		self._hp -= amount
 
@@ -217,18 +219,27 @@ func drop_block() -> Array:
 		return drops  # Return empty if no block data exists
 
 	# Get drop properties
-	var drop_chance = block_data.get("drop_chance", 1.0)
 	var alt_drop = block_data.get("alt_drop", null)
-	var alt_drop_chance = block_data.get("alt_drop_chance", drop_chance)  # Use main drop chance if not set
-	var alt_drop_count = block_data.get("alt_drop_count", 1)  # Default to 1 if not set
+	
+	if !alt_drop:
+		return drops
+		
+	var alt_drop_data = dl._get(alt_drop)
+	
+	if alt_drop_data:
+		
+		var drop_chance = alt_drop_data.get("drop_chance", 1.0)  # Default to 1.0 (100%) if not specified
 
-	# Primary drop
-	if randf() <= drop_chance:
-		drops.append(dl.create_item(block_name))
+		# Random chance check for drops
+		if randf() > drop_chance:
+			return drops  # No drop if the random chance exceeds drop_chance
 
-	# Alternate drop (only if an alt_drop exists)
-	if alt_drop and randf() <= alt_drop_chance:
-		for i in range(alt_drop_count):  # Drop multiple alt drops based on alt_drop_count
-			drops.append(dl.create_item(alt_drop))
+	# Alternate drop (only if an alt_drop exists and is a dictionary)
+	if alt_drop:
+		for item_name in alt_drop.keys():
+			# Randomize the number of items to drop for each alt_drop item based on its count
+			var drop_amount = randi() % (int(alt_drop[item_name]) + 1)  # Random number of items between 0 and the count for that item
+			for i in range(drop_amount):  # Drop the random amount of items
+				drops.append(dl.create_item(item_name))
 
 	return drops

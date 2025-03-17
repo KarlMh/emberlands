@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://odraxfwg20ho"]
+
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_6is2g"]
+[ext_resource type="Script" uid="uid://dkeyo8p3lkhdc" path="res://scripts/smelting_button.gd" id="2_o7oxv"]
+
+[node name="SmeltingButtonPanel" type="Panel"]
+z_index = -10
+offset_right = 24.0
+offset_bottom = 24.0
+theme = ExtResource("1_6is2g")
+
+[node name="SmeltingButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_o7oxv")
+
+[connection signal="pressed" from="SmeltingButton" to="SmeltingButton" method="_on_pressed"]

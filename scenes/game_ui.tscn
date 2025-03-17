@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cqmu0xy3fueuf"]
+[gd_scene load_steps=18 format=3 uid="uid://cqmu0xy3fueuf"]
 
 [ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_m15es"]
 [ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_yorhh"]
@@ -11,6 +11,9 @@
 [ext_resource type="Script" uid="uid://d3jeyqx5nytu1" path="res://scripts/main_menu_button.gd" id="8_3q1cn"]
 [ext_resource type="Script" uid="uid://bbhhxtd4mu6il" path="res://scripts/exit_button.gd" id="9_op3db"]
 [ext_resource type="Script" uid="uid://bysipgc0mns7m" path="res://scripts/options_button.gd" id="10_vnx7g"]
+[ext_resource type="PackedScene" uid="uid://gd0pslqbs0gy" path="res://scenes/ChatBox.tscn" id="12_s2npe"]
+[ext_resource type="PackedScene" uid="uid://bku03h8u11bkh" path="res://scenes/SmeltingPanel.tscn" id="13_g2v8e"]
+[ext_resource type="Script" uid="uid://dfh7uyt384fka" path="res://scripts/smelting_panel.gd" id="14_1kaiv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n55u8"]
 bg_color = Color(0.454902, 0.72549, 1, 0)
@@ -28,13 +31,19 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bsgeq"]
 
 [node name="game_ui" type="Control"]
+z_index = 10
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("1_m15es")
+
+[node name="ChatBox" parent="." instance=ExtResource("12_s2npe")]
+z_index = -5
+layout_mode = 1
 
 [node name="inventory_bar" parent="." instance=ExtResource("1_yorhh")]
 layout_mode = 1
@@ -197,6 +206,10 @@ text = "esc"
 icon_alignment = 1
 expand_icon = true
 script = ExtResource("10_vnx7g")
+
+[node name="SmeltingPanel" parent="." instance=ExtResource("13_g2v8e")]
+layout_mode = 1
+script = ExtResource("14_1kaiv")
 
 [connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]
 [connection signal="pressed" from="options/VBoxContainer/main_menu_button" to="options/VBoxContainer/main_menu_button" method="_on_pressed"]

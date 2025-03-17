@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=68 format=3 uid="uid://bqdn1hl5c7fvl"]
+[gd_resource type="Theme" load_steps=69 format=3 uid="uid://bqdn1hl5c7fvl"]
 
 [ext_resource type="FontFile" uid="uid://dcoyeg1tf1500" path="res://themes/space-worm-theme/fonts/ProggyClean.ttf" id="1_6u0fb"]
 [ext_resource type="Texture2D" uid="uid://ba7mvawrmi0qt" path="res://themes/space-worm-theme/button/Blue_Hover.png" id="1_gebbq"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://1d8q46t3elp8" path="res://themes/space-worm-theme/checkbox/Checkbox_Blue_Checked.png" id="4_pbf4m"]
 [ext_resource type="Texture2D" uid="uid://cwpjdqbvip2vt" path="res://themes/space-worm-theme/textedit/TextEditWhite.png" id="5_3rf8f"]
 [ext_resource type="Texture2D" uid="uid://bk7etkvyd8tlh" path="res://themes/space-worm-theme/checkbox/Checkbox_Blue_Unchecked.png" id="5_f0op2"]
-[ext_resource type="Texture2D" uid="uid://c1nih1844agfm" path="res://themes/space-worm-theme/textedit/TextEditDisabled.png" id="6_ks1cx"]
 [ext_resource type="Texture2D" uid="uid://dix04hpse2rvu" path="res://themes/space-worm-theme/general/LighterBlueHover.png" id="8_0vxfq"]
 [ext_resource type="Texture2D" uid="uid://cdrydq61w6idd" path="res://themes/space-worm-theme/scrollbar/Slider_Blue_Grabber.png" id="8_8ni7u"]
 [ext_resource type="Texture2D" uid="uid://w58p2fbmrwo0" path="res://themes/space-worm-theme/general/LighterBlue.png" id="8_88cds"]
@@ -136,8 +135,10 @@ texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_o8uni"]
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e64vi"]
-texture = ExtResource("6_ks1cx")
+texture = SubResource("CompressedTexture2D_o8uni")
 texture_margin_left = 8.0
 texture_margin_top = 8.0
 texture_margin_right = 8.0
@@ -243,6 +244,8 @@ texture_margin_left = 8.0
 texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k8o5o"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l7pn2"]
 texture = ExtResource("8_88cds")
@@ -363,6 +366,7 @@ Label/colors/font_color = Color(0, 0, 0, 1)
 Label/fonts/font = ExtResource("1_6u0fb")
 LineEdit/colors/caret_color = Color(0, 0, 0, 1)
 LineEdit/colors/font_color = Color(0, 0, 0, 1)
+LineEdit/font_sizes/font_size = 24
 LineEdit/fonts/font = ExtResource("1_6u0fb")
 LineEdit/styles/focus = SubResource("StyleBoxTexture_mqfcp")
 LineEdit/styles/normal = SubResource("StyleBoxTexture_3tphg")
@@ -402,6 +406,7 @@ TextEdit/colors/caret_color = Color(0, 0, 0, 1)
 TextEdit/colors/font_color = Color(0, 0, 0, 1)
 TextEdit/fonts/font = ExtResource("1_6u0fb")
 TextEdit/styles/normal = SubResource("StyleBoxTexture_o80ik")
+TextEdit/styles/read_only = SubResource("StyleBoxTexture_k8o5o")
 Tree/colors/font_color = Color(0.184314, 0.215686, 0.321569, 1)
 Tree/fonts/font = ExtResource("1_6u0fb")
 Tree/fonts/title_button_font = ExtResource("1_6u0fb")

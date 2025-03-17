@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-const SPEED = 200.0
-const JUMP_VELOCITY = -400.0
+var SPEED = 200.0
+var JUMP_VELOCITY = -400.0
 const TILE_SIZE = 32
 const WORLD_WIDTH = 200
 const WORLD_HEIGHT = 100
@@ -10,14 +10,21 @@ const BLINK_DELAY_MAX = 12.0
 const TIME_BETWEEN_ACTIONS = 0.3
 const BLOCK_PLACEMENT_RANGE = 3
 
+const DOUBLE_JUMP_VELOCITY: float = -350.0  # Slightly weaker than initial jump
+const TRIPLE_JUMP_VELOCITY: float = -300.0  # Weaker than double jump
+
+# Add these variables near your other state variables:
+var can_double_jump: bool = true  # Set to false to disable double jumping
+var can_triple_jump: bool = true   # Set to false to disable triple jumping
+
 @onready var animated_sprite = $AnimationPlayer
 @onready var animated_sprite2 = $AnimationPlayer2
 @onready var animated_sprite3 = $AnimationPlayer3
 @onready var animated_sprite4 = $AnimationPlayer4
 
 @onready var blockLayer = get_tree().get_root().find_child("blockLayer", true, false)
-@onready var breakingLayer = $"../breakingLayer"
-@onready var bg_layer = $"../backgroundLayer"
+@onready var breakingLayer = get_tree().get_root().find_child("breakingLayer", true, false)
+@onready var bg_layer = get_tree().get_root().find_child("backgroundLayer", true, false)
 
 @onready var dl = DataLoader
 
@@ -37,12 +44,15 @@ const BLOCK_PLACEMENT_RANGE = 3
 @onready var place_sound = get_tree().get_root().find_child("place_sound", true, false)
 @onready var death_sound = get_tree().get_root().find_child("death_sound", true, false)
 
+@onready var ChatBox = get_tree().get_root().find_child("ChatBox", true, false)  # Find chat input field
+
 
 @onready var seed_planter = preload("res://scripts/seed_planter.gd").new()
 
 const BlockEntity = preload("res://scripts/Entity/BlockEntity.gd")
 const BackgroundEntity = preload("res://scripts/Entity/BackgroundEntity.gd")
 const InteractiveBlockEntity = preload("res://scripts/Entity/InteractiveBlockEntity.gd")
+var nearby_interactive_block: InteractiveBlockEntity
 
 var blink_timer = 0.0
 var can_blink = true
@@ -62,8 +72,11 @@ func _ready():
 	add_child(seed_planter)
 	
 	inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
+	inventory_manager.add_item(dl.create_item("FURNACE"))
 
 func _physics_process(delta: float) -> void:
+		
+	interact_smelt()	
 	apply_gravity(delta)
 	
 	if not is_frozen:
@@ -91,14 +104,36 @@ func respawn_player():
 func apply_gravity(delta: float):
 	if not is_on_floor():
 		velocity.y += get_gravity().y * delta
+		
 
-func handle_jump():
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-		if not jump_sound.playing:  # Prevent overlapping sounds
-			jump_sound.play()
-		animated_sprite.play("jumping")
-	if Input.is_action_just_released("ui_accept") and velocity.y < 0:
+# Modify your handle_jump function like this:
+func handle_jump() -> void:
+	if Input.is_action_just_pressed("jump"):
+		if is_on_floor():
+			# Initial jump from ground
+			velocity.y = JUMP_VELOCITY
+			if not jump_sound.playing:
+				jump_sound.play()
+			animated_sprite.play("jumping")
+			can_double_jump = true  # Reset double jump ability
+			can_triple_jump = true  # Reset triple jump ability when jumping from ground
+		elif can_double_jump and not is_on_floor():
+			# Double jump
+			velocity.y = DOUBLE_JUMP_VELOCITY
+			if not jump_sound.playing:
+				jump_sound.play()
+			animated_sprite.play("jumping")
+			can_double_jump = false  # Prevent multiple double jumps
+			can_triple_jump = true  # Allow triple jump after double jump
+		elif can_triple_jump and not can_double_jump and not is_on_floor():
+			# Triple jump
+			velocity.y = TRIPLE_JUMP_VELOCITY
+			if not jump_sound.playing:
+				jump_sound.play()
+			animated_sprite.play("jumping")
+			can_triple_jump = false  # Prevent multiple triple jumps
+
+	if Input.is_action_just_released("jump") and velocity.y < 0:
 		velocity.y *= 0.4
 
 func handle_movement(delta: float):
@@ -106,6 +141,9 @@ func handle_movement(delta: float):
 	
 	if direction:
 		velocity.x = direction * SPEED
+		
+		if ChatBox.chat_toggled_on:
+			return
 		
 		# Flip the player's scale.x based on the direction
 		if direction < 0:
@@ -209,11 +247,10 @@ func pick_up_from_layer(layer, entity_dict, tile_pos):
 
 	var is_dirt_block = block.get_id() == dl.BLOCK_DIRT["id"] or block.get_id() == dl.BLOCK_DEEP_DIRT["id"]
 
+	# Remove loader from the old block if it's different from the current one
+	if _current_block and (_current_block != block or !_current_block.can_be_damaged() or !block.can_be_damaged()):
+		remove_loader()
 	if block.can_be_damaged():
-		# Remove loader from the old block if it's different from the current one
-		if _current_block and _current_block != block:
-			remove_loader()
-
 		# Check if tile position has changed before removing loader
 		if _current_block and _current_block.get_position() != tile_pos:
 			remove_loader()
@@ -277,6 +314,9 @@ func break_block() -> void:
 		# Check background block
 		elif bg_layer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
 			if blockLayer.bg_entities.has(tile_pos):
+				remove_loader()
+				if _current_block and _current_block.get_position() != tile_pos:
+					remove_loader()
 				var bg_block = blockLayer.bg_entities[tile_pos]
 				var block_id = bg_block.get_id()
 				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
@@ -389,22 +429,30 @@ func interact_craft() -> bool:
 	
 func interact_smelt() -> bool:
 	var nearby_block = check_and_interact_with_nearby_block()
-	if nearby_block and nearby_block.get_interaction_type() == "smelt":
-		return true
+	if nearby_block:
+		nearby_interactive_block = nearby_block
+		if nearby_block.get_interaction_type() == "smelt":
+			nearby_block.spawn_interactive_button()
+			return true
+	else:
+		if nearby_interactive_block:
+			nearby_interactive_block.despawn_interactive_button()
 	return false
 	
 func check_and_interact_with_nearby_block() -> InteractiveBlockEntity:
 	var player_tile_pos = blockLayer.local_to_map(position)
-
-	# Iterate over all block entities in the foreground and background layers
-	for tile_pos in blockLayer.block_entities.keys():
-		if is_within_range_of_block(tile_pos, player_tile_pos):
-			var block_entity = blockLayer.block_entities[tile_pos]
-			if block_entity is InteractiveBlockEntity:
-				return block_entity
+	var interaction_radius = 2  # The radius around the player to search for blocks
+	
+	# Iterate through a small area around the player based on the interaction radius
+	for x in range(player_tile_pos.x - interaction_radius, player_tile_pos.x + interaction_radius + 1):
+		for y in range(player_tile_pos.y - interaction_radius, player_tile_pos.y + interaction_radius + 1):
+			var tile_pos = Vector2i(x, y)
+			if is_within_range(tile_pos):  # Manhattan distance check
+				if blockLayer.block_entities.has(tile_pos):
+					var block_entity = blockLayer.block_entities[tile_pos]
+					if block_entity is InteractiveBlockEntity:
+						return block_entity
 	return null
-
-
 
 func place_block() -> void:
 	var item = inventory_manager.get_selected_item()

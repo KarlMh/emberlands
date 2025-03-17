@@ -128,6 +128,14 @@ scale = Vector2(3, 2.5)
 texture = ExtResource("17_h7iu3")
 centered = false
 
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="game_ui" parent="CanvasLayer" instance=ExtResource("21_w54kg")]
+metadata/_edit_use_anchors_ = true
+
 [node name="player" parent="." instance=ExtResource("1_plyk1")]
 
 [node name="blockLayer" type="TileMapLayer" parent="."]
@@ -144,10 +152,4 @@ z_as_relative = false
 tile_set = SubResource("TileSet_cpqtn")
 script = SubResource("GDScript_1gn7e")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Control" parent="CanvasLayer" instance=ExtResource("21_w54kg")]
-
 [editable path="player"]
-[editable path="CanvasLayer/Control"]
-[editable path="CanvasLayer/Control/inventory_bar"]
