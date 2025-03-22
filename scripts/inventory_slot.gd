@@ -39,6 +39,13 @@ func set_count(count: int):
 	if item:
 		item_count = count
 	update_display()
+	
+func remove_item(count):
+	if item:
+		item_count -= count
+		
+		if item_count <= 0:
+			clear_slot()
 
 func clear_slot() -> void:
 	item = null
@@ -141,6 +148,8 @@ func _can_drop_data(position, data):
 func _drop_data(position, data):
 	if not can_drag_and_drop or not data or not data.has("item"):
 		return  # Invalid drop or slot not allowed
+	
+	var block = SmeltingPanel.furnace_in_use
 
 	var dropped_item = data["item"]
 	var dropped_count = data["count"]
@@ -157,13 +166,14 @@ func _drop_data(position, data):
 	elif self.name.begins_with("fuel_slot") or self.name.begins_with("mats_slot") or self.name.begins_with("final_slot"):
 		move_item_to_furnace(origin_slot, self, dropped_item, dropped_count)
 		if !origin_slot.name.begins_with("smelting_slot"):
-			var block = SmeltingPanel.furnace_in_use
 			block.claim_furnace_item(origin_slot)
 			
 	elif self.name == "hand_slot" and dropped_item is Tool:
 		origin_slot.move_to_hand()  # Call the move_to_hand function to equip the tool
 		
 	smelt_slot_container.sync_with_inventory()
+	
+	block.smelt_item()
 	
 func move_item_to_furnace(origin_slot, furnace_slot, item, count):
 	if not origin_slot or not furnace_slot:
@@ -190,13 +200,12 @@ func move_item_to_furnace(origin_slot, furnace_slot, item, count):
 	if furnace_slot.name.begins_with("fuel_slot"):
 		block.set_fuel_slot_item(item, count)
 	elif furnace_slot.name.begins_with("mats_slot"):
-		block.mats_slot_item = item
-		block.mats_slot_item_count = count
+		block.set_mats_slot_item(item, count)
 	elif furnace_slot.name.begins_with("final_slot"):
-		block.final_slot_item = item
-		block.final_slot_item_count = count
+		block.set_final_slot_item(item, count)
 		
 	inventory.remove_item(item, count)
+	
 
 	
 	
@@ -228,6 +237,8 @@ func move_item_to_inventory(furnace_slot, target_inventory_slot, item, count):
 		inventory.add_item(item)  # Add the item back to the inventory
 		
 	block.claim_furnace_item(furnace_slot)
+	
+	block.smelt_item()
 	
 func update_smelt_slot_display():
 	# Loop through all smelting slots and update their display

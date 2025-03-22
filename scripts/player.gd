@@ -78,6 +78,7 @@ func _ready():
 	
 	for i in 10:
 		inventory_manager.add_item(dl.create_item("FURNACE"))
+		inventory_manager.add_item(dl.create_item("BLOCK_IRON"))
 
 func _physics_process(delta: float) -> void:
 		

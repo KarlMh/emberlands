@@ -17,6 +17,8 @@ var fuel_slot
 var mats_slot
 var final_slot
 
+var inventory_manager
+
 
 # Constructor
 func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool):
@@ -30,7 +32,8 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 		fuel_slot = _parent_node.get_tree().get_root().find_child("fuel_slot", true, false)
 		mats_slot = _parent_node.get_tree().get_root().find_child("mats_slot", true, false)
 		final_slot = _parent_node.get_tree().get_root().find_child("final_slot", true, false)
-
+		inventory_manager = _parent_node.get_tree().get_root().find_child("slot_container", true, false)
+		
 # Override the function to define the interaction type
 func set_interaction_type() -> void:
 	if _is_interactive and _name in dl.game_data['blocks']['interactive_blocks']:
@@ -127,3 +130,42 @@ func set_mats_slot_item(item: Item, count: int) -> void:
 func set_final_slot_item(item: Item, count: int) -> void:
 	self.final_slot_item = item
 	self.final_slot_item_count = count
+	
+var accepted_fuel = ["WOODEN_LOG"]
+var accepted_for_smelting = ["BLOCK_IRON"]
+
+var smelt_timer = Timer.new()
+
+func smelt_item():
+	var fuel = self.fuel_slot_item
+	var raw_ore = self.mats_slot_item
+	
+	if fuel_slot.item_count <= 0:
+		return
+	
+	if smelt_timer:
+		_parent_node.add_child(smelt_timer)
+		smelt_timer.name = "SmeltTimer"
+		smelt_timer.wait_time = 3  # Wait for 3 seconds (change as needed)
+		smelt_timer.one_shot = true
+	
+	if fuel and fuel.get_name() in accepted_fuel:
+		if raw_ore and raw_ore.get_name() in accepted_for_smelting:
+			print("🔥 Smelting in progress...")
+			smelt_timer.start()
+			await smelt_timer.timeout  # Wait until timer finishes
+			
+			# Smelting is complete
+			final_slot.set_item(dl.create_item("IRON"))
+			final_slot.set_count(final_slot.item_count + 1)
+			fuel_slot.remove_item(1)
+			mats_slot.remove_item(1)
+				
+			fuel_slot.update_display()
+			mats_slot.update_display()
+			final_slot.update_display()
+				
+			print("✅ Smelting Complete")
+
+				
+			
