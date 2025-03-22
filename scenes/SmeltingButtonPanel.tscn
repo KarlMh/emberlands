@@ -24,4 +24,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_o7oxv")
 
+[connection signal="mouse_entered" from="SmeltingButton" to="SmeltingButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="SmeltingButton" to="SmeltingButton" method="_on_mouse_exited"]
 [connection signal="pressed" from="SmeltingButton" to="SmeltingButton" method="_on_pressed"]

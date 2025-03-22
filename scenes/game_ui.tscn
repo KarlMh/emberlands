@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://cqmu0xy3fueuf"]
+[gd_scene load_steps=19 format=3 uid="uid://cqmu0xy3fueuf"]
 
 [ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_m15es"]
 [ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_yorhh"]
 [ext_resource type="Script" uid="uid://rbke1qof2r7r" path="res://scripts/inventory_bar.gd" id="2_dqpr8"]
+[ext_resource type="Script" uid="uid://bcjejmj63jf5d" path="res://scripts/game_ui.gd" id="2_upmhx"]
 [ext_resource type="Script" uid="uid://c5lxu8umbfs8l" path="res://scripts/display_gems.gd" id="3_ck6tt"]
 [ext_resource type="Texture2D" uid="uid://ba1dptwycerkh" path="res://pixel_art/stuff/gems.png" id="4_80606"]
 [ext_resource type="PackedScene" uid="uid://ul4ff2b876bs" path="res://scenes/inventory_window.tscn" id="5_u2aqm"]
@@ -40,6 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("1_m15es")
+script = ExtResource("2_upmhx")
 
 [node name="ChatBox" parent="." instance=ExtResource("12_s2npe")]
 z_index = -5
@@ -209,6 +211,10 @@ script = ExtResource("10_vnx7g")
 
 [node name="SmeltingPanel" parent="." instance=ExtResource("13_g2v8e")]
 layout_mode = 1
+offset_top = -125.0
+offset_bottom = 125.0
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(200, 150)
 script = ExtResource("14_1kaiv")
 
 [connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]

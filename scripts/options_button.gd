@@ -3,6 +3,7 @@ extends Button
 @onready var options = get_tree().get_root().find_child("options", true, false)
 @onready var canvas = get_tree().get_root().find_child("CanvasLayer", true, false)
 @onready var inventory = get_tree().get_root().find_child("inventory_window", true, false)
+@onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
 
 var is_visible = false  # Fixed typo from "is_visisble"
 
@@ -19,3 +20,4 @@ func toggle_options():
 	options.visible = is_visible
 	
 	inventory.visible = false
+	SmeltingPanel.visible = false

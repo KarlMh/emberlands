@@ -15,7 +15,8 @@
 [ext_resource type="AudioStream" uid="uid://b20r7yg01e5xh" path="res://sounds/place.wav" id="12_88bb4"]
 [ext_resource type="AudioStream" uid="uid://drfkmddalvv60" path="res://sounds/death.wav" id="13_f133i"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ej7"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f1ej7"]
+size = Vector2(13, 30)
 
 [sub_resource type="Animation" id="Animation_xhi3o"]
 length = 0.001
@@ -838,8 +839,8 @@ script = ExtResource("1_ga323")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_index = 1
-position = Vector2(0, -15)
-shape = SubResource("CapsuleShape2D_f1ej7")
+position = Vector2(-0.5, -15)
+shape = SubResource("RectangleShape2D_f1ej7")
 
 [node name="Camera2D" parent="." instance=ExtResource("2_f1ej7")]
 

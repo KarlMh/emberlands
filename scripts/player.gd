@@ -13,6 +13,8 @@ const BLOCK_PLACEMENT_RANGE = 3
 const DOUBLE_JUMP_VELOCITY: float = -350.0  # Slightly weaker than initial jump
 const TRIPLE_JUMP_VELOCITY: float = -300.0  # Weaker than double jump
 
+var can_build: bool = true
+
 # Add these variables near your other state variables:
 var can_double_jump: bool = true  # Set to false to disable double jumping
 var can_triple_jump: bool = true   # Set to false to disable triple jumping
@@ -45,7 +47,8 @@ var can_triple_jump: bool = true   # Set to false to disable triple jumping
 @onready var death_sound = get_tree().get_root().find_child("death_sound", true, false)
 
 @onready var ChatBox = get_tree().get_root().find_child("ChatBox", true, false)  # Find chat input field
-
+@onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
+@onready var game_ui = get_tree().get_root().find_child("game_ui", true, false)
 
 @onready var seed_planter = preload("res://scripts/seed_planter.gd").new()
 
@@ -72,7 +75,9 @@ func _ready():
 	add_child(seed_planter)
 	
 	inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
-	inventory_manager.add_item(dl.create_item("FURNACE"))
+	
+	for i in 10:
+		inventory_manager.add_item(dl.create_item("FURNACE"))
 
 func _physics_process(delta: float) -> void:
 		
@@ -196,7 +201,7 @@ func get_blink_delay() -> float:
 
 func handle_block_actions(delta: float):
 	action_timer += delta
-	if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_action_pressed("ui_break")) and !inventory_window.visible and !options.visible:
+	if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_action_pressed("ui_break")) and !game_ui.any_ui_shown() and can_build:
 		animated_sprite3.speed_scale = 1.5
 		animated_sprite3.play("hand_movement")
 		if action_timer >= TIME_BETWEEN_ACTIONS:
@@ -282,9 +287,12 @@ func pick_up_from_layer(layer, entity_dict, tile_pos):
 func break_block() -> void:
 	if inventory_manager.get_selected_item() == null or inventory_manager.get_selected_item().get_id() != -10:
 		return
-
+	
 	var mouse_pos = get_global_mouse_position()
 	var tile_pos = blockLayer.local_to_map(mouse_pos)
+	
+	if tile_pos == blockLayer.local_to_map(position): # if breaking block on top of player
+			return
 
 	if is_within_range(tile_pos):
 		# Check foreground block
@@ -419,29 +427,55 @@ func smelt_item(item_name: String, quantity: int) -> bool:
 
 
 	return true  # Indicate successful smelting
+	
+var nearby_interactive_blocks: Array = []  # Store multiple nearby interactive blocks
 
-
+# Craft interaction for multiple blocks (no panel or buttons)
 func interact_craft() -> bool:
-	var nearby_block = check_and_interact_with_nearby_block()
-	if nearby_block and nearby_block.get_interaction_type() == "craft":
-		return true
-	return false
+	# Get all nearby interactive blocks
+	nearby_interactive_blocks = check_and_interact_with_nearby_blocks()
+
+	# Check if any nearby block is a craft block
+	for block in nearby_interactive_blocks:
+		if block.get_interaction_type() == "craft":
+			return true  # Return true if a craft block is found
 	
+	return false  # Return false if no craft block is found
+
+var previous_nearby_blocks = []
+
+
 func interact_smelt() -> bool:
-	var nearby_block = check_and_interact_with_nearby_block()
-	if nearby_block:
-		nearby_interactive_block = nearby_block
-		if nearby_block.get_interaction_type() == "smelt":
-			nearby_block.spawn_interactive_button()
-			return true
-	else:
-		if nearby_interactive_block:
-			nearby_interactive_block.despawn_interactive_button()
-	return false
-	
-func check_and_interact_with_nearby_block() -> InteractiveBlockEntity:
+	# Cache the nearby blocks in a variable (do it every few frames instead of every frame for performance)
+	var nearby_blocks = check_and_interact_with_nearby_blocks()
+
+	# Check if the list of nearby blocks has changed
+	if nearby_blocks != previous_nearby_blocks:
+		# Clear buttons for blocks that are no longer in range or have changed interaction type
+		for block in previous_nearby_blocks:
+			if block.get_interaction_type() == "smelt" and block not in nearby_blocks:
+				block.despawn_interactive_button()
+
+		# Spawn buttons for new blocks that need interaction
+		for block in nearby_blocks:
+			if block.get_interaction_type() == "smelt" and block not in previous_nearby_blocks:
+				block.spawn_interactive_button()
+
+		# Update the previous block list for the next iteration
+		previous_nearby_blocks = nearby_blocks.duplicate()
+
+		# Hide the smelting panel if no smelting blocks are nearby
+		if nearby_blocks.is_empty():
+			SmeltingPanel.visible = false
+
+	return not nearby_blocks.is_empty()
+
+
+# Function to check for all nearby blocks (no change needed here)
+func check_and_interact_with_nearby_blocks() -> Array:
 	var player_tile_pos = blockLayer.local_to_map(position)
 	var interaction_radius = 2  # The radius around the player to search for blocks
+	var nearby_blocks: Array = []  # Store multiple interactive blocks
 	
 	# Iterate through a small area around the player based on the interaction radius
 	for x in range(player_tile_pos.x - interaction_radius, player_tile_pos.x + interaction_radius + 1):
@@ -451,8 +485,11 @@ func check_and_interact_with_nearby_block() -> InteractiveBlockEntity:
 				if blockLayer.block_entities.has(tile_pos):
 					var block_entity = blockLayer.block_entities[tile_pos]
 					if block_entity is InteractiveBlockEntity:
-						return block_entity
-	return null
+						nearby_blocks.append(block_entity)
+
+	return nearby_blocks  # Return all found interactive blocks
+
+
 
 func place_block() -> void:
 	var item = inventory_manager.get_selected_item()
@@ -460,6 +497,9 @@ func place_block() -> void:
 		return
 	var mouse_pos = get_global_mouse_position()
 	var tile_pos = blockLayer.local_to_map(mouse_pos)
+	
+	if tile_pos == blockLayer.local_to_map(position): # if placing block on top of player
+		return
 
 	if is_within_range(tile_pos) and is_within_bounds(tile_pos):
 		# Determine which layer to use (foreground or background)

@@ -8,6 +8,12 @@ var hand_item_slot: Control  # Reference to the hand item slot
 var hand_item: Node2D
 var inventory
 var inventory_bar
+var smelt_slot_container
+var player
+
+var can_drag_and_drop: bool = true  # Set to false for slots that should not support drag & drop
+
+@onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
 
 func _ready():
 	# Find references to key UI elements
@@ -15,17 +21,24 @@ func _ready():
 	hand_item = get_tree().get_root().find_child("hand_item", true, false)
 	inventory = get_tree().get_root().find_child("slot_container", true, false)
 	inventory_bar = get_tree().get_root().find_child("slot_bar", true, false)
+	smelt_slot_container = get_tree().get_root().find_child("smelt_slot_container", true, false)
+	player = get_tree().get_root().find_child("player", true, false)
+	is_dragable()
 
 func set_item(new_item: Item) -> void:
 	item = new_item
 	if item:
 	
 		icon.texture = item.item_icon  # Use full texture for other items
-
+		
 		update_display()
 	else:
 		icon.texture = null  # Reset texture
 
+func set_count(count: int):
+	if item:
+		item_count = count
+	update_display()
 
 func clear_slot() -> void:
 	item = null
@@ -87,3 +100,137 @@ func update_inventory():
 
 func get_item() -> Item:
 	return item  # Returns the item stored in this slot
+
+
+### 🟢 DRAG & DROP IMPLEMENTATION ###
+var allowed_to_dnd = ["fuel_slot", "mats_slot", "final_slot", "smelting_slot"]
+
+func is_dragable():
+	print(self.name)
+
+	# Check if self.name is in the list or contains any of the allowed slot names
+	for slot_name in allowed_to_dnd:
+		if self.name.begins_with(slot_name):
+			can_drag_and_drop = true
+			return  # Exit early if a match is found
+
+	can_drag_and_drop = false  # Default to false if no match found
+
+
+func _get_drag_data(position):
+	is_dragable()
+	if not item or not can_drag_and_drop:
+		return null  # Don't allow dragging
+	
+	# Create a preview of the item
+	var drag_preview = TextureRect.new()
+	drag_preview.texture = icon.texture
+	drag_preview.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	drag_preview.size = Vector2(64, 64)  # Adjust preview size
+	drag_preview.modulate = Color(1, 1, 1, 0.7)  # Make semi-transparent
+	drag_preview.z_index = 100
+	
+	set_drag_preview(drag_preview)  # Show preview above UI
+	
+	# Return item data so it can be dropped somewhere else
+	return {"item": item, "count": item_count, "origin_slot": self}
+
+func _can_drop_data(position, data):
+	return can_drag_and_drop and data is Dictionary and "item" in data  # Allow only if enabled
+
+func _drop_data(position, data):
+	if not can_drag_and_drop or not data or not data.has("item"):
+		return  # Invalid drop or slot not allowed
+
+	var dropped_item = data["item"]
+	var dropped_count = data["count"]
+	var origin_slot = data["origin_slot"]
+
+	if origin_slot == self:
+		return  # Dropping onto itself, do nothing
+
+	# 🔥 CASE 1: Smelting Slot (Sync with Inventory)
+	if self.name.begins_with("smelting_slot") and (origin_slot.name.begins_with("fuel_slot") or origin_slot.name.begins_with("mats_slot") or origin_slot.name.begins_with("final_slot")):
+		move_item_to_inventory(origin_slot, self, dropped_item, dropped_count)
+
+	# 🔥 CASE 2: Furnace Slots (fuel, material, final)
+	elif self.name.begins_with("fuel_slot") or self.name.begins_with("mats_slot") or self.name.begins_with("final_slot"):
+		move_item_to_furnace(origin_slot, self, dropped_item, dropped_count)
+		if !origin_slot.name.begins_with("smelting_slot"):
+			var block = SmeltingPanel.furnace_in_use
+			block.claim_furnace_item(origin_slot)
+			
+	elif self.name == "hand_slot" and dropped_item is Tool:
+		origin_slot.move_to_hand()  # Call the move_to_hand function to equip the tool
+		
+	smelt_slot_container.sync_with_inventory()
+	
+func move_item_to_furnace(origin_slot, furnace_slot, item, count):
+	if not origin_slot or not furnace_slot:
+		return  # Invalid slots
+	
+
+	if not furnace_slot.item:
+		# Move item into furnace slot
+		furnace_slot.set_item(item)
+		furnace_slot.set_count(count)
+		origin_slot.clear_slot()
+	else:
+		# Swap items if furnace slot is occupied
+		var temp_item = furnace_slot.item
+		var temp_count = furnace_slot.item_count
+		furnace_slot.set_item(item)
+		furnace_slot.set_count(count)
+		origin_slot.set_item(temp_item)
+		origin_slot.set_count(temp_count)
+		
+	
+	var block = SmeltingPanel.furnace_in_use
+	
+	if furnace_slot.name.begins_with("fuel_slot"):
+		block.set_fuel_slot_item(item, count)
+	elif furnace_slot.name.begins_with("mats_slot"):
+		block.mats_slot_item = item
+		block.mats_slot_item_count = count
+	elif furnace_slot.name.begins_with("final_slot"):
+		block.final_slot_item = item
+		block.final_slot_item_count = count
+		
+	inventory.remove_item(item, count)
+
+	
+	
+func move_item_to_inventory(furnace_slot, target_inventory_slot, item, count):
+	if not furnace_slot or not target_inventory_slot:
+		return  # Invalid slots
+	
+	var block = SmeltingPanel.furnace_in_use
+	
+	if not target_inventory_slot.item:
+		# Move item to empty inventory slot
+		target_inventory_slot.set_item(item)
+		target_inventory_slot.set_count(count)
+		furnace_slot.clear_slot()
+	elif target_inventory_slot.item == item:
+		# Merge stacks if the same item exists in inventory
+		target_inventory_slot.set_count(target_inventory_slot.item_count + count)
+		furnace_slot.clear_slot()
+	else:
+		# Swap items if inventory slot is occupied
+		var temp_item = target_inventory_slot.item
+		var temp_count = target_inventory_slot.item_count
+		target_inventory_slot.set_item(item)
+		target_inventory_slot.set_count(count)
+		furnace_slot.set_item(temp_item)
+		furnace_slot.set_count(temp_count)
+	
+	for i in count:
+		inventory.add_item(item)  # Add the item back to the inventory
+		
+	block.claim_furnace_item(furnace_slot)
+	
+func update_smelt_slot_display():
+	# Loop through all smelting slots and update their display
+	var smelting_slots = smelt_slot_container.get_children()
+	for slot in smelting_slots:
+		slot.update_display()  # Ensure each slot display is updated properly

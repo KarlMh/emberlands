@@ -29,8 +29,6 @@ func _ready():
 
 		await get_tree().process_frame  # Wait for UI to be ready
 
-		print("BOOOBBAA")
-
 		fixed_slots[0].set_item(hand_item)
 		fixed_slots[0].item_count = 1
 		fixed_slots[0].update_display()
@@ -74,7 +72,7 @@ func update_selection_visual():
 
 # Add an item to the dynamic inventory (last three slots only)
 func add_to_bar(slot: Control):
-	if not slot or not slot.item or slot.item is Tool:
+	if not slot or not slot.item or slot.item is Tool or slot.item is Resources:
 		return
 
 	# Check if item is already in dynamic slots

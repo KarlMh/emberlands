@@ -81,6 +81,11 @@ func pick_up_block():
 
 	if self._pickup_hp <= 0:
 		self._pickup_hp = 0
+		
+		var interactive_block = self as InteractiveBlockEntity
+		if interactive_block:
+			interactive_block.despawn_interactive_button()
+		
 		_destroyed = true
 		_remove_loader()  # Remove loader when block is fully picked up
 		return true  # Block is now picked up
@@ -138,10 +143,10 @@ func _remove_loader():
 		_loader.queue_free()  # Remove it from the scene
 		_loader = null  # Reset reference
 
-# Reduce HP
 func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLayer) -> bool:
 	if !_can_be_damaged or _destroyed or self._pickup_hp != self._initial_hp:
 		return false  # Block can't be damaged or is already destroyed
+	
 	_remove_loader()
 	
 	if self._hp == self._initial_hp:
@@ -152,10 +157,17 @@ func reduce_hp(amount: float, blockLayer: TileMapLayer, breakingLayer: TileMapLa
 
 	if self._hp <= 0:
 		self._hp = 0
+
+		# If it's an InteractiveBlockEntity, call despawn_interactive_button()
+		var interactive_block = self as InteractiveBlockEntity
+		if interactive_block:
+			interactive_block.despawn_interactive_button()
+		
 		_destroyed = true
 		return true  # Block is now destroyed
 
 	return false  # Block is damaged but not destroyed
+
 
 # Animation Handling
 func _start_break_animation(blockLayer: TileMapLayer, breakingLayer: TileMapLayer, breaking: bool):

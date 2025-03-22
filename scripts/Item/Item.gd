@@ -9,6 +9,7 @@ var item_name: String
 var crafting_tier: int
 var item_icon: Texture2D
 var item_type: ItemType
+var item_count: int
 
 func _init(id: int, name: String, crafting_tier: int, icon: Texture2D, type: ItemType):
 	self.item_id = id

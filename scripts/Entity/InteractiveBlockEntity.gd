@@ -5,6 +5,19 @@ class_name InteractiveBlockEntity
 var _interaction_type: String = ""
 var interactive_button: Control = null  # Store reference to button
 
+# New properties to hold furnace slot items
+var fuel_slot_item: Item = null
+var mats_slot_item: Item = null
+var final_slot_item: Item = null
+var fuel_slot_item_count: int
+var mats_slot_item_count: int
+var final_slot_item_count: int
+
+var fuel_slot 
+var mats_slot
+var final_slot
+
+
 # Constructor
 func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool):
 	super(id, position, parent_node, can_be_damaged)  # Call parent constructor
@@ -12,6 +25,11 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 	# Set interaction type if this block is interactive
 	if _is_interactive:
 		set_interaction_type()
+		
+	if parent_node:
+		fuel_slot = _parent_node.get_tree().get_root().find_child("fuel_slot", true, false)
+		mats_slot = _parent_node.get_tree().get_root().find_child("mats_slot", true, false)
+		final_slot = _parent_node.get_tree().get_root().find_child("final_slot", true, false)
 
 # Override the function to define the interaction type
 func set_interaction_type() -> void:
@@ -44,20 +62,68 @@ func spawn_interactive_button():
 	# Set button position
 	interactive_button.position = button_pos
 
+	# Store reference to this block (self) in the button's user data (custom property)
+	interactive_button.get_child(0).block_reference = self
+
 	# Connect the button to an interaction function
 	interactive_button.connect("pressed", Callable(self, "_on_interact_button_pressed"))
 
 	# Add button to the parent node (assuming parent_node is a Control or CanvasLayer)
 	if _parent_node:
 		_canvas_node.add_child(interactive_button)
-		
+
 	# Set button position
 	interactive_button.position = button_pos
-		
+	
 	print("spawned")
+
 
 func despawn_interactive_button():
 	if interactive_button and interactive_button.get_parent():
 		interactive_button.queue_free()  # Remove button safely
 		interactive_button = null  # Clear reference
 		print("despawned")
+		
+
+func load_furnace_data():
+	fuel_slot.set_item(self.fuel_slot_item)
+	fuel_slot.set_count(self.fuel_slot_item_count)
+		
+	mats_slot.set_item(self.mats_slot_item)
+	mats_slot.set_count(self.mats_slot_item_count)
+		
+	final_slot.set_item(self.final_slot_item)
+	final_slot.set_count(self.final_slot_item_count)
+		
+	# Optionally, you can call update_display() to make sure everything is visually correct
+	fuel_slot.update_display()
+	mats_slot.update_display()
+	final_slot.update_display()
+	
+func claim_furnace_item(slot):
+	if slot == fuel_slot:
+		self.fuel_slot_item = null
+		self.fuel_slot_item_count = 0
+	elif slot == mats_slot:
+		self.mats_slot_item = null
+		self.mats_slot_item_count = 0
+	elif slot == final_slot:
+		self.final_slot_item = null
+		self.final_slot_item_count = 0
+	
+	print("✅ Item claimed from furnace:", slot)
+
+
+# Setters for furnace slot items and their counts
+
+func set_fuel_slot_item(item: Item, count: int) -> void:
+	self.fuel_slot_item = item
+	self.fuel_slot_item_count = count
+
+func set_mats_slot_item(item: Item, count: int) -> void:
+	self.mats_slot_item = item
+	self.mats_slot_item_count = count
+
+func set_final_slot_item(item: Item, count: int) -> void:
+	self.final_slot_item = item
+	self.final_slot_item_count = count
