@@ -33,10 +33,10 @@
 	},
 	
 	"resources": {
-		"BLOCK_IRON": { "id": 7, "ig_name": "Iron Block", "hp": 8, "gems": 12, "alt_drop": { "IRON_ORE": 5 }, "smelt_form": {"IRON": 6}, "icon": "res://pixel_art/blocks/BLOCK_IRON.png", "crafting_tier": -1 },
-		"IRON": { "id": 303, "ig_name": "Iron", "icon": "res://pixel_art/resources/IRON.png", "crafting_tier": -1 },
-		"WOODEN_LOG": { "id": 304, "ig_name": "Wooden Log", "icon": "res://pixel_art/resources/WOODEN_LOG.png", "crafting_tier": -1 },
-		"SMALL_ROCK": { "id": 305, "ig_name": "Rock", "icon": "res://pixel_art/resources/SMALL_ROCK.png", "crafting_tier": -1 },
-		"MUD": { "id": 306, "ig_name": "Mud", "icon": "res://pixel_art/resources/MUD.png", "crafting_tier": -1 }
+		"BLOCK_IRON": { "id": 7, "ig_name": "Iron Block", "hp": 8, "resource_type": "raw_ore", "gems": 12, "alt_drop": { "IRON_ORE": 5 }, "smelt_form": {"IRON": 6}, "icon": "res://pixel_art/blocks/BLOCK_IRON.png", "crafting_tier": -1 },
+		"IRON": { "id": 303, "ig_name": "Iron", "resource_type": "ore","icon": "res://pixel_art/resources/IRON.png", "crafting_tier": -1 },
+		"WOODEN_LOG": { "id": 304, "ig_name": "Wooden Log", "resource_type": "fuel", "icon": "res://pixel_art/resources/WOODEN_LOG.png", "crafting_tier": -1 },
+		"SMALL_ROCK": { "id": 305, "ig_name": "Rock", "resource_type": "", "icon": "res://pixel_art/resources/SMALL_ROCK.png", "crafting_tier": -1 },
+		"MUD": { "id": 306, "ig_name": "Mud", "resource_type": "", "icon": "res://pixel_art/resources/MUD.png", "crafting_tier": -1 }
 	}
 }

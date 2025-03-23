@@ -223,3 +223,4 @@ script = ExtResource("14_1kaiv")
 [connection signal="pressed" from="option_button_panel/options_button" to="option_button_panel/options_button" method="_on_pressed"]
 
 [editable path="inventory_bar"]
+[editable path="SmeltingPanel"]

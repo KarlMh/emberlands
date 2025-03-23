@@ -11,6 +11,8 @@ var inventory_bar
 var smelt_slot_container
 var player
 
+var dl = DataLoader
+
 var can_drag_and_drop: bool = true  # Set to false for slots that should not support drag & drop
 
 @onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
@@ -65,6 +67,43 @@ func _gui_input(event):
 			return
 		if item and item.item_type == Item.ItemType.TOOL:
 			move_to_hand()
+			return
+		
+		# Find furnace slots
+		var block = SmeltingPanel.furnace_in_use
+		
+		if item and self in smelt_slot_container.smelting_slots:	
+			var resource_type = dl._get(item.get_name())
+			if resource_type:
+				resource_type = resource_type["resource_type"]
+
+			
+			# Auto-add to the correct slot
+			if resource_type == "fuel":
+				if not block.fuel_slot_item:
+					block.set_fuel_slot_item(item, item_count)
+
+					block.load_furnace_data()
+					inventory.remove_item(item, item_count)
+					
+			elif resource_type == "raw_ore":
+				if not block.mats_slot_item:
+					block.set_mats_slot_item(item, item_count)
+		
+					block.load_furnace_data()
+					inventory.remove_item(item, item_count)
+				
+			block.smelt_item(block.fuel_slot_item, block.mats_slot_item, block.fuel_slot_item_count, block.mats_slot_item_count)
+			smelt_slot_container.sync_with_inventory()
+			
+		if item and SmeltingPanel.visible: 
+			if self in block.furnace_slots :
+				block.claim_furnace_item(self)
+				for i in item_count:
+					inventory.add_item(item)
+				block.load_furnace_data()
+				
+		smelt_slot_container.sync_with_inventory()
 
 func move_to_hand():
 	if not item:
@@ -173,38 +212,32 @@ func _drop_data(position, data):
 		
 	smelt_slot_container.sync_with_inventory()
 	
-	block.smelt_item()
-	
 func move_item_to_furnace(origin_slot, furnace_slot, item, count):
 	if not origin_slot or not furnace_slot:
 		return  # Invalid slots
 	
+	if furnace_slot.item:
+		for i in furnace_slot.item_count:
+			inventory.add_item(furnace_slot.item)  # Add the item back to the inventory
 
-	if not furnace_slot.item:
-		# Move item into furnace slot
-		furnace_slot.set_item(item)
-		furnace_slot.set_count(count)
-		origin_slot.clear_slot()
-	else:
-		# Swap items if furnace slot is occupied
-		var temp_item = furnace_slot.item
-		var temp_count = furnace_slot.item_count
-		furnace_slot.set_item(item)
-		furnace_slot.set_count(count)
-		origin_slot.set_item(temp_item)
-		origin_slot.set_count(temp_count)
-		
+	furnace_slot.set_item(item)
+	furnace_slot.set_count(count)
+	origin_slot.clear_slot()
 	
 	var block = SmeltingPanel.furnace_in_use
 	
 	if furnace_slot.name.begins_with("fuel_slot"):
-		block.set_fuel_slot_item(item, count)
+		block.set_fuel_slot_item()
 	elif furnace_slot.name.begins_with("mats_slot"):
-		block.set_mats_slot_item(item, count)
+		block.set_mats_slot_item()
 	elif furnace_slot.name.begins_with("final_slot"):
-		block.set_final_slot_item(item, count)
+		block.set_final_slot_item()
+		
 		
 	inventory.remove_item(item, count)
+	
+	block.smelt_item()
+	
 	
 
 	
@@ -212,33 +245,22 @@ func move_item_to_furnace(origin_slot, furnace_slot, item, count):
 func move_item_to_inventory(furnace_slot, target_inventory_slot, item, count):
 	if not furnace_slot or not target_inventory_slot:
 		return  # Invalid slots
+		
+	if target_inventory_slot.item:
+		target_inventory_slot.set_item(item)
+		target_inventory_slot.set_count(count)
 	
 	var block = SmeltingPanel.furnace_in_use
-	
-	if not target_inventory_slot.item:
-		# Move item to empty inventory slot
-		target_inventory_slot.set_item(item)
-		target_inventory_slot.set_count(count)
-		furnace_slot.clear_slot()
-	elif target_inventory_slot.item == item:
-		# Merge stacks if the same item exists in inventory
-		target_inventory_slot.set_count(target_inventory_slot.item_count + count)
-		furnace_slot.clear_slot()
-	else:
-		# Swap items if inventory slot is occupied
-		var temp_item = target_inventory_slot.item
-		var temp_count = target_inventory_slot.item_count
-		target_inventory_slot.set_item(item)
-		target_inventory_slot.set_count(count)
-		furnace_slot.set_item(temp_item)
-		furnace_slot.set_count(temp_count)
+
+
+	block.claim_furnace_item(furnace_slot)
+	furnace_slot.clear_slot()
 	
 	for i in count:
 		inventory.add_item(item)  # Add the item back to the inventory
-		
-	block.claim_furnace_item(furnace_slot)
 	
 	block.smelt_item()
+	
 	
 func update_smelt_slot_display():
 	# Loop through all smelting slots and update their display

@@ -17,6 +17,8 @@ var fuel_slot
 var mats_slot
 var final_slot
 
+var furnace_slots
+
 var inventory_manager
 
 
@@ -33,6 +35,8 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 		mats_slot = _parent_node.get_tree().get_root().find_child("mats_slot", true, false)
 		final_slot = _parent_node.get_tree().get_root().find_child("final_slot", true, false)
 		inventory_manager = _parent_node.get_tree().get_root().find_child("slot_container", true, false)
+		
+		furnace_slots = [fuel_slot, mats_slot, final_slot]
 		
 # Override the function to define the interaction type
 func set_interaction_type() -> void:
@@ -119,29 +123,33 @@ func claim_furnace_item(slot):
 
 # Setters for furnace slot items and their counts
 
-func set_fuel_slot_item(item: Item, count: int) -> void:
-	self.fuel_slot_item = item
-	self.fuel_slot_item_count = count
+func set_fuel_slot_item(item, item_count) -> void:
+	self.fuel_slot_item =item
+	self.fuel_slot_item_count = item_count
 
-func set_mats_slot_item(item: Item, count: int) -> void:
+func set_mats_slot_item(item, item_count) -> void:
 	self.mats_slot_item = item
-	self.mats_slot_item_count = count
+	self.mats_slot_item_count = item_count
 
-func set_final_slot_item(item: Item, count: int) -> void:
+func set_final_slot_item(item, item_count) -> void:
 	self.final_slot_item = item
-	self.final_slot_item_count = count
+	self.final_slot_item_count = item_count
 	
 var accepted_fuel = ["WOODEN_LOG"]
 var accepted_for_smelting = ["BLOCK_IRON"]
 
 var smelt_timer = Timer.new()
 
-func smelt_item():
-	var fuel = self.fuel_slot_item
-	var raw_ore = self.mats_slot_item
+func smelt_item(fuel, raw_ore, fuel_count, raw_ore_count):
 	
-	if fuel_slot.item_count <= 0:
+	if fuel_slot_item_count <= 0:
+		set_fuel_slot_item(null, 0)
+		load_furnace_data()
 		return
+	
+	if mats_slot_item_count <= 0:
+		set_mats_slot_item(null, 0)
+		load_furnace_data()
 	
 	if smelt_timer:
 		_parent_node.add_child(smelt_timer)
@@ -155,17 +163,20 @@ func smelt_item():
 			smelt_timer.start()
 			await smelt_timer.timeout  # Wait until timer finishes
 			
-			# Smelting is complete
-			final_slot.set_item(dl.create_item("IRON"))
-			final_slot.set_count(final_slot.item_count + 1)
-			fuel_slot.remove_item(1)
-			mats_slot.remove_item(1)
+			raw_ore = self.mats_slot_item
+			if raw_ore and raw_ore.get_name() in accepted_for_smelting:
+			
+				# Smelting is complete
+				set_fuel_slot_item(fuel_slot_item, fuel_slot_item_count - 1)
+				set_mats_slot_item(mats_slot_item, mats_slot_item_count - 1)
+					
 				
-			fuel_slot.update_display()
-			mats_slot.update_display()
-			final_slot.update_display()
+				set_final_slot_item(dl.create_item("IRON"), final_slot_item_count + 1)
+				load_furnace_data()
+					
+				print("✅ Smelting Complete")
 				
-			print("✅ Smelting Complete")
+				smelt_item(fuel, raw_ore, fuel_count, raw_ore_count)
 
 				
 			
