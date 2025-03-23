@@ -1,0 +1,226 @@
+[gd_scene load_steps=19 format=3 uid="uid://cqmu0xy3fueuf"]
+
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_m15es"]
+[ext_resource type="PackedScene" uid="uid://dh1sg8vfhieu2" path="res://scenes/inventory_bar.tscn" id="1_yorhh"]
+[ext_resource type="Script" uid="uid://rbke1qof2r7r" path="res://scripts/inventory_bar.gd" id="2_dqpr8"]
+[ext_resource type="Script" uid="uid://bcjejmj63jf5d" path="res://scripts/game_ui.gd" id="2_upmhx"]
+[ext_resource type="Script" uid="uid://c5lxu8umbfs8l" path="res://scripts/display_gems.gd" id="3_ck6tt"]
+[ext_resource type="Texture2D" uid="uid://ba1dptwycerkh" path="res://pixel_art/stuff/gems.png" id="4_80606"]
+[ext_resource type="PackedScene" uid="uid://ul4ff2b876bs" path="res://scenes/inventory_window.tscn" id="5_u2aqm"]
+[ext_resource type="Script" uid="uid://cf1w30b0pb2j3" path="res://scripts/options.gd" id="6_cppry"]
+[ext_resource type="Script" uid="uid://cpba6o2rj85y" path="res://scripts/respawn_button.gd" id="7_n8dry"]
+[ext_resource type="Script" uid="uid://d3jeyqx5nytu1" path="res://scripts/main_menu_button.gd" id="8_3q1cn"]
+[ext_resource type="Script" uid="uid://bbhhxtd4mu6il" path="res://scripts/exit_button.gd" id="9_op3db"]
+[ext_resource type="Script" uid="uid://bysipgc0mns7m" path="res://scripts/options_button.gd" id="10_vnx7g"]
+[ext_resource type="PackedScene" uid="uid://gd0pslqbs0gy" path="res://scenes/ChatBox.tscn" id="12_s2npe"]
+[ext_resource type="PackedScene" uid="uid://bku03h8u11bkh" path="res://scenes/SmeltingPanel.tscn" id="13_g2v8e"]
+[ext_resource type="Script" uid="uid://dfh7uyt384fka" path="res://scripts/smelting_panel.gd" id="14_1kaiv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n55u8"]
+bg_color = Color(0.454902, 0.72549, 1, 0)
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_w4khy"]
+font_size = 60
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bsgeq"]
+
+[node name="game_ui" type="Control"]
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_m15es")
+script = ExtResource("2_upmhx")
+
+[node name="ChatBox" parent="." instance=ExtResource("12_s2npe")]
+z_index = -5
+layout_mode = 1
+
+[node name="inventory_bar" parent="." instance=ExtResource("1_yorhh")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -125.0
+offset_top = -44.9999
+offset_right = 125.0
+offset_bottom = 5.00012
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(125, 50)
+script = null
+
+[node name="slot_bar" parent="inventory_bar" index="0" node_paths=PackedStringArray("bar_container")]
+offset_left = -100.0
+offset_top = -17.5
+offset_right = 100.0
+offset_bottom = 17.5
+script = ExtResource("2_dqpr8")
+bar_container = NodePath(".")
+
+[node name="display_gems" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_right = 60.0
+offset_bottom = 15.0
+grow_vertical = 2
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(0, 15)
+theme_override_styles/panel = SubResource("StyleBoxFlat_n55u8")
+script = ExtResource("3_ck6tt")
+
+[node name="Sprite2D" type="Sprite2D" parent="display_gems"]
+position = Vector2(10, 15)
+texture = ExtResource("4_80606")
+
+[node name="Label" type="Label" parent="display_gems"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.464
+anchor_top = 0.5
+anchor_right = 0.464
+anchor_bottom = 0.5
+offset_left = -5.24
+offset_top = -51.3998
+offset_right = 152.76
+offset_bottom = -1.39978
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+pivot_offset = Vector2(-2.66667, 57.6667)
+label_settings = SubResource("LabelSettings_w4khy")
+
+[node name="inventory_window" parent="." instance=ExtResource("5_u2aqm")]
+layout_mode = 1
+scale = Vector2(2.5, 2.5)
+
+[node name="options" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -150.0
+offset_right = 125.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(125, 150)
+size_flags_horizontal = 4
+script = ExtResource("6_cppry")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="options"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -140.0
+offset_right = 115.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="respawn_button" type="Button" parent="options/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Respawn"
+script = ExtResource("7_n8dry")
+
+[node name="main_menu_button" type="Button" parent="options/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Main Menu"
+script = ExtResource("8_3q1cn")
+
+[node name="settings_button" type="Button" parent="options/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Settings"
+
+[node name="shop_button" type="Button" parent="options/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Shop"
+
+[node name="repot_button" type="Button" parent="options/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Report"
+
+[node name="exit_button" type="Button" parent="options/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Exit"
+script = ExtResource("9_op3db")
+
+[node name="option_button_panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_bottom = 40.0
+grow_horizontal = 0
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(50, 0)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bsgeq")
+
+[node name="options_button" type="Button" parent="option_button_panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -15.0
+offset_right = 20.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(18, 16)
+size_flags_horizontal = 0
+focus_mode = 0
+text = "esc"
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("10_vnx7g")
+
+[node name="SmeltingPanel" parent="." instance=ExtResource("13_g2v8e")]
+layout_mode = 1
+offset_top = -125.0
+offset_bottom = 125.0
+scale = Vector2(2.5, 2.5)
+pivot_offset = Vector2(200, 150)
+script = ExtResource("14_1kaiv")
+
+[connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]
+[connection signal="pressed" from="options/VBoxContainer/main_menu_button" to="options/VBoxContainer/main_menu_button" method="_on_pressed"]
+[connection signal="pressed" from="options/VBoxContainer/exit_button" to="options/VBoxContainer/exit_button" method="_on_exit_button_pressed"]
+[connection signal="pressed" from="option_button_panel/options_button" to="option_button_panel/options_button" method="_on_pressed"]
+
+[editable path="inventory_bar"]
+[editable path="SmeltingPanel"]
