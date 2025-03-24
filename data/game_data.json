@@ -12,7 +12,7 @@
 		"interactive_blocks": {
 			"CRAFTING_TABLE": { "id": 401, "ig_name": "Crafting Table", "hp": 5, "gems": 6, "alt_drop": { "WOODEN_LOG": 8 }, "recipe": {"WOODEN_LOG": 8}, "interaction_type": "craft", "icon": "res://pixel_art/interactive_blocks/CRAFTING_TABLE.png", "crafting_tier": 0 },
 			"FURNACE": { "id": 402, "ig_name": "Furnace", "hp": 6, "gems": 5, "alt_drop": { "WOODEN_LOG": 4, "SMALL_ROCK": 2 }, "recipe": {"WOODEN_LOG": 4, "SMALL_ROCK": 2}, "interaction_type": "smelt", "icon": "res://pixel_art/interactive_blocks/FURNACE.png", "crafting_tier": 0 },
-			"RECYCLE_MACHINE": { "id": 403, "ig_name": "Recycle Machine", "hp": 8, "gems": 5, "alt_drop": { "RECYCLED_MATERIAL": 1 }, "interaction_type": "recycle", "icon": "res://pixel_art/interactive_blocks/RECYCLE_MACHINE.png", "crafting_tier": -1 }
+			"RECYCLE_MACHINE": { "id": 403, "ig_name": "Recycle Machine", "hp": 8, "gems": 5, "alt_drop": { "IRON": 10 }, "interaction_type": "recycle", "icon": "res://pixel_art/interactive_blocks/RECYCLE_MACHINE.png", "crafting_tier": -1 }
 		},	
 	},
 		

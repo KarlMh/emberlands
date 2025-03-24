@@ -1,0 +1,150 @@
+[gd_scene load_steps=6 format=3 uid="uid://byww1d65miwmw"]
+
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_m8mc8"]
+[ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="2_5yv5v"]
+[ext_resource type="Script" uid="uid://bh4io2ojecjx8" path="res://scripts/recycling_panel.gd" id="2_535h0"]
+[ext_resource type="Script" uid="uid://bwqps87ukwciw" path="res://scripts/recycle_slot_container.gd" id="3_u2rge"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cwxs"]
+
+[node name="RecyclingPanel" type="Panel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(200, 125)
+theme = ExtResource("1_m8mc8")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2cwxs")
+script = ExtResource("2_535h0")
+
+[node name="RecDepo" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_right = 160.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RecDepo"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -42.0
+offset_right = 130.0
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UpperSlots" type="HBoxContainer" parent="RecDepo/VBoxContainer"]
+layout_mode = 2
+
+[node name="inventory_slot" parent="RecDepo/VBoxContainer/UpperSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="inventory_slot2" parent="RecDepo/VBoxContainer/UpperSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="inventory_slot3" parent="RecDepo/VBoxContainer/UpperSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="inventory_slot4" parent="RecDepo/VBoxContainer/UpperSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="inventory_slot5" parent="RecDepo/VBoxContainer/UpperSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="inventory_slot6" parent="RecDepo/VBoxContainer/UpperSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="DownSlots" type="HBoxContainer" parent="RecDepo/VBoxContainer"]
+layout_mode = 2
+
+[node name="inventory_slot" parent="RecDepo/VBoxContainer/DownSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+
+[node name="inventory_slot2" parent="RecDepo/VBoxContainer/DownSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+
+[node name="inventory_slot3" parent="RecDepo/VBoxContainer/DownSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+
+[node name="inventory_slot4" parent="RecDepo/VBoxContainer/DownSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+
+[node name="inventory_slot5" parent="RecDepo/VBoxContainer/DownSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+
+[node name="inventory_slot6" parent="RecDepo/VBoxContainer/DownSlots" instance=ExtResource("2_5yv5v")]
+layout_mode = 2
+
+[node name="RecPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="recycle_scroll_container" type="ScrollContainer" parent="RecPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -55.0
+offset_right = 180.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(140, 130)
+mouse_filter = 2
+horizontal_scroll_mode = 0
+
+[node name="recycle_margin_conatiner" type="MarginContainer" parent="RecPanel/recycle_scroll_container"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="recycle_slot_container" type="GridContainer" parent="RecPanel/recycle_scroll_container/recycle_margin_conatiner"]
+z_index = 1
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 6
+script = ExtResource("3_u2rge")

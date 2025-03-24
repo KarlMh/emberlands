@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://bysipgc0mns7m" path="res://scripts/options_button.gd" id="10_vnx7g"]
 [ext_resource type="PackedScene" uid="uid://gd0pslqbs0gy" path="res://scenes/ChatBox.tscn" id="12_s2npe"]
 [ext_resource type="PackedScene" uid="uid://bku03h8u11bkh" path="res://scenes/SmeltingPanel.tscn" id="13_g2v8e"]
-[ext_resource type="Script" uid="uid://dfh7uyt384fka" path="res://scripts/smelting_panel.gd" id="14_1kaiv"]
+[ext_resource type="PackedScene" uid="uid://byww1d65miwmw" path="res://scenes/RecyclingPanel.tscn" id="15_upmhx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n55u8"]
 bg_color = Color(0.454902, 0.72549, 1, 0)
@@ -209,13 +209,17 @@ icon_alignment = 1
 expand_icon = true
 script = ExtResource("10_vnx7g")
 
+[node name="RecyclingPanel" parent="." instance=ExtResource("15_upmhx")]
+layout_mode = 1
+offset_top = -125.0
+offset_bottom = 125.0
+scale = Vector2(2.5, 2.5)
+
 [node name="SmeltingPanel" parent="." instance=ExtResource("13_g2v8e")]
 layout_mode = 1
 offset_top = -125.0
 offset_bottom = 125.0
 scale = Vector2(2.5, 2.5)
-pivot_offset = Vector2(200, 150)
-script = ExtResource("14_1kaiv")
 
 [connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]
 [connection signal="pressed" from="options/VBoxContainer/main_menu_button" to="options/VBoxContainer/main_menu_button" method="_on_pressed"]
@@ -223,4 +227,3 @@ script = ExtResource("14_1kaiv")
 [connection signal="pressed" from="option_button_panel/options_button" to="option_button_panel/options_button" method="_on_pressed"]
 
 [editable path="inventory_bar"]
-[editable path="SmeltingPanel"]

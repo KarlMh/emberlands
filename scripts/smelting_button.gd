@@ -1,7 +1,9 @@
 extends Button
 
 @onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
+@onready var RecyclingPanel = get_tree().get_root().find_child("RecyclingPanel", true, false)
 @onready var smelt_slot_container = get_tree().get_root().find_child("smelt_slot_container", true, false)
+@onready var recycle_slot_container = get_tree().get_root().find_child("recycle_slot_container", true, false)
 @onready var player = get_tree().get_root().find_child("player", true, false)
 @onready var inventory_slot = get_tree().get_root().find_child("inventory_slot", true, false)
 @onready var inventory_window = get_tree().get_root().find_child("inventory_window", true, false)
@@ -12,13 +14,27 @@ var block_reference = null
 func _on_pressed() -> void:
 	if inventory_window.visible or options.visible:
 		return
-		
-	SmeltingPanel.visible = true
-	smelt_slot_container.sync_with_inventory()
 	
+	player.interactive_button = self
+		
 	if block_reference:
-		SmeltingPanel.furnace_in_use = block_reference
-		block_reference.load_furnace_data()
+		if block_reference.get_interaction_type() == "smelt":
+			SmeltingPanel.visible = true
+			smelt_slot_container.sync_with_inventory()
+		
+			SmeltingPanel.furnace_in_use = block_reference
+			block_reference.load_furnace_data()	
+			
+		elif block_reference.get_interaction_type() == "recycle":
+			RecyclingPanel.visible = true
+			recycle_slot_container.sync_with_inventory()
+			
+			RecyclingPanel.recycler_in_use = block_reference
+			block_reference.load_recycler_data()
+			print("Recycler in use:", RecyclingPanel.recycler_in_use)
+
+			
+			
 	
 
 

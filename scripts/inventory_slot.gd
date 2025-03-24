@@ -16,6 +16,10 @@ var dl = DataLoader
 var can_drag_and_drop: bool = true  # Set to false for slots that should not support drag & drop
 
 @onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
+@onready var RecyclingPanel = get_tree().get_root().find_child("RecyclingPanel", true, false)
+@onready var recycle_slot_container = get_tree().get_root().find_child("recycle_slot_container", true, false)
+
+
 
 func _ready():
 	# Find references to key UI elements
@@ -41,6 +45,12 @@ func set_count(count: int):
 		item_count = count
 	update_display()
 	
+func get_item():
+	return item
+	
+func get_count():
+	return item_count
+	
 func remove_item(count):
 	if item:
 		item_count -= count
@@ -64,9 +74,23 @@ func _gui_input(event):
 	if event is InputEventMouseButton and event.double_click:
 		if hand_item_slot.get_global_rect().has_point(event.position):
 			return
-		if item and item.item_type == Item.ItemType.TOOL:
+		if item and (self in inventory.slots or self == hand_item_slot) and item.item_type == Item.ItemType.TOOL:
 			move_to_hand()
 			return
+			
+		
+		var recycler = RecyclingPanel.recycler_in_use
+		
+
+		if item and self in recycle_slot_container.recycle_slots:
+			if item is Tool:
+				recycler.set_recycler_data(item, item_count)
+				recycler.load_recycler_data()						
+				inventory.remove_item(item, item_count)
+		
+		
+		recycle_slot_container.sync_with_inventory()
+		
 		
 		# Find furnace slots
 		var block = SmeltingPanel.furnace_in_use
@@ -143,9 +167,6 @@ func update_inventory():
 	clear_slot()  # Also clear the clicked slot in the bar()
 	update_display()
 	inventory_bar.update_bar_display()
-
-func get_item() -> Item:
-	return item  # Returns the item stored in this slot
 
 
 

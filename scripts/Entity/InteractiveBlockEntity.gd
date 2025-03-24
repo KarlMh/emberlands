@@ -19,13 +19,24 @@ var final_slot
 
 var furnace_slots
 
+var upper_slots
+var down_slots
+
 var inventory_manager
+
+
+var recycling_upper_slots: Array 
+var recycling_down_slots: Array
+
+var RecyclingPanel
+var SmeltingPanel
 
 
 # Constructor
 func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool):
 	super(id, position, parent_node, can_be_damaged)  # Call parent constructor
-	
+	recycling_upper_slots= [null, null, null, null, null, null]
+	recycling_down_slots = [null, null, null, null, null, null]
 	# Set interaction type if this block is interactive
 	if _is_interactive:
 		set_interaction_type()
@@ -35,6 +46,11 @@ func _init(id: int, position: Vector2i, parent_node: Node, can_be_damaged: bool)
 		mats_slot = _parent_node.get_tree().get_root().find_child("mats_slot", true, false)
 		final_slot = _parent_node.get_tree().get_root().find_child("final_slot", true, false)
 		inventory_manager = _parent_node.get_tree().get_root().find_child("slot_container", true, false)
+		upper_slots = _parent_node.get_tree().get_root().find_child("UpperSlots", true, false)
+		down_slots = _parent_node.get_tree().get_root().find_child("DownSlots", true, false)
+		
+		RecyclingPanel = _parent_node.get_tree().get_root().find_child("RecyclingPanel", true, false)
+		SmeltingPanel = _parent_node.get_tree().get_root().find_child("SmeltingPanel", true, false)
 		
 		furnace_slots = [fuel_slot, mats_slot, final_slot]
 		
@@ -50,6 +66,9 @@ func set_interaction_type() -> void:
 # Getters for interaction type
 func get_interaction_type() -> String:
 	return _interaction_type
+	
+func get_interactive_button():
+	return interactive_button
 	
 func spawn_interactive_button():
 	# Prevent duplicate button spawn
@@ -123,8 +142,69 @@ func claim_furnace_item(slot):
 
 # Setters for furnace slot items and their counts
 
+
+func set_recycler_data(item, item_count):
+	for i in range(len(self.recycling_upper_slots)):
+		if self.recycling_upper_slots[i] == null:
+			self.recycling_upper_slots[i] = [item, item_count]
+			print("✅ Upper slot", i, "set to", item.get_name(), item_count)
+			return
+
+func set_recycler_down_data(item, item_count):
+	for i in range(len(self.recycling_down_slots)):
+		if self.recycling_down_slots[i] == null:
+			self.recycling_down_slots[i] = [item, item_count]
+			print("✅ Down slot", i, "set to", item.get_name(), item_count)
+			return
+
+func load_recycler_data():
+	# Reset all slots before loading new data
+	for slot in upper_slots.get_children():
+		slot.clear_slot()
+		
+	# Now load data back into upper slots
+	for i in range(len(self.recycling_upper_slots)):
+		var slot = upper_slots.get_child(i)
+		var saved_item = self.recycling_upper_slots[i]
+		if saved_item != null:
+			if not slot.item:
+				slot.set_item(saved_item[0])
+				slot.set_count(saved_item[1])
+				slot.update_display()
+			else:
+				print("⚠️ Upper slot", i, "already has an item.")
+				
+	# Load data back into down slots
+	for i in range(len(self.recycling_down_slots)):
+		var slot = down_slots.get_child(i)
+		var saved_item = self.recycling_down_slots[i]
+		if saved_item != null:
+			if not slot.item:
+				slot.set_item(saved_item[0])
+				slot.set_count(saved_item[1])
+				slot.update_display()
+			else:
+				print("⚠️ Down slot", i, "already has an item.")
+
+
+func claim_recycler_item(slot):
+	for i in range(len(recycling_upper_slots)):
+		if upper_slots.get_child(i) == slot:
+			self.recycling_upper_slots[i] = null
+			print("✅ Claimed from upper slot", i)
+			return
+
+	for i in range(len(recycling_down_slots)):
+		if down_slots.get_child(i) == slot:
+			self.recycling_down_slots[i] = null
+			print("✅ Claimed from down slot", i)
+			return
+
+
+
+
 func set_fuel_slot_item(item, item_count) -> void:
-	self.fuel_slot_item =item
+	self.fuel_slot_item = item
 	self.fuel_slot_item_count = item_count
 
 func set_mats_slot_item(item, item_count) -> void:

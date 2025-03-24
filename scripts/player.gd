@@ -16,7 +16,7 @@ const TRIPLE_JUMP_VELOCITY: float = -300.0  # Weaker than double jump
 var can_build: bool = true
 
 # Add these variables near your other state variables:
-var can_double_jump: bool = true  # Set to false to disable double jumping
+var can_double_jump: bool = true # Set to false to disable double jumping
 var can_triple_jump: bool = true   # Set to false to disable triple jumping
 
 @onready var animated_sprite = $AnimationPlayer
@@ -48,6 +48,7 @@ var can_triple_jump: bool = true   # Set to false to disable triple jumping
 
 @onready var ChatBox = get_tree().get_root().find_child("ChatBox", true, false)  # Find chat input field
 @onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
+@onready var RecyclingPanel = get_tree().get_root().find_child("RecyclingPanel", true, false)
 @onready var game_ui = get_tree().get_root().find_child("game_ui", true, false)
 
 @onready var seed_planter = preload("res://scripts/seed_planter.gd").new()
@@ -56,6 +57,7 @@ const BlockEntity = preload("res://scripts/Entity/BlockEntity.gd")
 const BackgroundEntity = preload("res://scripts/Entity/BackgroundEntity.gd")
 const InteractiveBlockEntity = preload("res://scripts/Entity/InteractiveBlockEntity.gd")
 var nearby_interactive_block: InteractiveBlockEntity
+var interactive_button
 
 var blink_timer = 0.0
 var can_blink = true
@@ -79,6 +81,8 @@ func _ready():
 	for i in 10:
 		inventory_manager.add_item(dl.create_item("FURNACE"))
 		inventory_manager.add_item(dl.create_item("BLOCK_IRON"))
+		
+		inventory_manager.add_item(dl.create_item("RECYCLE_MACHINE"))
 
 func _physics_process(delta: float) -> void:
 		
@@ -454,12 +458,15 @@ func interact_smelt() -> bool:
 	if nearby_blocks != previous_nearby_blocks:
 		# Clear buttons for blocks that are no longer in range or have changed interaction type
 		for block in previous_nearby_blocks:
-			if block.get_interaction_type() == "smelt" and block not in nearby_blocks:
+			if block.get_interaction_type() in ["smelt", "recycle"]  and block not in nearby_blocks:
 				block.despawn_interactive_button()
+				if interactive_button != null:
+					SmeltingPanel.visible = false
+					RecyclingPanel.visible = false
 
 		# Spawn buttons for new blocks that need interaction
 		for block in nearby_blocks:
-			if block.get_interaction_type() == "smelt" and block not in previous_nearby_blocks:
+			if block.get_interaction_type() in ["smelt", "recycle"] and block not in previous_nearby_blocks:
 				block.spawn_interactive_button()
 
 		# Update the previous block list for the next iteration
@@ -468,6 +475,7 @@ func interact_smelt() -> bool:
 		# Hide the smelting panel if no smelting blocks are nearby
 		if nearby_blocks.is_empty():
 			SmeltingPanel.visible = false
+			RecyclingPanel.visible = false
 
 	return not nearby_blocks.is_empty()
 
