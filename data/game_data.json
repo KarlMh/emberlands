@@ -29,7 +29,7 @@
 	
 	"items": {
 		"WOODEN_PICKAXE": { "id": 301, "ig_name": "Wooden Pickaxe", "tool_power": 1, "recipe": {"WOODEN_LOG": 20, "SMALL_ROCK": 12}, "icon": "res://pixel_art/items/WOODEN_PICKAXE.png", "crafting_tier": 1 },
-		"GOLDEN_PICKAXE": { "id": 302, "ig_name": "Golden Pickaxe", "tool_power": 100, "icon": "res://pixel_art/items/GOLDEN_PICKAXE.png", "crafting_tier": -1 }
+		"GOLDEN_PICKAXE": { "id": 302, "ig_name": "Golden Pickaxe", "tool_power": 100, "recycle": {"BLOCK_MAGMA": 10, "WOODEN_LOG": 15}, "icon": "res://pixel_art/items/GOLDEN_PICKAXE.png", "crafting_tier": -1 }
 	},
 	
 	"resources": {

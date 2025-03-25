@@ -145,14 +145,26 @@ func claim_furnace_item(slot):
 
 func set_recycler_data(item, item_count):
 	for i in range(len(self.recycling_upper_slots)):
-		if self.recycling_upper_slots[i] == null:
+		if  self.recycling_upper_slots[i] != null and self.recycling_upper_slots[i][0] == item:
+			self.recycling_upper_slots[i] = [item, item_count]
+			print("✅ Upper slot", i, "set to", item.get_name(), item_count)
+			
+			if item_count <= 0:
+				self.recycling_upper_slots[i][0] = null
+				self.recycling_upper_slots[i][1] = 0
+			return
+		elif self.recycling_upper_slots[i] == null:
 			self.recycling_upper_slots[i] = [item, item_count]
 			print("✅ Upper slot", i, "set to", item.get_name(), item_count)
 			return
 
 func set_recycler_down_data(item, item_count):
 	for i in range(len(self.recycling_down_slots)):
-		if self.recycling_down_slots[i] == null:
+		if  self.recycling_down_slots[i] != null and self.recycling_down_slots[i][0] == item:
+			self.recycling_down_slots[i] = [item, item_count]
+			print("✅ Upper slot", i, "set to", item.get_name(), item_count)
+			return
+		elif self.recycling_down_slots[i] == null:
 			self.recycling_down_slots[i] = [item, item_count]
 			print("✅ Down slot", i, "set to", item.get_name(), item_count)
 			return
@@ -160,6 +172,9 @@ func set_recycler_down_data(item, item_count):
 func load_recycler_data():
 	# Reset all slots before loading new data
 	for slot in upper_slots.get_children():
+		slot.clear_slot()
+	
+	for slot in down_slots.get_children():
 		slot.clear_slot()
 		
 	# Now load data back into upper slots
@@ -192,12 +207,14 @@ func claim_recycler_item(slot):
 		if upper_slots.get_child(i) == slot:
 			self.recycling_upper_slots[i] = null
 			print("✅ Claimed from upper slot", i)
+			load_recycler_data()
 			return
 
 	for i in range(len(recycling_down_slots)):
 		if down_slots.get_child(i) == slot:
 			self.recycling_down_slots[i] = null
 			print("✅ Claimed from down slot", i)
+			load_recycler_data()
 			return
 
 
@@ -217,6 +234,7 @@ func set_final_slot_item(item, item_count) -> void:
 	
 var accepted_fuel = ["WOODEN_LOG"]
 var accepted_for_smelting = ["BLOCK_IRON"]
+var accepted_for_recycling = ["GOLDEN_PICKAXE"]
 
 var smelt_timer = Timer.new()
 
@@ -257,6 +275,47 @@ func smelt_item(fuel, raw_ore, fuel_count, raw_ore_count):
 				print("✅ Smelting Complete")
 				
 				smelt_item(fuel, raw_ore, fuel_count, raw_ore_count)
+				
+func recycle_item(item, item_count):
+	# Check if there are no items left to recycle
+	if item_count <= 0:
+		print("⚠️ No items left to recycle.")
+		return
+
+	# Create a separate timer for recycling if not already present
+	var recycle_timer = Timer.new()
+	_parent_node.add_child(recycle_timer)
+	recycle_timer.name = "RecycleTimer"
+	recycle_timer.wait_time = 2  # 3 seconds for recycling (adjust as needed)
+	recycle_timer.one_shot = true
+
+	if item and item.get_name() in accepted_for_recycling:
+		print("♻️ Recycling in progress...")
+		recycle_timer.start()
+		await recycle_timer.timeout  # Wait until timer finishes
+
+		# Get item data from the data loader
+		var item_data = dl._get(item.get_name())
+		if item_data and item_data.has("recycle"):
+			# Loop through recycled items and create them
+			for recycled_item_name in item_data["recycle"]:
+				var recycled_count = item_data["recycle"][recycled_item_name]
+				var recycled_item
+				for x in range(len(item_data["recycle"])):
+					recycled_item = dl.create_item(recycled_item_name)
+				set_recycler_down_data(recycled_item, recycled_count)
+				
+				print("✅ Recycled", recycled_count, recycled_item_name)
+
+			# Reduce item count in upper slots
+			set_recycler_data(item, item_count - 1)
+			load_recycler_data()
+			print("✅ Recycling complete.")
+
+			# Repeat if items remain
+			recycle_item(item, item_count - 1)
+		else:
+			print("⚠️ No recycle data found for", item.get_name())
 
 				
 			

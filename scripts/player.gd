@@ -76,11 +76,13 @@ func _ready():
 	blink_delay = get_blink_delay()
 	add_child(seed_planter)
 	
-	inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
+	
 	
 	for i in 10:
 		inventory_manager.add_item(dl.create_item("FURNACE"))
 		inventory_manager.add_item(dl.create_item("BLOCK_IRON"))
+		
+		inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
 		
 		inventory_manager.add_item(dl.create_item("RECYCLE_MACHINE"))
 

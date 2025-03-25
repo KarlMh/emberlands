@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://byww1d65miwmw"]
+[gd_scene load_steps=7 format=3 uid="uid://byww1d65miwmw"]
 
 [ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_m8mc8"]
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="2_5yv5v"]
 [ext_resource type="Script" uid="uid://bh4io2ojecjx8" path="res://scripts/recycling_panel.gd" id="2_535h0"]
 [ext_resource type="Script" uid="uid://bwqps87ukwciw" path="res://scripts/recycle_slot_container.gd" id="3_u2rge"]
+[ext_resource type="PackedScene" uid="uid://bwlyckchs4ioc" path="res://scenes/count_item.tscn" id="5_m8mc8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cwxs"]
 
@@ -148,3 +149,19 @@ theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 6
 script = ExtResource("3_u2rge")
+
+[node name="count_item" parent="." instance=ExtResource("5_m8mc8")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -37.0
+offset_right = 60.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[connection signal="text_submitted" from="count_item" to="count_item" method="_on_text_submitted"]

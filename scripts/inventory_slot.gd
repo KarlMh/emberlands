@@ -18,6 +18,7 @@ var can_drag_and_drop: bool = true  # Set to false for slots that should not sup
 @onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
 @onready var RecyclingPanel = get_tree().get_root().find_child("RecyclingPanel", true, false)
 @onready var recycle_slot_container = get_tree().get_root().find_child("recycle_slot_container", true, false)
+@onready var count_item = get_tree().get_root().find_child("count_item", true, false)
 
 
 
@@ -69,6 +70,48 @@ func update_display():
 		label.text = str(item_count) if item_count > 1 else ""  # Hide count if 1
 	else:
 		label.text = ""
+		
+		
+func recycle():
+		var recycler = RecyclingPanel.recycler_in_use
+		
+
+		# Assuming you already have a reference to your LineEdit node
+		var line_edit = count_item  # Replace with the actual path to your LineEdit
+		
+		line_edit.visible = true
+
+		# Get the user input as a string
+		if line_edit.value_entered:
+			
+			var input_text = line_edit.count
+
+			# Try to convert the input to an integer
+			var temp_item_count = int(input_text) 
+
+			# Now use item_count in your recycling logic
+			if item and self in recycle_slot_container.recycle_slots and temp_item_count <= item_count:
+				if item:
+					# Set recycler data with the item and item_count from user input
+					recycler.set_recycler_data(item, temp_item_count)
+					recycler.load_recycler_data()
+					
+					# Remove the item from the inventory
+					inventory.remove_item(item, temp_item_count)
+					
+					# Recycle the item with the specified count
+					recycler.recycle_item(item, temp_item_count)
+
+		
+		if item and (self in recycler.upper_slots.get_children() or self in recycler.down_slots.get_children()):
+			for i in item_count:
+				inventory.add_item(item)
+				
+			recycler.claim_recycler_item(self)
+		
+		recycle_slot_container.sync_with_inventory()
+		
+		line_edit.value_entered = false
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.double_click:
@@ -78,19 +121,9 @@ func _gui_input(event):
 			move_to_hand()
 			return
 			
+		count_item.last_slot = self
 		
-		var recycler = RecyclingPanel.recycler_in_use
-		
-
-		if item and self in recycle_slot_container.recycle_slots:
-			if item is Tool:
-				recycler.set_recycler_data(item, item_count)
-				recycler.load_recycler_data()						
-				inventory.remove_item(item, item_count)
-		
-		
-		recycle_slot_container.sync_with_inventory()
-		
+		recycle()
 		
 		# Find furnace slots
 		var block = SmeltingPanel.furnace_in_use
