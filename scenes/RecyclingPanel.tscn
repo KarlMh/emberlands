@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cg4ukqpkgths8" path="res://scenes/inventory_slot.tscn" id="2_5yv5v"]
 [ext_resource type="Script" uid="uid://bh4io2ojecjx8" path="res://scripts/recycling_panel.gd" id="2_535h0"]
 [ext_resource type="Script" uid="uid://bwqps87ukwciw" path="res://scripts/recycle_slot_container.gd" id="3_u2rge"]
-[ext_resource type="PackedScene" uid="uid://bwlyckchs4ioc" path="res://scenes/count_item.tscn" id="5_m8mc8"]
+[ext_resource type="PackedScene" uid="uid://bwlyckchs4ioc" path="res://scenes/count_item_recycle.tscn" id="5_m8mc8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cwxs"]
 
@@ -150,18 +150,21 @@ theme_override_constants/v_separation = 10
 columns = 6
 script = ExtResource("3_u2rge")
 
-[node name="count_item" parent="." instance=ExtResource("5_m8mc8")]
+[node name="count_item_recycle" parent="RecPanel" instance=ExtResource("5_m8mc8")]
+z_index = 20
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.5
 offset_left = -60.0
-offset_top = -37.0
+offset_top = -18.5
 offset_right = 60.0
-offset_bottom = 0.0
+offset_bottom = 18.5
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
-[connection signal="text_submitted" from="count_item" to="count_item" method="_on_text_submitted"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="text_submitted" from="RecPanel/count_item_recycle" to="." method="_on_count_item_recycle_text_submitted"]

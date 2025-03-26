@@ -143,15 +143,19 @@ func claim_furnace_item(slot):
 # Setters for furnace slot items and their counts
 
 
-func set_recycler_data(item, item_count):
+func set_recycler_data(item, item_count, is_removing=false):
 	for i in range(len(self.recycling_upper_slots)):
-		if  self.recycling_upper_slots[i] != null and self.recycling_upper_slots[i][0] == item:
-			self.recycling_upper_slots[i] = [item, item_count]
+		if  self.recycling_upper_slots[i] != null and self.recycling_upper_slots[i][0] and self.recycling_upper_slots[i][0].get_name() == item.get_name():
+			if is_removing:
+				self.recycling_upper_slots[i][1] = item_count
+			else:
+				self.recycling_upper_slots[i][1] += item_count
 			print("✅ Upper slot", i, "set to", item.get_name(), item_count)
 			
 			if item_count <= 0:
 				self.recycling_upper_slots[i][0] = null
 				self.recycling_upper_slots[i][1] = 0
+				self.recycling_upper_slots[i] = null
 			return
 		elif self.recycling_upper_slots[i] == null:
 			self.recycling_upper_slots[i] = [item, item_count]
@@ -160,8 +164,8 @@ func set_recycler_data(item, item_count):
 
 func set_recycler_down_data(item, item_count):
 	for i in range(len(self.recycling_down_slots)):
-		if  self.recycling_down_slots[i] != null and self.recycling_down_slots[i][0] == item:
-			self.recycling_down_slots[i] = [item, item_count]
+		if  self.recycling_down_slots[i] != null and self.recycling_down_slots[i][0].get_name() == item.get_name():
+			self.recycling_down_slots[i][1] += item_count
 			print("✅ Upper slot", i, "set to", item.get_name(), item_count)
 			return
 		elif self.recycling_down_slots[i] == null:
@@ -202,10 +206,12 @@ func load_recycler_data():
 				print("⚠️ Down slot", i, "already has an item.")
 
 
-func claim_recycler_item(slot):
+func claim_recycler_item(slot, stop_action=false):
+	global_stop_action = stop_action
 	for i in range(len(recycling_upper_slots)):
 		if upper_slots.get_child(i) == slot:
 			self.recycling_upper_slots[i] = null
+			slot.clear_slot()
 			print("✅ Claimed from upper slot", i)
 			load_recycler_data()
 			return
@@ -213,6 +219,7 @@ func claim_recycler_item(slot):
 	for i in range(len(recycling_down_slots)):
 		if down_slots.get_child(i) == slot:
 			self.recycling_down_slots[i] = null
+			slot.clear_slot()
 			print("✅ Claimed from down slot", i)
 			load_recycler_data()
 			return
@@ -220,13 +227,19 @@ func claim_recycler_item(slot):
 
 
 
-func set_fuel_slot_item(item, item_count) -> void:
-	self.fuel_slot_item = item
-	self.fuel_slot_item_count = item_count
+func set_fuel_slot_item(item, item_count, smelting=false) -> void:
+	if !self.fuel_slot_item or smelting:
+		self.fuel_slot_item = item
+		self.fuel_slot_item_count = item_count
+	else:
+		self.fuel_slot_item_count += item_count
 
-func set_mats_slot_item(item, item_count) -> void:
-	self.mats_slot_item = item
-	self.mats_slot_item_count = item_count
+func set_mats_slot_item(item, item_count, smelting=false) -> void:
+	if !self.mats_slot_item or smelting:
+		self.mats_slot_item = item
+		self.mats_slot_item_count = item_count
+	else:
+		self.mats_slot_item_count += item_count
 
 func set_final_slot_item(item, item_count) -> void:
 	self.final_slot_item = item
@@ -265,8 +278,8 @@ func smelt_item(fuel, raw_ore, fuel_count, raw_ore_count):
 			if raw_ore and raw_ore.get_name() in accepted_for_smelting:
 			
 				# Smelting is complete
-				set_fuel_slot_item(fuel_slot_item, fuel_slot_item_count - 1)
-				set_mats_slot_item(mats_slot_item, mats_slot_item_count - 1)
+				set_fuel_slot_item(fuel_slot_item, fuel_slot_item_count - 1, true)
+				set_mats_slot_item(mats_slot_item, mats_slot_item_count - 1, true)
 					
 				
 				set_final_slot_item(dl.create_item("IRON"), final_slot_item_count + 1)
@@ -276,7 +289,12 @@ func smelt_item(fuel, raw_ore, fuel_count, raw_ore_count):
 				
 				smelt_item(fuel, raw_ore, fuel_count, raw_ore_count)
 				
-func recycle_item(item, item_count):
+var global_stop_action: bool				
+
+func recycle_item(item, item_count, slot):
+	if global_stop_action:
+		global_stop_action = false
+		return
 	# Check if there are no items left to recycle
 	if item_count <= 0:
 		print("⚠️ No items left to recycle.")
@@ -293,6 +311,10 @@ func recycle_item(item, item_count):
 		print("♻️ Recycling in progress...")
 		recycle_timer.start()
 		await recycle_timer.timeout  # Wait until timer finishes
+		
+		if global_stop_action:
+			global_stop_action = false
+			return
 
 		# Get item data from the data loader
 		var item_data = dl._get(item.get_name())
@@ -308,12 +330,12 @@ func recycle_item(item, item_count):
 				print("✅ Recycled", recycled_count, recycled_item_name)
 
 			# Reduce item count in upper slots
-			set_recycler_data(item, item_count - 1)
+			set_recycler_data(item, item_count - 1, true)
 			load_recycler_data()
 			print("✅ Recycling complete.")
 
 			# Repeat if items remain
-			recycle_item(item, item_count - 1)
+			recycle_item(item, item_count - 1, slot)
 		else:
 			print("⚠️ No recycle data found for", item.get_name())
 

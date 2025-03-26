@@ -18,7 +18,8 @@ var can_drag_and_drop: bool = true  # Set to false for slots that should not sup
 @onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
 @onready var RecyclingPanel = get_tree().get_root().find_child("RecyclingPanel", true, false)
 @onready var recycle_slot_container = get_tree().get_root().find_child("recycle_slot_container", true, false)
-@onready var count_item = get_tree().get_root().find_child("count_item", true, false)
+@onready var count_item_recycle = get_tree().get_root().find_child("count_item_recycle", true, false)
+@onready var count_item_smelt = get_tree().get_root().find_child("count_item_smelt", true, false)
 
 
 
@@ -73,45 +74,55 @@ func update_display():
 		
 		
 func recycle():
-		var recycler = RecyclingPanel.recycler_in_use
-		
-
-		# Assuming you already have a reference to your LineEdit node
-		var line_edit = count_item  # Replace with the actual path to your LineEdit
-		
-		line_edit.visible = true
-
-		# Get the user input as a string
-		if line_edit.value_entered:
+	var recycler = RecyclingPanel.recycler_in_use
 			
-			var input_text = line_edit.count
+	var input_text = count_item_recycle.count
 
-			# Try to convert the input to an integer
-			var temp_item_count = int(input_text) 
-
-			# Now use item_count in your recycling logic
-			if item and self in recycle_slot_container.recycle_slots and temp_item_count <= item_count:
-				if item:
-					# Set recycler data with the item and item_count from user input
-					recycler.set_recycler_data(item, temp_item_count)
-					recycler.load_recycler_data()
+	# Try to convert the input to an integer
+	var temp_item_count = int(input_text) 
+			
+	if temp_item_count <= item_count:
+		# Set recycler data with the item and item_count from user input
+		recycler.set_recycler_data(item, temp_item_count, false)
+						
+		# Remove the item from the inventory
+		inventory.remove_item(item, temp_item_count)
+		recycler.load_recycler_data()
 					
-					# Remove the item from the inventory
-					inventory.remove_item(item, temp_item_count)
-					
-					# Recycle the item with the specified count
-					recycler.recycle_item(item, temp_item_count)
-
-		
-		if item and (self in recycler.upper_slots.get_children() or self in recycler.down_slots.get_children()):
-			for i in item_count:
-				inventory.add_item(item)
-				
-			recycler.claim_recycler_item(self)
-		
+		# Recycle the item with the specified count	
+		recycler.recycle_item(item, temp_item_count, self)
+		recycler.load_recycler_data()
 		recycle_slot_container.sync_with_inventory()
 		
-		line_edit.value_entered = false
+func smelt():
+	var block = SmeltingPanel.furnace_in_use
+	var input_text = count_item_smelt.count  # Get user input count
+	var temp_item_count = int(input_text)  # Convert input to integer
+	
+	if temp_item_count <= item_count:
+		var resource_type = dl._get(item.get_name())
+		if resource_type:
+			resource_type = resource_type["resource_type"]
+
+		# Auto-add to the correct slot with input count
+		if resource_type == "fuel":
+			block.set_fuel_slot_item(item, temp_item_count)
+			block.load_furnace_data()
+			inventory.remove_item(item, temp_item_count)
+				
+		elif resource_type == "raw_ore":
+			block.set_mats_slot_item(item, temp_item_count)
+			block.load_furnace_data()
+			inventory.remove_item(item, temp_item_count)
+
+		block.smelt_item(
+			block.fuel_slot_item, 
+			block.mats_slot_item, 
+			block.fuel_slot_item_count, 
+			block.mats_slot_item_count
+		)
+		smelt_slot_container.sync_with_inventory()
+
 
 func _gui_input(event):
 	if event is InputEventMouseButton and event.double_click:
@@ -120,37 +131,31 @@ func _gui_input(event):
 		if item and (self in inventory.slots or self == hand_item_slot) and item.item_type == Item.ItemType.TOOL:
 			move_to_hand()
 			return
+
+		if item and self in recycle_slot_container.recycle_slots:
+			count_item_recycle.last_slot = self
+			count_item_recycle.visible = true
 			
-		count_item.last_slot = self
+		var recycler = RecyclingPanel.recycler_in_use
 		
-		recycle()
+		if item and recycler and (self in recycler.upper_slots.get_children() or self in recycler.down_slots.get_children()):
+			for i in item_count:
+				inventory.add_item(item)
+				
+			recycler.claim_recycler_item(self, true)
+			
+		
+		recycle_slot_container.sync_with_inventory()
 		
 		# Find furnace slots
+		
+		if item and self in smelt_slot_container.smelting_slots:
+			count_item_smelt.last_slot = self
+			count_item_smelt.visible = true
+			
 		var block = SmeltingPanel.furnace_in_use
 		
-		if item and self in smelt_slot_container.smelting_slots:	
-			var resource_type = dl._get(item.get_name())
-			if resource_type:
-				resource_type = resource_type["resource_type"]
-
-			
-			# Auto-add to the correct slot
-			if resource_type == "fuel":
-				if not block.fuel_slot_item:
-					block.set_fuel_slot_item(item, item_count)
-
-					block.load_furnace_data()
-					inventory.remove_item(item, item_count)
-					
-			elif resource_type == "raw_ore":
-				if not block.mats_slot_item:
-					block.set_mats_slot_item(item, item_count)
 		
-					block.load_furnace_data()
-					inventory.remove_item(item, item_count)
-				
-			block.smelt_item(block.fuel_slot_item, block.mats_slot_item, block.fuel_slot_item_count, block.mats_slot_item_count)
-			smelt_slot_container.sync_with_inventory()
 			
 		if item and SmeltingPanel.visible: 
 			if self in block.furnace_slots :
@@ -210,3 +215,11 @@ func update_smelt_slot_display():
 	var smelting_slots = smelt_slot_container.get_children()
 	for slot in smelting_slots:
 		slot.update_display()  # Ensure each slot display is updated properly
+		
+		
+func _on_mouse_entered() -> void:
+	player.can_build = false
+
+
+func _on_mouse_exited() -> void:
+	player.can_build = true

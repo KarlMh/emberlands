@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dmkhqmmr2itjp" path="res://pixel_art/ui/PLUS_UI.png" id="3_2cwxs"]
 [ext_resource type="Texture2D" uid="uid://bkt26ov6r2d03" path="res://pixel_art/ui/ARROW_UI.png" id="4_pbts0"]
 [ext_resource type="Script" uid="uid://bdmosbqthogae" path="res://scripts/smelt_slot_container.gd" id="5_pbts0"]
-[ext_resource type="PackedScene" uid="uid://bwlyckchs4ioc" path="res://scenes/count_item.tscn" id="7_7ty6d"]
+[ext_resource type="PackedScene" uid="uid://cgmm67dysj15f" path="res://scenes/count_item_smelt.tscn" id="7_7ty6d"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cwxs"]
 
@@ -117,7 +117,8 @@ theme_override_constants/v_separation = 10
 columns = 6
 script = ExtResource("5_pbts0")
 
-[node name="count_item" parent="." instance=ExtResource("7_7ty6d")]
+[node name="count_item_smelt" parent="MatsPanel" instance=ExtResource("7_7ty6d")]
+z_index = 20
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -130,3 +131,5 @@ offset_right = 60.0
 offset_bottom = 18.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[connection signal="text_submitted" from="MatsPanel/count_item_smelt" to="MatsPanel/count_item_smelt" method="_on_text_submitted"]

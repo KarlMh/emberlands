@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwlyckchs4ioc"]
+
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_1tmcg"]
+[ext_resource type="Script" uid="uid://b5v7stvo06guc" path="res://scripts/count_item_recycle.gd" id="2_ybb46"]
+
+[node name="count_item_recycle" type="LineEdit"]
+offset_right = 120.0
+offset_bottom = 37.0
+theme = ExtResource("1_1tmcg")
+placeholder_text = "how much?"
+script = ExtResource("2_ybb46")
+
+[connection signal="text_submitted" from="." to="." method="_on_text_submitted"]

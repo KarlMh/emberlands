@@ -13,11 +13,13 @@ func _ready() -> void:
 func _on_text_submitted(new_text: String) -> void:
 	count = new_text
 	value_entered = true
-	self.visible = false
 	self.text = "0"
 	
 
 
 	# Call the _gui_input method from the referenced script and pass the event
 	if last_slot:
-		last_slot.recycle()
+		if int(count) > 0:
+			last_slot.smelt()
+		self.visible = false
+		last_slot = null

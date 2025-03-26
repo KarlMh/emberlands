@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgmm67dysj15f"]
+
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_t7thj"]
+[ext_resource type="Script" uid="uid://dum2exaklwyb6" path="res://scripts/count_item_smelt.gd" id="2_t7thj"]
+
+[node name="count_item_smelt" type="LineEdit"]
+offset_right = 120.0
+offset_bottom = 37.0
+theme = ExtResource("1_t7thj")
+script = ExtResource("2_t7thj")
