@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://b5v7stvo06guc" path="res://scripts/count_item_recycle.gd" id="2_ybb46"]
 
 [node name="count_item_recycle" type="LineEdit"]
-offset_right = 120.0
-offset_bottom = 37.0
+z_index = 20
+offset_right = 200.0
+offset_bottom = 40.0
 theme = ExtResource("1_1tmcg")
 placeholder_text = "how much?"
 script = ExtResource("2_ybb46")

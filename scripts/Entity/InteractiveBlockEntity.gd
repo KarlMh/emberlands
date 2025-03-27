@@ -206,8 +206,7 @@ func load_recycler_data():
 				print("⚠️ Down slot", i, "already has an item.")
 
 
-func claim_recycler_item(slot, stop_action=false):
-	global_stop_action = stop_action
+func claim_recycler_item(slot):
 	for i in range(len(recycling_upper_slots)):
 		if upper_slots.get_child(i) == slot:
 			self.recycling_upper_slots[i] = null
@@ -253,14 +252,17 @@ var smelt_timer = Timer.new()
 
 func smelt_item(fuel, raw_ore, fuel_count, raw_ore_count):
 	
-	if fuel_slot_item_count <= 0:
-		set_fuel_slot_item(null, 0)
-		load_furnace_data()
+	if fuel_slot_item == null and mats_slot_item == null:
 		return
 	
-	if mats_slot_item_count <= 0:
-		set_mats_slot_item(null, 0)
+	if fuel_slot_item_count <= 0:
+		set_fuel_slot_item(null, 0, true)
 		load_furnace_data()
+	
+	if mats_slot_item_count <= 0:
+		set_mats_slot_item(null, 0, true)
+		load_furnace_data()
+
 	
 	if smelt_timer:
 		_parent_node.add_child(smelt_timer)
@@ -288,13 +290,17 @@ func smelt_item(fuel, raw_ore, fuel_count, raw_ore_count):
 				print("✅ Smelting Complete")
 				
 				smelt_item(fuel, raw_ore, fuel_count, raw_ore_count)
-				
-var global_stop_action: bool				
+						
 
 func recycle_item(item, item_count, slot):
-	if global_stop_action:
-		global_stop_action = false
+	var count_items = 0
+	for i in range(len(self.recycling_upper_slots)):
+		if self.recycling_upper_slots[i] != null:
+			count_items += 1
+		
+	if count_items == 0:
 		return
+			
 	# Check if there are no items left to recycle
 	if item_count <= 0:
 		print("⚠️ No items left to recycle.")
@@ -312,9 +318,14 @@ func recycle_item(item, item_count, slot):
 		recycle_timer.start()
 		await recycle_timer.timeout  # Wait until timer finishes
 		
-		if global_stop_action:
-			global_stop_action = false
+		count_items = 0
+		for i in range(len(self.recycling_upper_slots)):
+			if self.recycling_upper_slots[i] != null:
+				count_items += 1
+		
+		if count_items == 0:
 			return
+				
 
 		# Get item data from the data loader
 		var item_data = dl._get(item.get_name())

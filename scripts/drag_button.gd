@@ -7,7 +7,7 @@ var last_mouse_position = Vector2.ZERO
 var is_open = false
 var total_drag_distance = 0  # Track total movement
 
-const MIN_Y = -400
+const MIN_Y = -350
 const MAX_Y = -5
 const CLICK_THRESHOLD = 5  # Max movement to still count as a click
 

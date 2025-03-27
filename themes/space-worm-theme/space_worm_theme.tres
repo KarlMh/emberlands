@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=69 format=3 uid="uid://bqdn1hl5c7fvl"]
+[gd_resource type="Theme" load_steps=70 format=3 uid="uid://bqdn1hl5c7fvl"]
 
 [ext_resource type="FontFile" uid="uid://dcoyeg1tf1500" path="res://themes/space-worm-theme/fonts/ProggyClean.ttf" id="1_6u0fb"]
 [ext_resource type="Texture2D" uid="uid://ba7mvawrmi0qt" path="res://themes/space-worm-theme/button/Blue_Hover.png" id="1_gebbq"]
@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://cjqmfulw5rg55" path="res://themes/space-worm-theme/scrollbar/Scrollbar_Background_Blue.png" id="14_xjco6"]
 [ext_resource type="Texture2D" uid="uid://blst4yq06d5fm" path="res://themes/space-worm-theme/scrollbar/Slider_Blue_Grabber_Vert.png" id="16_12tqw"]
 [ext_resource type="Texture2D" uid="uid://dwswdrnt02kpy" path="res://themes/space-worm-theme/general/Spinner_Blue_Arrows_1.png" id="16_767aa"]
+[ext_resource type="FontFile" uid="uid://caumm1ow7ukxw" path="res://fonts/m5x7.ttf" id="21_k8o5o"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gcxt6"]
 texture = ExtResource("1_lfy6v")
@@ -320,6 +321,8 @@ expand_margin_right = 10.0
 expand_margin_bottom = 6.0
 
 [resource]
+default_font = ExtResource("21_k8o5o")
+default_font_size = 16
 Button/fonts/font = ExtResource("1_6u0fb")
 Button/styles/disabled = SubResource("StyleBoxTexture_gcxt6")
 Button/styles/focus = SubResource("StyleBoxEmpty_07amn")

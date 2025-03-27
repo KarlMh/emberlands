@@ -46,6 +46,8 @@ script = ExtResource("2_upmhx")
 [node name="ChatBox" parent="." instance=ExtResource("12_s2npe")]
 z_index = -5
 layout_mode = 1
+offset_top = -340.0
+offset_bottom = 0.0
 
 [node name="inventory_bar" parent="." instance=ExtResource("1_yorhh")]
 layout_mode = 1
@@ -60,7 +62,7 @@ offset_right = 125.0
 offset_bottom = 5.00012
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(125, 50)
 script = null
 
@@ -81,7 +83,7 @@ offset_top = -15.0
 offset_right = 60.0
 offset_bottom = 15.0
 grow_vertical = 2
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(0, 15)
 theme_override_styles/panel = SubResource("StyleBoxFlat_n55u8")
 script = ExtResource("3_ck6tt")
@@ -108,7 +110,7 @@ label_settings = SubResource("LabelSettings_w4khy")
 
 [node name="inventory_window" parent="." instance=ExtResource("5_u2aqm")]
 layout_mode = 1
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.5, 1.5)
 
 [node name="options" type="Panel" parent="."]
 layout_mode = 1
@@ -123,7 +125,7 @@ offset_right = 125.0
 offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(125, 150)
 size_flags_horizontal = 4
 script = ExtResource("6_cppry")
@@ -184,7 +186,7 @@ anchor_right = 1.0
 offset_left = -50.0
 offset_bottom = 40.0
 grow_horizontal = 0
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.5, 1.5)
 pivot_offset = Vector2(50, 0)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_bsgeq")
 
@@ -209,17 +211,17 @@ icon_alignment = 1
 expand_icon = true
 script = ExtResource("10_vnx7g")
 
-[node name="RecyclingPanel" parent="." instance=ExtResource("15_upmhx")]
-layout_mode = 1
-offset_top = -125.0
-offset_bottom = 125.0
-scale = Vector2(2.5, 2.5)
-
 [node name="SmeltingPanel" parent="." instance=ExtResource("13_g2v8e")]
 layout_mode = 1
 offset_top = -125.0
 offset_bottom = 125.0
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.5, 1.5)
+
+[node name="RecyclingPanel" parent="." instance=ExtResource("15_upmhx")]
+layout_mode = 1
+offset_top = -120.0
+offset_bottom = 120.0
+scale = Vector2(1.5, 1.5)
 
 [connection signal="pressed" from="options/VBoxContainer/respawn_button" to="options/VBoxContainer/respawn_button" method="_on_pressed"]
 [connection signal="pressed" from="options/VBoxContainer/main_menu_button" to="options/VBoxContainer/main_menu_button" method="_on_pressed"]

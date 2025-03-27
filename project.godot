@@ -22,10 +22,11 @@ procam="*res://addons/ProCam2D/scripts/autoload.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1920
+window/size/window_height_override=1080
 window/stretch/mode="viewport"
-window/stretch/aspect="expand"
 
 [editor_plugins]
 
@@ -34,6 +35,11 @@ enabled=PackedStringArray("res://addons/ProCam2D/plugin.cfg", "res://addons/beau
 [global_group]
 
 player=""
+
+[gui]
+
+theme/default_font_antialiasing=0
+theme/default_font_multichannel_signed_distance_field=true
 
 [input]
 

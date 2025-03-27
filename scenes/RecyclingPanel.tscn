@@ -17,7 +17,7 @@ anchor_bottom = 0.5
 offset_left = -200.0
 offset_top = -150.0
 offset_right = 200.0
-offset_bottom = 100.0
+offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(200, 125)
@@ -111,7 +111,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -150.0
+offset_top = -140.0
 offset_right = 200.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -151,20 +151,18 @@ columns = 6
 script = ExtResource("3_u2rge")
 
 [node name="count_item_recycle" parent="RecPanel" instance=ExtResource("5_m8mc8")]
-z_index = 20
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -60.0
-offset_top = -18.5
-offset_right = 60.0
-offset_bottom = 18.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -40.0
+offset_right = 100.0
+offset_bottom = 0.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="text_submitted" from="RecPanel/count_item_recycle" to="." method="_on_count_item_recycle_text_submitted"]

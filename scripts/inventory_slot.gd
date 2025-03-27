@@ -142,7 +142,7 @@ func _gui_input(event):
 			for i in item_count:
 				inventory.add_item(item)
 				
-			recycler.claim_recycler_item(self, true)
+			recycler.claim_recycler_item(self)
 			
 		
 		recycle_slot_container.sync_with_inventory()
