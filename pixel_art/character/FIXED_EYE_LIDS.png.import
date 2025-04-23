@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://curgmp0su2rn1"
-path="res://.godot/imported/main_body.png-a57d7c4fa8908e5396f9decf93e64a1c.ctex"
+uid="uid://b1uno5wfut4b1"
+path="res://.godot/imported/FIXED_EYE_LIDS.png-0718350f3448f030e75c1d2dd933f9dc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pixel_art/character/main_body.png"
-dest_files=["res://.godot/imported/main_body.png-a57d7c4fa8908e5396f9decf93e64a1c.ctex"]
+source_file="res://pixel_art/character/FIXED_EYE_LIDS.png"
+dest_files=["res://.godot/imported/FIXED_EYE_LIDS.png-0718350f3448f030e75c1d2dd933f9dc.ctex"]
 
 [params]
 

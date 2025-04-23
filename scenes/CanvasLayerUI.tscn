@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ct7oovfvolh6h"]
+
+[ext_resource type="PackedScene" uid="uid://cqmu0xy3fueuf" path="res://scenes/game_ui.tscn" id="1_i7ucq"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="game_ui" parent="." instance=ExtResource("1_i7ucq")]
+metadata/_edit_use_anchors_ = true

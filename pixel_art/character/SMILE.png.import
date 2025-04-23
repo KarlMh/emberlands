@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgt27yugrkfw5"
-path="res://.godot/imported/dirt_block_2.png-b21a1bf4ca0fe1a0324ad61e9ebef4d9.ctex"
+uid="uid://bf87tewcd5873"
+path="res://.godot/imported/SMILE.png-739c54750800b34af864b268c61bd9fe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pixel_art/character/dirt_block_2.png"
-dest_files=["res://.godot/imported/dirt_block_2.png-b21a1bf4ca0fe1a0324ad61e9ebef4d9.ctex"]
+source_file="res://pixel_art/character/SMILE.png"
+dest_files=["res://.godot/imported/SMILE.png-739c54750800b34af864b268c61bd9fe.ctex"]
 
 [params]
 

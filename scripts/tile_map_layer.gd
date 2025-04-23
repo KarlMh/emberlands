@@ -9,6 +9,9 @@ var spawn_tile = null
 var block_entities = {}
 var bg_entities = {}
 
+var block_map_ids = {}
+var bg_map_ids = {}
+
 var dl = DataLoader
 
 @onready var blockLayer = get_tree().get_root().find_child("blockLayer", true, false)
@@ -26,7 +29,6 @@ var current_frame = 0
 func _ready():
 	noise.seed = randi()
 	noise.frequency = 0.1
-	generate_world()
 	
 	# Set up the animation timer to update the frame every 0.1 seconds
 	animation_timer.wait_time = 0.15
@@ -66,9 +68,30 @@ func update_block_below(tile_pos: Vector2i):
 func get_block_name_at_position(pos):
 	return block_entities[pos].get_name()
 
+func load_world(block_map_ids=block_map_ids, bg_map_ids=bg_map_ids, block_entities=block_entities, bg_entities=bg_entities, sp=spawn_tile,):
+	var bg_layer = get_parent().find_child("backgroundLayer", true, false)
+	for x in range(WORLD_WIDTH):
+		for y in range(WORLD_HEIGHT):
+			var tile_pos = Vector2i(x, y)
+
+			set_cell(tile_pos, block_map_ids[tile_pos], Vector2i(0, 0))
+			block_entities = block_entities
+			bg_layer.set_cell(tile_pos, bg_map_ids[tile_pos], Vector2i(0, 0))
+			bg_entities = bg_entities
+	
+	spawn_tile = sp
+
+
 
 func generate_world():
 	randomize()
+	
+	for x in range(WORLD_WIDTH):
+		for y in range(WORLD_HEIGHT):
+			var tile_pos = Vector2i(x, y)
+			set_cell(tile_pos, dl.BLOCK_BEDROCK["id"], Vector2i(0, 0))
+			block_entities[tile_pos] = BlockEntity.new(dl.BLOCK_BEDROCK["id"], tile_pos, self, false)
+			bg_entities[tile_pos] = BlockEntity.new(dl.BLOCK_BEDROCK["id"], tile_pos, self, false)
 
 	var dirt_start_y = WORLD_HEIGHT / 2
 	var cave_start_y = WORLD_HEIGHT - 1
@@ -158,6 +181,16 @@ func generate_world():
 		generate_world()
 		
 	print("World generated with smooth hills and cave background intact.")
+	
+	for x in range(WORLD_WIDTH):
+		for y in range(WORLD_HEIGHT):
+			var tile_pos = Vector2i(x, y)
+
+			# ✅ Access ID correctly
+			block_map_ids[tile_pos] = block_entities[tile_pos].get_id()
+			bg_map_ids[tile_pos] = bg_entities[tile_pos].get_id()
+	
+	return [block_map_ids, bg_map_ids, block_entities, bg_entities]
 
 
 func place_bedrock_spawn(dirt_y):

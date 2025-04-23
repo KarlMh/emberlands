@@ -45,6 +45,30 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath("visuals:scale")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+properties/8/path = NodePath("jump_sound:playing")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath("break_sound:playing")
+properties/9/spawn = true
+properties/9/replication_mode = 1
+properties/10/path = NodePath("place_sound:playing")
+properties/10/spawn = true
+properties/10/replication_mode = 1
+properties/11/path = NodePath("death_sound:playing")
+properties/11/spawn = true
+properties/11/replication_mode = 1
+properties/12/path = NodePath("CanvasLayer:visible")
+properties/12/spawn = true
+properties/12/replication_mode = 1
+properties/13/path = NodePath("CanvasLayer/game_ui/display_gems/Label:text")
+properties/13/spawn = true
+properties/13/replication_mode = 1
+properties/14/path = NodePath("CanvasLayer/game_ui/inventory_window:position")
+properties/14/spawn = true
+properties/14/replication_mode = 1
+properties/15/path = NodePath("CanvasLayer/game_ui/inventory_window:visible")
+properties/15/spawn = true
+properties/15/replication_mode = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f1ej7"]
 size = Vector2(14, 26)
@@ -403,6 +427,21 @@ tracks/9/keys = {
 "update": 0,
 "values": [0.0, 0.0, 0.0]
 }
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("jump_sound")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("10_gulkr")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="Animation" id="Animation_8qlhc"]
 resource_name = "walking"
@@ -655,6 +694,8 @@ _data = {
 z_index = 20
 collision_layer = 128
 script = ExtResource("1_ga323")
+player_gems = null
+player_id = null
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_4r5pv")
@@ -767,7 +808,6 @@ libraries = {
 }
 
 [node name="jump_sound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("10_gulkr")
 volume_db = -20.0
 
 [node name="break_sound" type="AudioStreamPlayer2D" parent="."]

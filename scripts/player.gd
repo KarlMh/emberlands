@@ -19,10 +19,12 @@ var can_build: bool = true
 var can_double_jump: bool = true # Set to false to disable double jumping
 var can_triple_jump: bool = true   # Set to false to disable triple jumping
 
-@onready var animated_sprite = $AnimationPlayer
-@onready var animated_sprite2 = $AnimationPlayer2
-@onready var animated_sprite3 = $AnimationPlayer3
-@onready var animated_sprite4 = $AnimationPlayer4
+@onready var animation_player = $AnimationPlayer
+@onready var animation_player2 = $AnimationPlayer2
+@onready var animation_player3 = $AnimationPlayer3
+@onready var animation_player4 = $AnimationPlayer4
+
+@onready var MN = $"../MultiplayerManager"
 
 @onready var blockLayer = get_tree().get_root().find_child("blockLayer", true, false)
 @onready var breakingLayer = get_tree().get_root().find_child("breakingLayer", true, false)
@@ -32,24 +34,24 @@ var can_triple_jump: bool = true   # Set to false to disable triple jumping
 
 @onready var erase_timer = $"../breakingLayer/erase_timer"
 @onready var visuals = $visuals
-@onready var camera = get_tree().get_root().find_child("Camera2D", true, false)
+@onready var camera = $Camera2D  # Each player has their own camera as a child
 
-@onready var inventory_manager = get_tree().get_root().find_child("slot_container", true, false)
-@onready var inventory_window = get_tree().get_root().find_child("inventory_window", true, false)
-@onready var options = get_tree().get_root().find_child("options", true, false)
+@onready var inventory_manager = find_child("slot_container", true, false)
+@onready var inventory_window = find_child("inventory_window", true, false)
+@onready var options = find_child("options", true, false)
 
-@onready var main_inventory = get_tree().get_root().find_child("main_inventory", true, false)
-@onready var crafting_inventory = get_tree().get_root().find_child("crafting_inventory", true, false)
+@onready var main_inventory = find_child("main_inventory", true, false)
+@onready var crafting_inventory = find_child("crafting_inventory", true, false)
 
-@onready var jump_sound = get_tree().get_root().find_child("jump_sound", true, false)
-@onready var break_sound = get_tree().get_root().find_child("break_sound", true, false)
-@onready var place_sound = get_tree().get_root().find_child("place_sound", true, false)
-@onready var death_sound = get_tree().get_root().find_child("death_sound", true, false)
+@onready var jump_sound = find_child("jump_sound", true, false)
+@onready var break_sound = find_child("break_sound", true, false)
+@onready var place_sound = find_child("place_sound", true, false)
+@onready var death_sound = find_child("death_sound", true, false)
 
-@onready var ChatBox = get_tree().get_root().find_child("ChatBox", true, false)  # Find chat input field
-@onready var SmeltingPanel = get_tree().get_root().find_child("SmeltingPanel", true, false)
-@onready var RecyclingPanel = get_tree().get_root().find_child("RecyclingPanel", true, false)
-@onready var game_ui = get_tree().get_root().find_child("game_ui", true, false)
+@onready var ChatBox = find_child("ChatBox", true, false)  # Find chat input field
+@onready var SmeltingPanel = find_child("SmeltingPanel", true, false)
+@onready var RecyclingPanel = find_child("RecyclingPanel", true, false)
+@onready var game_ui = find_child("game_ui", true, false)
 
 @onready var seed_planter = preload("res://scripts/seed_planter.gd").new()
 
@@ -68,38 +70,56 @@ var placing_block = false
 var mining_power = 0
 
 @export var player_gems: int
+@export var player_id: int
+
+func _enter_tree() -> void:
+	set_multiplayer_authority(player_id)
 
 func _ready():
+	await get_tree().process_frame
+	
+	while not blockLayer:
+		await get_tree().process_frame
+			
+		
 	await get_tree().create_timer(0.01).timeout
 	
-	spawn_player()
-	blink_delay = get_blink_delay()
-	add_child(seed_planter)
+	if is_multiplayer_authority():
+		spawn_player()
+		print("Local player ", player_id, " ready")
+		enable_camera()
+
+		# Give items
+		for i in 10:
+			inventory_manager.add_item(dl.create_item("FURNACE"))
+			inventory_manager.add_item(dl.create_item("BLOCK_IRON"))
+			inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
+			inventory_manager.add_item(dl.create_item("RECYCLE_MACHINE"))
 	
 	
-	
-	for i in 10:
-		inventory_manager.add_item(dl.create_item("FURNACE"))
-		inventory_manager.add_item(dl.create_item("BLOCK_IRON"))
-		
-		inventory_manager.add_item(dl.create_item("GOLDEN_PICKAXE"))
-		
-		inventory_manager.add_item(dl.create_item("RECYCLE_MACHINE"))
+func enable_camera():
+	camera.make_current()
+	print("Camera enabled for player ", player_id)
 
 func _physics_process(delta: float) -> void:
+	if is_multiplayer_authority():
+			
 		
-	interact_smelt()	
-	apply_gravity(delta)
-	
-	if not is_frozen:
-		handle_jump()
-		handle_movement(delta)
-		handle_block_actions(delta)
-	
-	move_and_slide()
-	handle_animations()
-	clamp_player_position()
-	handle_blink(delta)
+			if blockLayer:	
+				interact_smelt()	
+				
+			apply_gravity(delta)
+			
+			if not is_frozen:
+					handle_jump()
+					handle_movement(delta)
+					handle_block_actions(delta)
+			
+			move_and_slide()
+			handle_animations()
+			clamp_player_position()
+			handle_blink(delta)
+
 
 
 func spawn_player():
@@ -118,35 +138,33 @@ func apply_gravity(delta: float):
 		velocity.y += get_gravity().y * delta
 		
 
-# Modify your handle_jump function like this:
 func handle_jump() -> void:
 	if Input.is_action_just_pressed("jump"):
 		if is_on_floor():
 			# Initial jump from ground
 			velocity.y = JUMP_VELOCITY
-			if not jump_sound.playing:
-				jump_sound.play()
-			animated_sprite.play("jumping")
 			can_double_jump = true  # Reset double jump ability
 			can_triple_jump = true  # Reset triple jump ability when jumping from ground
+			if not jump_sound.playing:  # Prevent overlapping sounds
+				jump_sound.play()
 		elif can_double_jump and not is_on_floor():
 			# Double jump
 			velocity.y = DOUBLE_JUMP_VELOCITY
-			if not jump_sound.playing:
-				jump_sound.play()
-			animated_sprite.play("jumping")
+
 			can_double_jump = false  # Prevent multiple double jumps
 			can_triple_jump = true  # Allow triple jump after double jump
+			if not jump_sound.playing:  # Prevent overlapping sounds
+				jump_sound.play()
 		elif can_triple_jump and not can_double_jump and not is_on_floor():
 			# Triple jump
 			velocity.y = TRIPLE_JUMP_VELOCITY
-			if not jump_sound.playing:
-				jump_sound.play()
-			animated_sprite.play("jumping")
 			can_triple_jump = false  # Prevent multiple triple jumps
+			if not jump_sound.playing:  # Prevent overlapping sounds
+				jump_sound.play()
 
 	if Input.is_action_just_released("jump") and velocity.y < 0:
 		velocity.y *= 0.4
+
 
 func handle_movement(delta: float):
 	var direction = Input.get_axis("ui_left", "ui_right")
@@ -172,20 +190,25 @@ func handle_movement(delta: float):
 		
 
 
-
 func handle_animations():
 	if is_on_floor():
 		if abs(velocity.x) > 1:
-			animated_sprite.speed_scale = 2
-			animated_sprite.play("walking")
+			animation_player.speed_scale = 2
+			animation_player.play("walking")
 		else:
-			animated_sprite.play("RESET")
+			animation_player.play("RESET")
 	else:
-		if velocity.y < 0:
-			animated_sprite.speed_scale = 2
-			animated_sprite.play("jumping")
-		elif velocity.y > 0:
-			animated_sprite4.speed_scale = 2
+		if velocity.y < -1:  # Small threshold to avoid quick switching
+			if animation_player.current_animation != "jumping":
+				animation_player.speed_scale = 2
+				animation_player.play("jumping")
+		elif velocity.y > 1:  # Small threshold to avoid quick switching
+			if animation_player.current_animation != "falling":
+				animation_player.speed_scale = 2
+				animation_player.play("falling")
+
+
+
 
 
 func clamp_player_position():
@@ -196,7 +219,7 @@ func handle_blink(delta: float):
 	blink_timer += delta
 	if blink_timer >= blink_delay and is_on_floor():
 		can_blink = false
-		animated_sprite2.play("blink")
+		animation_player2.play("blink")
 		blink_timer = 0.0
 		can_blink = true
 		blink_delay = get_blink_delay()
@@ -209,8 +232,8 @@ func get_blink_delay() -> float:
 func handle_block_actions(delta: float):
 	action_timer += delta
 	if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_action_pressed("ui_break")) and !game_ui.any_ui_shown() and can_build:
-		animated_sprite3.speed_scale = 1.5
-		animated_sprite3.play("hand_movement")
+		animation_player3.speed_scale = 1.5
+		animation_player3.play("hand_movement")
 		if action_timer >= TIME_BETWEEN_ACTIONS:
 			action_timer = 0
 			break_block()
@@ -305,6 +328,7 @@ func break_block() -> void:
 		# Check foreground block
 		if blockLayer.get_cell_source_id(tile_pos) != dl.EMPTY['id']:
 			if blockLayer.block_entities.has(tile_pos):
+				
 				remove_loader()
 				if _current_block and _current_block.get_position() != tile_pos:
 					remove_loader()
@@ -313,7 +337,7 @@ func break_block() -> void:
 				var is_dirt_block = block_id == dl.BLOCK_DIRT["id"] or block_id == dl.BLOCK_DEEP_DIRT["id"]
 				if not break_sound.playing and !block.is_being_picked_up() and block.can_be_damaged():  # Prevent overlapping sounds
 						break_sound.play()
-				if block.reduce_hp(mining_power, blockLayer, breakingLayer):
+				if block.reduce_hp(mining_power, blockLayer, breakingLayer):				
 					player_gems += block.get_gems_to_drop()
 					var dropped_item = block.drop_block()
 					if dropped_item:
@@ -321,6 +345,13 @@ func break_block() -> void:
 							inventory_manager.add_item(item)
 					blockLayer.set_cell(tile_pos, dl.EMPTY['id'])
 					blockLayer.block_entities[tile_pos] = BlockEntity.new(dl.EMPTY['id'], tile_pos, self, false)
+
+					if multiplayer.is_server():
+						MN.notify_block_break(tile_pos, true, dl.EMPTY["id"])
+					else:
+						rpc_id(1, "notify_block_break", tile_pos, true, dl.EMPTY["id"])
+
+
 
 					# **Only update below if breaking dirt**
 					if is_dirt_block:
@@ -346,6 +377,11 @@ func break_block() -> void:
 							inventory_manager.add_item(item)
 					bg_layer.set_cell(tile_pos, dl.EMPTY['id'])
 					blockLayer.bg_entities[tile_pos] = BackgroundEntity.new(dl.EMPTY['id'], tile_pos, self, false)
+
+					if multiplayer.is_server():
+						MN.notify_block_break(tile_pos, false, dl.EMPTY["id"])
+					else:
+						rpc_id(1, "notify_block_break", tile_pos, false, dl.EMPTY["id"])
 
 					# **Only update below if breaking dirt**
 					if is_dirt_block:
@@ -560,8 +596,8 @@ func place_block() -> void:
 				inventory_manager.remove_item(selected_item, 1)
 
 				# Play the placement animation
-				animated_sprite3.speed_scale = 1.5
-				animated_sprite3.play("hand_movement")
+				animation_player3.speed_scale = 1.5
+				animation_player3.play("hand_movement")
 				
 				if not place_sound.playing:  # Prevent overlapping sounds
 					place_sound.play()

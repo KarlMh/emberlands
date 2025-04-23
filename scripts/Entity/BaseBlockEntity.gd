@@ -96,7 +96,6 @@ func pick_up_block():
 
 # Function to spawn the progress bar
 func _spawn_loader() -> ProgressBar:
-	print("LOAAAAADDDDERRRRR")
 	
 	var loader = ProgressBar.new()
 	loader.show_percentage = false

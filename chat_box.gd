@@ -1,7 +1,8 @@
 extends Control
 
 var messages = []
-@onready var player = get_tree().get_root().find_child("player", true, false)
+@onready var player_id = multiplayer.get_unique_id()
+@onready var player = get_tree().get_root().find_child("Player_" + str(player_id), true, false)
 
 var SPEED = 200.0
 var JUMP_VELOCITY = -400.0

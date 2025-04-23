@@ -1,7 +1,8 @@
 extends Node2D
 
 @onready var hand_sprite = $"."  # Sprite to display equipped item
-@onready var player = $"../../../.."  # Reference to the player node
+@onready var player_id = multiplayer.get_unique_id()
+@onready var player = get_tree().get_root().find_child("Player_" + str(player_id), true, false)
 
 var equipped_item: Item = null
 

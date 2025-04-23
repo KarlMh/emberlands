@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0eguf0gkllf1"
-path="res://.godot/imported/dirt_block.png-b3637fbb2233f61b639605707274fcff.ctex"
+uid="uid://dnxdoiglvcsqd"
+path="res://.godot/imported/PULPE.png-7a7c1c6636e7621428b1c0e65c213abb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pixel_art/character/dirt_block.png"
-dest_files=["res://.godot/imported/dirt_block.png-b3637fbb2233f61b639605707274fcff.ctex"]
+source_file="res://pixel_art/character/PULPE.png"
+dest_files=["res://.godot/imported/PULPE.png-7a7c1c6636e7621428b1c0e65c213abb.ctex"]
 
 [params]
 

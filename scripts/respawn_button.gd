@@ -1,6 +1,7 @@
 extends Button
 
-@onready var player = get_tree().get_root().find_child("player", true, false)
+@onready var player_id = multiplayer.get_unique_id()
+@onready var player = get_tree().get_root().find_child("Player_" + str(player_id), true, false)
 @onready var options = get_tree().get_root().find_child("options", true, false)
 
 var can_respawn = true  # Cooldown flag

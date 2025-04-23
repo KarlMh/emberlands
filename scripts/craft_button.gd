@@ -1,6 +1,7 @@
 extends Button
 
-@onready var player = get_tree().get_root().find_child("player", true, false)
+@onready var player_id = multiplayer.get_unique_id()
+@onready var player = get_tree().get_root().find_child("Player_" + str(player_id), true, false)
 @onready var craft_list = get_tree().get_root().find_child("craft_list", true, false)  # GridContainer containing the buttons
 
 var dl = DataLoader
@@ -18,6 +19,7 @@ func _ready() -> void:
 
 func _on_pressed() -> void:
 	# Loop through all the buttons in the GridContainer (craft_list)
+	var player = get_tree().get_root().find_child("Player_" + str(player_id), true, false)
 	
 	var item_name = get_child(0).name  # Get the name of the button (which corresponds to the item name)
 	print("Selected item:", item_name)  # Debugging line

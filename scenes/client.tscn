@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhcgxljmv8w85"]
+
+[ext_resource type="Script" uid="uid://mcfn8ftsrqp8" path="res://scripts/client.gd" id="1_5f806"]
+
+[node name="Client" type="Node"]
+script = ExtResource("1_5f806")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://n46n5hkwy7i")
+spawn_path = NodePath("..")
+spawn_limit = 6

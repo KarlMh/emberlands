@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dl2srnpujdl4f"]
+
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="1_lwmxx"]
+[ext_resource type="Script" uid="uid://0c2jwo3ivedb" path="res://scripts/player_name.gd" id="2_fbe3v"]
+
+[node name="PlayerName" type="RichTextLabel"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_lwmxx")
+bbcode_enabled = true
+text = "karl"
+fit_content = true
+autowrap_mode = 0
+script = ExtResource("2_fbe3v")

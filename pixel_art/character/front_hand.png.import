@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7e0icej03wq6"
-path="res://.godot/imported/front_hand.png-c93f16ade9d6deec46573f7f8cb2547d.ctex"
+uid="uid://q7v2xc6chca0"
+path="res://.godot/imported/FRONT_HAND.png-c2a49e13d74b08ec613c7e62c47170bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://pixel_art/character/front_hand.png"
-dest_files=["res://.godot/imported/front_hand.png-c93f16ade9d6deec46573f7f8cb2547d.ctex"]
+source_file="res://pixel_art/character/FRONT_HAND.png"
+dest_files=["res://.godot/imported/FRONT_HAND.png-c2a49e13d74b08ec613c7e62c47170bd.ctex"]
 
 [params]
 

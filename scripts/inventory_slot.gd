@@ -30,7 +30,9 @@ func _ready():
 	inventory = get_tree().get_root().find_child("slot_container", true, false)
 	inventory_bar = get_tree().get_root().find_child("slot_bar", true, false)
 	smelt_slot_container = get_tree().get_root().find_child("smelt_slot_container", true, false)
-	player = get_tree().get_root().find_child("player", true, false)
+	var player_id = multiplayer.get_unique_id()
+	player = get_tree().get_root().find_child("Player_" + str(player_id), true, false)
+
 
 func set_item(new_item: Item) -> void:
 	item = new_item
@@ -206,10 +208,6 @@ func update_inventory():
 	update_display()
 	inventory_bar.update_bar_display()
 
-
-
-	
-	
 func update_smelt_slot_display():
 	# Loop through all smelting slots and update their display
 	var smelting_slots = smelt_slot_container.get_children()

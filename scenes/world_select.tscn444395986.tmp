@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnlp1okhorbts"]
+
+[ext_resource type="Script" uid="uid://22akuisahwbo" path="res://scripts/world_select.gd" id="1_qxscb"]
+[ext_resource type="Theme" uid="uid://bqdn1hl5c7fvl" path="res://themes/space-worm-theme/space_worm_theme.tres" id="2_ppnh1"]
+[ext_resource type="PackedScene" uid="uid://dx61s7w128cdr" path="res://scenes/MultiplayerManager.tscn" id="3_ppnh1"]
+
+[node name="WorldSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qxscb")
+
+[node name="WorldSelectPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -150.0
+offset_right = 250.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_ppnh1")
+
+[node name="WorldSelectVBoxContainer" type="VBoxContainer" parent="WorldSelectPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -44.5
+offset_right = 100.0
+offset_bottom = 44.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldNameLabel" type="Label" parent="WorldSelectPanel/WorldSelectVBoxContainer"]
+layout_mode = 2
+text = "Enter world name:"
+
+[node name="InputWorldName" type="LineEdit" parent="WorldSelectPanel/WorldSelectVBoxContainer"]
+layout_mode = 2
+
+[node name="JoinWorldButton" type="Button" parent="WorldSelectPanel/WorldSelectVBoxContainer"]
+layout_mode = 2
+text = "Join World"
+
+[node name="MultiplayerManager" parent="." instance=ExtResource("3_ppnh1")]
+
+[connection signal="pressed" from="WorldSelectPanel/WorldSelectVBoxContainer/JoinWorldButton" to="." method="_on_join_world_button_pressed"]
